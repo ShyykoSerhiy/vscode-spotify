@@ -1,0 +1,94 @@
+{
+    "name": "vscode-spotify",
+    "description": "Use Spotify inside vscode(on Mac).",
+    "version": "0.0.1",
+    "publisher": "shyyko.serhiy@gmail.com",
+    "engines": {
+        "vscode": "^0.10.1"
+    },
+    "icon": "media/icon.png",
+    "galleryBanner": {
+        "color": "#11B460",
+        "theme": "light"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "*"
+    ],    
+    "contributes": {
+        "commands": [
+            {
+                "command": "spotify.next",
+                "title": "Spotify Play Next Song"
+            },
+            {
+                "command": "spotify.previous",
+                "title": "Spotify Play Previous Song"
+            },
+            {
+                "command": "spotify.play",
+                "title": "Spotify Play"
+            },
+            {
+                "command": "spotify.pause",
+                "title": "Spotify Pause"
+            },
+            {
+                "command": "spotify.playPause",
+                "title": "Spotify Play|Pause"
+            },
+            {
+                "command": "spotify.muteVolume",
+                "title": "Spotify Mute Volume"
+            },
+            {
+                "command": "spotify.unmuteVolume",
+                "title": "Spotify Unmute Volume"
+            },
+            {
+                "command": "spotify.volumeUp",
+                "title": "Spotify Volume Up"
+            },
+            {
+                "command": "spotify.volumeDown",
+                "title": "Spotify Volume Down"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "spotify.next",
+                "key": "ctrl+shift+]",
+                "mac": "cmd+shift+]"
+            },
+            {
+                "command": "spotify.previous",
+                "key": "ctrl+shift+[",
+                "mac": "cmd+shift+["
+            },
+            {
+                "command": "spotify.volumeUp",
+                "key": "ctrl+shift+'",
+                "mac": "cmd+shift+'"
+            },
+            {
+                "command": "spotify.volumeDown",
+                "key": "ctrl+shift+;",
+                "mac": "cmd+shift+;"
+            }
+        ]
+    },
+    "main": "./out/src/extension",
+    "scripts": {
+        "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+        "compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+    },
+    "devDependencies": {
+        "typescript": "^1.6.2",
+        "vscode": "0.10.x"
+    },
+    "dependencies": {
+        "spotify-node-applescript": "^0.2.2"
+    }
+}
