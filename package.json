@@ -12,6 +12,10 @@
         "color": "#11B460",
         "theme": "light"
     },
+    "repository": {
+		"type": "git",
+		"url": "https://github.com/ShyykoSerhiy/vscode-spotify.git"
+	},
     "categories": [
         "Other"
     ],
