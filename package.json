@@ -3,6 +3,7 @@
     "description": "Use Spotify inside vscode(on Mac).",
     "version": "0.0.1",
     "publisher": "shyyko.serhiy@gmail.com",
+    "license": "MIT",
     "engines": {
         "vscode": "^0.10.1"
     },
