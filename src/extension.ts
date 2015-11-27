@@ -11,8 +11,7 @@ export function activate(context: ExtensionContext) {
     let controller = new SpotifyStatusController(spotifyStatus);
 
     // Add to a list of disposables which are disposed when this extension is deactivated.
-    context.subscriptions.push(spotifyStatus);
     context.subscriptions.push(controller);
     context.subscriptions.push(spotifyStatus);
-    context.subscriptions.push(createCommands());
+    context.subscriptions.push(createCommands(spotifyStatus, controller));
 }
