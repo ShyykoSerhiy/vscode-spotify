@@ -9,7 +9,9 @@ export interface SpotifyStatusState {
      */
     isRunning: boolean,
     state: spotify.State,
-    track: spotify.Track
+    track: spotify.Track,
+    isRepeating: boolean,
+    isShuffling: boolean
 }
 
 export class SpotifyStatus {
@@ -50,14 +52,15 @@ export class SpotifyStatus {
         }
 
         if (this._state.isRunning) {
-            const {artist, name} = this._state.track;
+            const {isRepeating, isShuffling} = this._state;
+            const {artist, name} = this._state.track;            
             const {state: playing, volume} = this._state.state;
             var text = `${artist} - ${name}`;
             if (text !== this._statusBarItem.text) {//we need this guard to prevent flickering
                 this._statusBarItem.text = `${artist} - ${name}`;
                 this.redraw();//we need to redraw due to a bug with priority
             }
-            if (this._spotifyControls.updateDynamicButtons(playing === 'playing', volume === 0)) {
+            if (this._spotifyControls.updateDynamicButtons(playing === 'playing', volume === 0, isRepeating, isShuffling)) {
                 this.redraw();//we need to redraw due to a bug with priority
             }
         } else {
