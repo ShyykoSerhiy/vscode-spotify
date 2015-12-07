@@ -63,6 +63,14 @@
             {
                 "command": "spotify.volumeDown",
                 "title": "Spotify Volume Down"
+            },
+            {
+                "command": "spotify.toggleRepeating",
+                "title": "Spotify Toggle Repeating"
+            },
+            {
+                "command": "spotify.toggleShuffling",
+                "title": "Spotify Toggle Shuffling"
             }
         ],
         "keybindings": [
@@ -141,11 +149,21 @@
                     "default": false,
                     "description": "Whether to show volume down button."
                 },
+                "spotify.showToggleRepeatingButton": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to show toggle repeating button."
+                },
+                "spotify.showToggleShufflingButton": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Whether to show toggle shuffling button."
+                },
                 "spotify.priorityBase": {
                     "type": "number",
                     "default": 30,
                     "description": "Base value of priority for all vscode-spotify elements in Status Bar(priority = basePriority+priority). This is done to avoid 'conflicts' with other extensions. "
-                },
+                },            
                 "spotify.nextButtonPriority": {
                     "type": "number",
                     "default": 8,
@@ -200,6 +218,16 @@
                     "type": "number",
                     "default": 0,
                     "description": "Priority of volume track info."
+                },
+                "spotify.toggleRepeatingButtonPriority": {
+                    "type": "number",
+                    "default": 11,
+                    "description": "Priority of toggle repeating button."
+                },
+                "spotify.toggleShufflingButtonPriority": {
+                    "type": "number",
+                    "default": 12,
+                    "description": "Priority of toggle shuffling button."
                 }
             }
         }
@@ -214,6 +242,6 @@
         "vscode": "0.10.x"
     },
     "dependencies": {
-        "spotify-node-applescript": "^0.2.2"
+        "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master"
     }
 }
