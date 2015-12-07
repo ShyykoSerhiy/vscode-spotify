@@ -111,5 +111,29 @@ declare module 'spotify-node-applescript' {
 	/**
 	 * Check if Spotify is running.
 	 */
-	export function isRunning(callback:(err:any, isRunning: boolean)=>void):void;
+	export function isRunning(callback:(err:any, isRunning: boolean)=>void):void;	
+	/**
+	 * Is repeating on or off?
+	 */
+	export function isRepeating(callback:(err:any, isRepeating: boolean)=>void):void;
+	/**
+	 * Is shuffling on or off?
+	 */
+	export function isShuffling(callback:(err:any, isShuffling: boolean)=>void):void;
+	/**
+	 * Sets repeating on or off
+	 */
+	export function setRepeating(repeating:boolean, callback:(err:any)=>void):void;
+	/**
+	 * Sets shuffling on or off
+	 */
+	export function setShuffling(shuffling:boolean, callback:(err:any)=>void):void;
+	/**
+	 * Toggles repeating
+	 */
+	export function toggleRepeating(callback:(err:any)=>void):void;
+	/**
+	 * Toggles shuffling
+	 */
+	export function toggleShuffling(callback:(err:any)=>void):void;
 }
