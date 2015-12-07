@@ -15,6 +15,10 @@ export interface Button {
 	 */
 	dynamicText?: (cond: boolean) => string,
 	/**
+	 * Generator of color for button
+	 */
+	dynamicColor?: (cond: boolean) => string,
+	/**
 	 * Name of a button
 	 */
 	buttonName: string,
@@ -43,6 +47,8 @@ export class SpotifyControls {
 	private _buttons: Button[];
 	private _playPauseButton: Button;
 	private _muteUnmuteVolumeButton: Button;
+	private _toggleRepeatingButton: Button;
+	private _toggleShufflingButton: Button;
 
 	constructor() {
 		var buttonsInfo = [
@@ -55,7 +61,9 @@ export class SpotifyControls {
 			{ id: 'unmuteVolume', text: '$(unmute)' },
 			{ id: 'muteUnmuteVolume', text: '$(mute)', dynamicText: (isMuted?: boolean) => { return isMuted ? '$(mute)' : '$(unmute)' } },
 			{ id: 'volumeUp', text: '$(arrow-small-up)' },
-			{ id: 'volumeDown', text: '$(arrow-small-down)' }
+			{ id: 'volumeDown', text: '$(arrow-small-down)' },
+			{ id: 'toggleRepeating', text: '$(sync)', dynamicColor: (isRepeating?: boolean) => { return isRepeating ? 'white' : 'darkgrey' } },
+			{ id: 'toggleShuffling', text: '$(git-branch)', dynamicColor: (isShuffling?: boolean) => { return isShuffling ? 'white' : 'darkgrey' } }
 		];
 		var commands: { command: string, title: string }[] = extensions.getExtension('shyykoserhiy.vscode-spotify').packageJSON.contributes.commands;
 		this._buttons = buttonsInfo.map((item) => {
@@ -78,6 +86,14 @@ export class SpotifyControls {
 			}
 			if (button.id === 'muteUnmuteVolume') {
 				this._muteUnmuteVolumeButton = button;
+				return;
+			}
+			if (button.id === 'toggleRepeating') {
+				this._toggleRepeatingButton = button;
+				return;
+			}
+			if (button.id === 'toggleShuffling') {
+				this._toggleShufflingButton = button;
 			}
 		})
 	}
@@ -88,20 +104,15 @@ export class SpotifyControls {
 	/**
 	 * Updates dynamicText buttons
 	 */
-	updateDynamicButtons(playing: boolean, muted: boolean):boolean {
+	updateDynamicButtons(playing: boolean, muted: boolean, repeating:boolean, shuffling: boolean):boolean {
 		var changed = false;
-		const playPauseDynamicText = this._playPauseButton.dynamicText(playing);
-		if (playPauseDynamicText !== this._playPauseButton.statusBarItem.text) {
-			this._playPauseButton.statusBarItem.text = playPauseDynamicText;
-			changed = true;
-		}
-		const mutedDynamicText = this._muteUnmuteVolumeButton.dynamicText(muted);
-		if (mutedDynamicText !== this._muteUnmuteVolumeButton.statusBarItem.text) {
-			this._muteUnmuteVolumeButton.statusBarItem.text = mutedDynamicText;
-			changed = true;
-		}
+		changed = this._updateText(this._playPauseButton, playing) || changed;
+		changed = this._updateText(this._muteUnmuteVolumeButton, muted) || changed;
+		changed = this._updateColor(this._toggleRepeatingButton, repeating) || changed;
+		changed = this._updateColor(this._toggleShufflingButton, shuffling) || changed; 
 		return changed;
     }
+	
 	/**
 	* Show buttons that are visible
 	*/
@@ -120,5 +131,29 @@ export class SpotifyControls {
 	*/
 	dispose() {
 		this.buttons.forEach((button) => { button.statusBarItem.dispose(); });
+	}
+	
+	private _updateText(button: Button, condition: boolean): boolean {
+		if (!isButtonToBeShown(button.buttonName)) {
+			return false;
+		}
+		const dynamicText = button.dynamicText(condition);
+		if (dynamicText !== button.statusBarItem.text) {
+			button.statusBarItem.text = dynamicText;
+			return true;
+		}
+		return false;
+	}
+
+	private _updateColor(button: Button, condition: boolean): boolean {
+		if (!isButtonToBeShown(button.buttonName)) {
+			return false;
+		}
+		const dynamicColor = button.dynamicColor(condition);
+		if (dynamicColor !== button.statusBarItem.color) {
+			button.statusBarItem.color = dynamicColor;
+			return true;
+		}
+		return false;
 	}
 }
