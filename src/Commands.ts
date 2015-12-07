@@ -38,5 +38,11 @@ export function createCommands(spotifyStatus: SpotifyStatus, spotifyStatusContro
 	const volumeDown = commands.registerCommand('spotify.volumeDown', () => {
 		spotify.volumeDown(() => { });
     });
-	return Disposable.from(next, previous, play, pause, playPause, muteVolume, unmuteVolume, volumeUp, volumeDown);
+	const toggleRepeating = commands.registerCommand('spotify.toggleRepeating', () => {
+		spotify.toggleRepeating(() => { spotifyStatusController.queryStatus(); });
+    });
+	const toggleShuffling = commands.registerCommand('spotify.toggleShuffling', () => {
+		spotify.toggleShuffling(() => { spotifyStatusController.queryStatus(); });
+    });
+	return Disposable.from(next, previous, play, pause, playPause, muteVolume, unmuteVolume, volumeUp, volumeDown, toggleRepeating, toggleShuffling);
 }
