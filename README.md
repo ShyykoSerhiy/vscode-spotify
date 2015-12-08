@@ -12,6 +12,12 @@ This extension uses https://github.com/andrehaveman/spotify-node-applescript to 
 * Provides [hotkeys](#hotkeys) of commands.
 * Provides [buttons](#buttons) for controlling Spotify from vscode.
 
+## What's new.
+### v0.0.4
+* Added Toggle Repeating Button. (not enabled by default. To enable have a look at [Buttons section below](#Buttons)).
+* Added Toggle Shuffling Button. (not enabled by default. To enable have a look at [Buttons section below](#Buttons)).
+* Fixed [Wrong stopped/playing state](https://github.com/ShyykoSerhiy/vscode-spotify/issues/2).
+
 ## Commands
 List of commands:
 ```json
@@ -182,7 +188,7 @@ You can change what buttons to show by changing parameters([go here to find out 
 }
 ```
 
-Note that due to limitation of Spotify's applesctipt API toggleRepeatingButton toggles only
+Note that due to limitations of Spotify's applesctipt API toggleRepeatingButton toggles only
 'repeat all' property of spotify. There is no way to set 'repeat one' via vscode-spotify.  
 
 You can also change position of buttons by changing of this parameters:
