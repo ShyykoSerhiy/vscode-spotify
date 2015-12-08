@@ -46,6 +46,10 @@ export class SpotifyStatusController {
         });
 
         this._promiseIsRunning().then((isRunning) => {
+            if (!isRunning){
+                clearState('not running');
+                return;
+            }
             Promise.all<spotify.State | spotify.Track | boolean>([
                 this._promiseGetState(),
                 this._promiseGetTrack(),
