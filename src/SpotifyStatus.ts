@@ -24,6 +24,7 @@ export class SpotifyStatus {
      * 'Current'(last retrieved) state of spotify. 
      */
     private _state: SpotifyStatusState;
+    private _hidden: boolean;
 
     /**
      * Sets state of spotify. Trigers 'updateSpotifyStatus' method.
@@ -63,19 +64,22 @@ export class SpotifyStatus {
             if (this._spotifyControls.updateDynamicButtons(playing === 'playing', volume === 0, isRepeating, isShuffling)) {
                 this.redraw();//we need to redraw due to a bug with priority
             }
+            if (this._hidden){
+                this.redraw();
+            }
         } else {
-
-            this._statusBarItem.hide();
-            this._spotifyControls.hideAll()
+            this.redraw();
         }
     }
     redraw() {
         if (this._state.isRunning) {
             this._statusBarItem.show();
             this._spotifyControls.showVisible();
+            this._hidden = false;
         } else {
             this._statusBarItem.hide();
-            this._spotifyControls.hideAll()
+            this._spotifyControls.hideAll();
+            this._hidden = true;
         }
     }  
     /**

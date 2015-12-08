@@ -4,11 +4,17 @@ import * as spotify from 'spotify-node-applescript';
 export class SpotifyStatusController {
     private _spotifyStatus: SpotifyStatus;
     private _timeoutId: number;
+    private _retryCount: number;
+    /**
+     * How many sequential errors is needed to hide all buttons
+     */
+    private _maxRetryCount: number;
 
     constructor(spotifyStatus: SpotifyStatus) {
-        console.log('dsad', 'asdas');
         this._timeoutId = null;
         this._spotifyStatus = spotifyStatus;
+        this._retryCount = 0;
+        this._maxRetryCount = 5;
         this.queryStatus();
     }
 
@@ -25,13 +31,17 @@ export class SpotifyStatusController {
     queryStatus() {   
         this._clearQueryTimeout();    
         var clearState = ((err: any) => {
-            this._spotifyStatus.state = {
-                state: null,
-                track: null,
-                isRepeating: false,
-                isShuffling: false,
-                isRunning: false
-            };
+            this._retryCount++;
+            if (this._retryCount >= this._maxRetryCount){ 
+                this._spotifyStatus.state = {
+                    state: null,
+                    track: null,
+                    isRepeating: false,
+                    isShuffling: false,
+                    isRunning: false
+                };
+                this._retryCount = 0;
+            }
             this.scheduleQueryStatus();
         });
 
@@ -49,6 +59,7 @@ export class SpotifyStatusController {
                     isShuffling: values[3] as boolean,
                     isRunning: true
                 }
+                this._retryCount = 0;
                 this.scheduleQueryStatus();
             }).catch(clearState);
         }).catch(clearState);
