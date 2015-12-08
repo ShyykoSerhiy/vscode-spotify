@@ -55,6 +55,14 @@ List of commands:
 	{
 		"command": "spotify.volumeDown",
 		"title": "Spotify Volume Down"
+	},
+	{
+		"command": "spotify.toggleRepeating",
+		"title": "Spotify Toggle Repeating"
+	},
+	{
+		"command": "spotify.toggleShuffling",
+		"title": "Spotify Toggle Shuffling"
 	}
 ]
 ```
@@ -162,7 +170,20 @@ You can change what buttons to show by changing parameters([go here to find out 
 	"default": false,
 	"description": "Whether to show volume down button."
 }
+"spotify.showToggleRepeatingButton": {
+	"type": "boolean",
+	"default": false,
+	"description": "Whether to show toggle repeating button."
+},
+"spotify.showToggleShufflingButton": {
+	"type": "boolean",
+	"default": false,
+	"description": "Whether to show toggle shuffling button."
+}
 ```
+
+Note that due to limitation of Spotify's applesctipt API toggleRepeatingButton toggles only
+'repeat all' property of spotify. There is no way to set 'repeat one' via vscode-spotify.  
 
 You can also change position of buttons by changing of this parameters:
 ```json
@@ -225,6 +246,16 @@ You can also change position of buttons by changing of this parameters:
 	"type": "number",
 	"default": 0,
 	"description": "Priority of volume track info."
+},
+"spotify.toggleRepeatingButtonPriority": {
+	"type": "number",
+	"default": 11,
+	"description": "Priority of toggle repeating button."
+},
+"spotify.toggleShufflingButtonPriority": {
+	"type": "number",
+	"default": 12,
+	"description": "Priority of toggle shuffling button."
 }
 ```
 
