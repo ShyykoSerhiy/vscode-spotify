@@ -56,7 +56,7 @@ export class SpotifyControls {
 			{ id: 'previous', text: '$(chevron-left)' },
 			{ id: 'play', text: '$(triangle-right)' },
 			{ id: 'pause', text: '$(primitive-square)' },
-			{ id: 'playPause', text: '$(triangle-right)', dynamicText: (isPlaying?: boolean) => { return isPlaying ? '$(triangle-right)' : '$(primitive-square)' } },
+			{ id: 'playPause', text: '$(triangle-right)', dynamicText: (isPlaying?: boolean) => { return isPlaying ? '$(primitive-square)' : '$(triangle-right)' } },
 			{ id: 'muteVolume', text: '$(mute)' },
 			{ id: 'unmuteVolume', text: '$(unmute)' },
 			{ id: 'muteUnmuteVolume', text: '$(mute)', dynamicText: (isMuted?: boolean) => { return isMuted ? '$(mute)' : '$(unmute)' } },
