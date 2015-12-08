@@ -13,6 +13,11 @@ This extension uses https://github.com/andrehaveman/spotify-node-applescript to 
 * Provides [buttons](#buttons) for controlling Spotify from vscode.
 
 ## What's new.
+
+### v0.0.5
+* Fixed [Sometimes there is error (unexpected tocken u) that hides all the buttons.](https://github.com/ShyykoSerhiy/vscode-spotify/issues/3).
+* Fixed [Extension reopens Spotify if it gets closed.](https://github.com/ShyykoSerhiy/vscode-spotify/issues/4).
+
 ### v0.0.4
 * Added Toggle Repeating Button. (not enabled by default. To enable have a look at [Buttons section below](#Buttons)).
 * Added Toggle Shuffling Button. (not enabled by default. To enable have a look at [Buttons section below](#Buttons)).
