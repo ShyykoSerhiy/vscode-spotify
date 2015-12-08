@@ -151,12 +151,12 @@
                 },
                 "spotify.showToggleRepeatingButton": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Whether to show toggle repeating button."
                 },
                 "spotify.showToggleShufflingButton": {
                     "type": "boolean",
-                    "default": true,
+                    "default": false,
                     "description": "Whether to show toggle shuffling button."
                 },
                 "spotify.priorityBase": {
