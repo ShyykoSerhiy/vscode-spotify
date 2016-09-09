@@ -1,247 +1,248 @@
 {
-    "name": "vscode-spotify",
-    "description": "Use Spotify inside vscode(on Mac).",
-    "version": "0.0.5",
-    "publisher": "shyykoserhiy",
-    "license": "MIT",
-    "engines": {
-        "vscode": "^0.10.1"
-    },
-    "icon": "media/icon.png",
-    "galleryBanner": {
-        "color": "#11B460",
-        "theme": "light"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/ShyykoSerhiy/vscode-spotify.git"
-    },
-    "categories": [
-        "Other"
+  "name": "vscode-spotify",
+  "description": "Use Spotify inside vscode(on Mac).",
+  "version": "0.0.5",
+  "publisher": "shyykoserhiy",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^0.10.1"
+  },
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#11B460",
+    "theme": "light"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ShyykoSerhiy/vscode-spotify.git"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "spotify.next",
+        "title": "Spotify Play Next Song"
+      },
+      {
+        "command": "spotify.previous",
+        "title": "Spotify Play Previous Song"
+      },
+      {
+        "command": "spotify.play",
+        "title": "Spotify Play"
+      },
+      {
+        "command": "spotify.pause",
+        "title": "Spotify Pause"
+      },
+      {
+        "command": "spotify.playPause",
+        "title": "Spotify Play|Pause"
+      },
+      {
+        "command": "spotify.muteVolume",
+        "title": "Spotify Mute Volume"
+      },
+      {
+        "command": "spotify.unmuteVolume",
+        "title": "Spotify Unmute Volume"
+      },
+      {
+        "command": "spotify.muteUnmuteVolume",
+        "title": "Spotify Mute|Unmute Volume"
+      },
+      {
+        "command": "spotify.volumeUp",
+        "title": "Spotify Volume Up"
+      },
+      {
+        "command": "spotify.volumeDown",
+        "title": "Spotify Volume Down"
+      },
+      {
+        "command": "spotify.toggleRepeating",
+        "title": "Spotify Toggle Repeating"
+      },
+      {
+        "command": "spotify.toggleShuffling",
+        "title": "Spotify Toggle Shuffling"
+      }
     ],
-    "activationEvents": [
-        "*"
+    "keybindings": [
+      {
+        "command": "spotify.next",
+        "key": "ctrl+shift+]",
+        "mac": "cmd+shift+]"
+      },
+      {
+        "command": "spotify.previous",
+        "key": "ctrl+shift+[",
+        "mac": "cmd+shift+["
+      },
+      {
+        "command": "spotify.volumeUp",
+        "key": "ctrl+shift+'",
+        "mac": "cmd+shift+'"
+      },
+      {
+        "command": "spotify.volumeDown",
+        "key": "ctrl+shift+;",
+        "mac": "cmd+shift+;"
+      }
     ],
-    "contributes": {
-        "commands": [
-            {
-                "command": "spotify.next",
-                "title": "Spotify Play Next Song"
-            },
-            {
-                "command": "spotify.previous",
-                "title": "Spotify Play Previous Song"
-            },
-            {
-                "command": "spotify.play",
-                "title": "Spotify Play"
-            },
-            {
-                "command": "spotify.pause",
-                "title": "Spotify Pause"
-            },
-            {
-                "command": "spotify.playPause",
-                "title": "Spotify Play|Pause"
-            },            
-            {
-                "command": "spotify.muteVolume",
-                "title": "Spotify Mute Volume"
-            },
-            {
-                "command": "spotify.unmuteVolume",
-                "title": "Spotify Unmute Volume"
-            },
-            {
-                "command": "spotify.muteUnmuteVolume",
-                "title": "Spotify Mute|Unmute Volume"
-            },
-            {
-                "command": "spotify.volumeUp",
-                "title": "Spotify Volume Up"
-            },
-            {
-                "command": "spotify.volumeDown",
-                "title": "Spotify Volume Down"
-            },
-            {
-                "command": "spotify.toggleRepeating",
-                "title": "Spotify Toggle Repeating"
-            },
-            {
-                "command": "spotify.toggleShuffling",
-                "title": "Spotify Toggle Shuffling"
-            }
-        ],
-        "keybindings": [
-            {
-                "command": "spotify.next",
-                "key": "ctrl+shift+]",
-                "mac": "cmd+shift+]"
-            },
-            {
-                "command": "spotify.previous",
-                "key": "ctrl+shift+[",
-                "mac": "cmd+shift+["
-            },
-            {
-                "command": "spotify.volumeUp",
-                "key": "ctrl+shift+'",
-                "mac": "cmd+shift+'"
-            },
-            {
-                "command": "spotify.volumeDown",
-                "key": "ctrl+shift+;",
-                "mac": "cmd+shift+;"
-            }
-        ],
-        "configuration": {
-            "type": "object",
-            "title": "vscode-spotify configuration",
-            "properties": {
-                "spotify.showNextButton": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Whether to show next button."
-                },
-                "spotify.showPreviousButton": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Whether to show previous button."
-                },
-                "spotify.showPlayButton": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether to show play button."
-                },
-                "spotify.showPauseButton": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether to show pause button."
-                },
-                "spotify.showPlayPauseButton": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Whether to show play|pause button."
-                },
-                "spotify.showMuteVolumeButton": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether to show mute button."
-                },
-                "spotify.showUnmuteVolumeButton": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether to show unmute button."
-                },
-                "spotify.showMuteUnmuteVolumeButton": {
-                    "type": "boolean",
-                    "default": true,
-                    "description": "Whether to show mute|unmute button."
-                },
-                "spotify.showVolumeUpButton": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether to show volume up button."
-                },
-                "spotify.showVolumeDownButton": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether to show volume down button."
-                },
-                "spotify.showToggleRepeatingButton": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether to show toggle repeating button."
-                },
-                "spotify.showToggleShufflingButton": {
-                    "type": "boolean",
-                    "default": false,
-                    "description": "Whether to show toggle shuffling button."
-                },
-                "spotify.priorityBase": {
-                    "type": "number",
-                    "default": 30,
-                    "description": "Base value of priority for all vscode-spotify elements in Status Bar(priority = basePriority+priority). This is done to avoid 'conflicts' with other extensions. "
-                },            
-                "spotify.nextButtonPriority": {
-                    "type": "number",
-                    "default": 8,
-                    "description": "Priority of next button."
-                },
-                "spotify.previousButtonPriority": {
-                    "type": "number",
-                    "default": 10,
-                    "description": "Priority of previous button."
-                },
-                "spotify.playButtonPriority": {
-                    "type": "number",
-                    "default": 7,
-                    "description": "Priority of play button."
-                },
-                "spotify.pauseButtonPriority": {
-                    "type": "number",
-                    "default": 6,
-                    "description": "Priority of pause button."
-                },
-                "spotify.playPauseButtonPriority": {
-                    "type": "number",
-                    "default": 9,
-                    "description": "Priority of play|pause button."
-                },
-                "spotify.muteButtonPriority": {
-                    "type": "number",
-                    "default": 5,
-                    "description": "Priority of mute button."
-                },
-                "spotify.unmuteButtonPriority": {
-                    "type": "number",
-                    "default": 4,
-                    "description": "Priority of unmute button."
-                },
-                "spotify.muteUnmuteButtonPriority": {
-                    "type": "number",
-                    "default": 3,
-                    "description": "Priority of mute|unmute button."
-                },
-                "spotify.volumeUpButtonPriority": {
-                    "type": "number",
-                    "default": 2,
-                    "description": "Priority of volume up button."
-                },
-                "spotify.volumeDownButtonPriority": {
-                    "type": "number",
-                    "default": 1,
-                    "description": "Priority of volume down button."
-                },
-                "spotify.trackInfoPriority": {
-                    "type": "number",
-                    "default": 0,
-                    "description": "Priority of volume track info."
-                },
-                "spotify.toggleRepeatingButtonPriority": {
-                    "type": "number",
-                    "default": 11,
-                    "description": "Priority of toggle repeating button."
-                },
-                "spotify.toggleShufflingButtonPriority": {
-                    "type": "number",
-                    "default": 12,
-                    "description": "Priority of toggle shuffling button."
-                }
-            }
+    "configuration": {
+      "type": "object",
+      "title": "vscode-spotify configuration",
+      "properties": {
+        "spotify.showNextButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show next button."
+        },
+        "spotify.showPreviousButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show previous button."
+        },
+        "spotify.showPlayButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show play button."
+        },
+        "spotify.showPauseButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show pause button."
+        },
+        "spotify.showPlayPauseButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show play|pause button."
+        },
+        "spotify.showMuteVolumeButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show mute button."
+        },
+        "spotify.showUnmuteVolumeButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show unmute button."
+        },
+        "spotify.showMuteUnmuteVolumeButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show mute|unmute button."
+        },
+        "spotify.showVolumeUpButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show volume up button."
+        },
+        "spotify.showVolumeDownButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show volume down button."
+        },
+        "spotify.showToggleRepeatingButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show toggle repeating button."
+        },
+        "spotify.showToggleShufflingButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to show toggle shuffling button."
+        },
+        "spotify.priorityBase": {
+          "type": "number",
+          "default": 30,
+          "description": "Base value of priority for all vscode-spotify elements in Status Bar(priority = basePriority+priority). This is done to avoid 'conflicts' with other extensions. "
+        },
+        "spotify.nextButtonPriority": {
+          "type": "number",
+          "default": 8,
+          "description": "Priority of next button."
+        },
+        "spotify.previousButtonPriority": {
+          "type": "number",
+          "default": 10,
+          "description": "Priority of previous button."
+        },
+        "spotify.playButtonPriority": {
+          "type": "number",
+          "default": 7,
+          "description": "Priority of play button."
+        },
+        "spotify.pauseButtonPriority": {
+          "type": "number",
+          "default": 6,
+          "description": "Priority of pause button."
+        },
+        "spotify.playPauseButtonPriority": {
+          "type": "number",
+          "default": 9,
+          "description": "Priority of play|pause button."
+        },
+        "spotify.muteButtonPriority": {
+          "type": "number",
+          "default": 5,
+          "description": "Priority of mute button."
+        },
+        "spotify.unmuteButtonPriority": {
+          "type": "number",
+          "default": 4,
+          "description": "Priority of unmute button."
+        },
+        "spotify.muteUnmuteButtonPriority": {
+          "type": "number",
+          "default": 3,
+          "description": "Priority of mute|unmute button."
+        },
+        "spotify.volumeUpButtonPriority": {
+          "type": "number",
+          "default": 2,
+          "description": "Priority of volume up button."
+        },
+        "spotify.volumeDownButtonPriority": {
+          "type": "number",
+          "default": 1,
+          "description": "Priority of volume down button."
+        },
+        "spotify.trackInfoPriority": {
+          "type": "number",
+          "default": 0,
+          "description": "Priority of volume track info."
+        },
+        "spotify.toggleRepeatingButtonPriority": {
+          "type": "number",
+          "default": 11,
+          "description": "Priority of toggle repeating button."
+        },
+        "spotify.toggleShufflingButtonPriority": {
+          "type": "number",
+          "default": 12,
+          "description": "Priority of toggle shuffling button."
         }
-    },
-    "main": "./out/src/extension",
-    "scripts": {
-        "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-        "compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
-    },
-    "devDependencies": {
-        "typescript": "^1.6.2",
-        "vscode": "0.10.x"
-    },
-    "dependencies": {
-        "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master"
+      }
     }
+  },
+  "main": "./out/src/extension",
+  "scripts": {
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+  },
+  "devDependencies": {
+    "typescript": "^1.8.5",
+    "vscode": "0.10.x"
+  },
+  "dependencies": {
+    "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master",
+    "spotilocal": "0.1.0"
+  }
 }

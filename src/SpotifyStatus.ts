@@ -3,13 +3,24 @@ import * as spotify from 'spotify-node-applescript';
 import {SpotifyControls} from './SpotifyControls';
 import {getButtonPriority} from './config/SpotifyConfig';
 
+export interface Track {
+    artist: string,
+    name: string
+}
+
+export interface State {
+    volume: number,
+    position: number,
+    state: string
+}
+
 export interface SpotifyStatusState {
     /**
      * true if spotify is open
      */
     isRunning: boolean,
-    state: spotify.State,
-    track: spotify.Track,
+    state: State,
+    track: Track,
     isRepeating: boolean,
     isShuffling: boolean
 }
