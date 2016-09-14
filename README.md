@@ -1,9 +1,15 @@
 # vscode-spotify
-Use Spotify inside vscode(on Mac).
-Provides integration with Spotify on **Mac ONLY**.
+Use Spotify inside vscode.
+Provides integration with Spotify Desktop client. 
+
+Note that some of functionality only available on macOS (see [How it works section](#how-it-works) )
 
 ## How it works
-This extension uses https://github.com/andrehaveman/spotify-node-applescript to communicate with Spotify.
+On macOS this extension uses https://github.com/andrehaveman/spotify-node-applescript (basically a wrapper for https://developer.spotify.com/applescript-api/)
+to communicate with Spotify. 
+
+On Windows and Linux it uses https://github.com/ShyykoSerhiy/spotilocal to communicate with Spotify's local web server. 
+It's undocumented approach and sadly it doesn't provide all the functionality that is available on macOS.
 
 ## Features
 * Shows the currently playing song in status bar of vscode.
@@ -12,7 +18,30 @@ This extension uses https://github.com/andrehaveman/spotify-node-applescript to 
 * Provides [hotkeys](#hotkeys) of commands.
 * Provides [buttons](#buttons) for controlling Spotify from vscode.
 
+## Compatibility table
+
+| Feature                      | macOS         | Windows and Linux            |
+| ---------------------------- |:-------------:| ----------------------------:|
+| Play Next Song               | ✅            | ❌                            |
+| Play Previous Song           | ✅            | ❌                            |
+| Play                         | ✅            | ❌                            |
+| Pause                        | ✅            | ❌                            |
+| Play Pause                   | ✅            | ❌                            |
+| Mute Volume                  | ✅            | (shows muted state) ⭕        |
+| Unmute Volume                | ✅            | (shows unmuted state)  ⭕     |
+| Mute Unmute Volume           | ✅            | (shows muted unmuted state)⭕ |
+| Volume Up                    | ✅            | ❌                            |
+| Volume Down                  | ✅            | ❌                            |
+| Toggle Repeating             | ✅            | (shows repeating state)  ⭕   |
+| Toggle Shuffling             | ✅            | (shows shuffling state)  ⭕   |
+| Volume Down                  | ✅            | ❌                            |
+| Volume Down                  | ✅            | ❌                            |
+| Volume Down                  | ✅            | ❌                            |
+
 ## What's new.
+
+### v1.0.0
+* [Support for Linux And Windows!](https://github.com/ShyykoSerhiy/vscode-spotify/issues/7).
 
 ### v0.0.5
 * Fixed [Sometimes there is error (unexpected tocken u) that hides all the buttons.](https://github.com/ShyykoSerhiy/vscode-spotify/issues/3).
