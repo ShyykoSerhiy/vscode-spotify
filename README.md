@@ -22,11 +22,12 @@ It's undocumented approach and sadly it doesn't provide all the functionality th
 
 | Feature                      | macOS         | Windows and Linux            |
 | ---------------------------- |:-------------:| ----------------------------:|
+| Show current song            | ✅            | ✅                            |
 | Play Next Song               | ✅            | ❌                            |
 | Play Previous Song           | ✅            | ❌                            |
-| Play                         | ✅            | ❌                            |
-| Pause                        | ✅            | ❌                            |
-| Play Pause                   | ✅            | ❌                            |
+| Play                         | ✅            | ✅                            |
+| Pause                        | ✅            | ✅                            |
+| Play Pause                   | ✅            | ✅                            |
 | Mute Volume                  | ✅            | (shows muted state) ⭕        |
 | Unmute Volume                | ✅            | (shows unmuted state)  ⭕     |
 | Mute Unmute Volume           | ✅            | (shows muted unmuted state)⭕ |
