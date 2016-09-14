@@ -43,7 +43,8 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
     private spotifyStatusController: SpotifyStatusController;
     private spotilocal: Spotilocal;
     private initialized: boolean;
-    private initTimeoutId: number;
+    private showedReinitMessage: boolean;
+    private initTimeoutId: number;    
 
     constructor(spotifyStatus: SpotifyStatus, spotifyStatusController: SpotifyStatusController) {
         this.spotifyStatus = spotifyStatus;
@@ -53,12 +54,16 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
         this.retryInit();
     }
     private retryInit() {
-        this.initialized = false;
+        this.initialized = false;        
         this.initTimeoutId && clearTimeout(this.initTimeoutId);
         this.spotilocal.init().then(() => {
             this.initialized = true;
+            this.showedReinitMessage = false;
         }).catch((error) => {
-            window.showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
+            if (!this.showedReinitMessage){
+                window.showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
+            }            
+            this.showedReinitMessage = true;
             this.initTimeoutId = setTimeout(this.retryInit.bind(this), 20 * 1000);
         })
     }
