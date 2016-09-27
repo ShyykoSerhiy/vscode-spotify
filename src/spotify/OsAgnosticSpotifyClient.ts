@@ -32,7 +32,7 @@ function notSupported(target: any, propertyKey: string, descriptor: PropertyDesc
 
     return Object.assign({}, descriptor, {
         value: function () {
-            window.showInformationMessage('This functionality is not supported on this platfrom.');
+            window.showInformationMessage('This functionality is not supported on this platform.');
             return;
         }
     })
