@@ -11,46 +11,47 @@ export class OsxSpotifyClient implements SpotifyClient {
     constructor(spotifyStatus: SpotifyStatus, spotifyStatusController: SpotifyStatusController) {
         this.spotifyStatus = spotifyStatus;
         this.spotifyStatusController = spotifyStatusController;
+        this._queryStatus = this._queryStatus.bind(this);
     }
     next() {
-        spotify.next(() => { });
+        spotify.next(this._queryStatus);
     }
     previous() {
-        spotify.previous(() => { });
+        spotify.previous(this._queryStatus);
     }
     play() {
-        spotify.play(() => { });
+        spotify.play(this._queryStatus);
     }
     pause() {
-        spotify.pause(() => { });
+        spotify.pause(this._queryStatus);
     }
     playPause() {
-        spotify.playPause(() => { this.spotifyStatusController.queryStatus(); });
+        spotify.playPause(this._queryStatus);
     }
     muteVolume() {
-        spotify.muteVolume(() => { });
+        spotify.muteVolume(this._queryStatus);
     }
     unmuteVolume() {
-        spotify.unmuteVolume(() => { });
+        spotify.unmuteVolume(this._queryStatus);
     }
     muteUnmuteVolume() {
         if (this.spotifyStatus.isMuted()) {
-            spotify.unmuteVolume(() => { this.spotifyStatusController.queryStatus(); })
+            spotify.unmuteVolume(this._queryStatus)
         } else {
-            spotify.muteVolume(() => { this.spotifyStatusController.queryStatus(); })
+            spotify.muteVolume(this._queryStatus)
         };
     }
     volumeUp() {
-        spotify.volumeUp(() => { });
+        spotify.volumeUp(this._queryStatus);
     }
     volumeDown() {
-        spotify.volumeDown(() => { });
+        spotify.volumeDown(this._queryStatus);
     }
     toggleRepeating() {
-        spotify.toggleRepeating(() => { this.spotifyStatusController.queryStatus(); });
+        spotify.toggleRepeating(this._queryStatus);
     }
     toggleShuffling() {
-        spotify.toggleShuffling(() => { this.spotifyStatusController.queryStatus(); });
+        spotify.toggleShuffling(this._queryStatus);
     }
     getStatus(): Promise<SpotifyStatusState> {
         return this._promiseIsRunning().then((isRunning) => {
@@ -73,6 +74,9 @@ export class OsxSpotifyClient implements SpotifyClient {
                 return state;
             });
         });
+    }
+    private _queryStatus(){
+        this.spotifyStatusController.queryStatus();
     }
     private _promiseIsRunning() {
         return new Promise<boolean>((resolve, reject) => {
