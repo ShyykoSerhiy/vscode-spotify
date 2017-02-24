@@ -5,7 +5,7 @@ import {SpotifyStatus} from '../SpotifyStatus';
 import {SpotifyStatusController} from '../SpotifyStatusController';
 import {SpotifyStatusState} from '../SpotifyStatus';
 
-function returnIfNotInitialized(target: any, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+function returnIfNotInitialized(_ignoredTarget: any, _ignoredPropertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const fn = descriptor.value as Function;
 
     if (typeof fn !== 'function') {
@@ -23,7 +23,7 @@ function returnIfNotInitialized(target: any, propertyKey: string, descriptor: Pr
     })
 }
 
-function notSupported(target: any, propertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
+function notSupported(_ignoredTarget: any, _ignoredPropertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const fn = descriptor.value as Function;
 
     if (typeof fn !== 'function') {
@@ -59,7 +59,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
         this.spotilocal.init().then(() => {
             this.initialized = true;
             this.showedReinitMessage = false;
-        }).catch((error) => {
+        }).catch((_ignorredError) => {
             if (!this.showedReinitMessage){
                 window.showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
             }            

@@ -1,4 +1,4 @@
-import {workspace, window, StatusBarAlignment, StatusBarItem, extensions} from 'vscode';
+import {window, StatusBarAlignment, StatusBarItem, extensions} from 'vscode';
 import {getButtonPriority, isButtonToBeShown} from './config/SpotifyConfig';
 
 export interface Button {
@@ -40,15 +40,29 @@ export interface Button {
 	statusBarItem: StatusBarItem
 }
 
+export interface ButtonWithDynamicText extends Button {
+	/**
+	 * Generator of text for button(Octicons)
+	 */
+	dynamicText: (cond: boolean) => string
+}
+
+export interface ButtonWithDynamicColor extends Button {
+	/**
+	 * Generator of color for button
+	 */
+	dynamicColor: (cond: boolean) => string
+}
+
 export class SpotifyControls {
 	/**
 	 * All buttons of vscode-spotify
 	 */
 	private _buttons: Button[];
-	private _playPauseButton: Button;
-	private _muteUnmuteVolumeButton: Button;
-	private _toggleRepeatingButton: Button;
-	private _toggleShufflingButton: Button;
+	private _playPauseButton: ButtonWithDynamicText;
+	private _muteUnmuteVolumeButton: ButtonWithDynamicText;
+	private _toggleRepeatingButton: ButtonWithDynamicColor;
+	private _toggleShufflingButton: ButtonWithDynamicColor;
 
 	constructor() {
 		var buttonsInfo = [
@@ -81,19 +95,19 @@ export class SpotifyControls {
 		});
 		this._buttons.forEach((button) => {
 			if (button.id === 'playPause') {
-				this._playPauseButton = button;
+				this._playPauseButton = button as ButtonWithDynamicText;
 				return;
 			}
 			if (button.id === 'muteUnmuteVolume') {
-				this._muteUnmuteVolumeButton = button;
+				this._muteUnmuteVolumeButton = button as ButtonWithDynamicText;
 				return;
 			}
 			if (button.id === 'toggleRepeating') {
-				this._toggleRepeatingButton = button;
+				this._toggleRepeatingButton = button as ButtonWithDynamicColor;
 				return;
 			}
 			if (button.id === 'toggleShuffling') {
-				this._toggleShufflingButton = button;
+				this._toggleShufflingButton = button as ButtonWithDynamicColor;
 			}
 		})
 	}
@@ -133,7 +147,7 @@ export class SpotifyControls {
 		this.buttons.forEach((button) => { button.statusBarItem.dispose(); });
 	}
 	
-	private _updateText(button: Button, condition: boolean): boolean {
+	private _updateText(button: ButtonWithDynamicText, condition: boolean): boolean {
 		if (!isButtonToBeShown(button.buttonName)) {
 			return false;
 		}
@@ -145,7 +159,7 @@ export class SpotifyControls {
 		return false;
 	}
 
-	private _updateColor(button: Button, condition: boolean): boolean {
+	private _updateColor(button: ButtonWithDynamicColor, condition: boolean): boolean {
 		if (!isButtonToBeShown(button.buttonName)) {
 			return false;
 		}

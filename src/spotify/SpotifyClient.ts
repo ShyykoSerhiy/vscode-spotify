@@ -1,5 +1,3 @@
-import * as spotify from 'spotify-node-applescript';
-import {Spotilocal} from 'spotilocal';
 import {SpotifyStatus} from '../SpotifyStatus';
 import {SpotifyStatusController} from '../SpotifyStatusController';
 import {OsAgnosticSpotifyClient} from './OsAgnosticSpotifyClient';

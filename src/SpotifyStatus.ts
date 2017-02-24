@@ -1,5 +1,4 @@
 import {window, StatusBarItem, StatusBarAlignment} from 'vscode';
-import * as spotify from 'spotify-node-applescript';
 import {SpotifyControls} from './SpotifyControls';
 import {getButtonPriority} from './config/SpotifyConfig';
 

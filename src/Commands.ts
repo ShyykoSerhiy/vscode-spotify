@@ -1,6 +1,4 @@
-import {commands, Disposable, window} from 'vscode';
-import * as spotify from 'spotify-node-applescript';
-import {Spotilocal} from 'spotilocal';
+import {commands, Disposable} from 'vscode';
 import {SpotifyStatus} from './SpotifyStatus';
 import {SpotifyStatusController} from './SpotifyStatusController';
 import {SpoifyClientSingleton} from './spotify/SpotifyClient'
@@ -19,5 +17,5 @@ export function createCommands(spotifyStatus: SpotifyStatus, spotifyStatusContro
 	const volumeDown = commands.registerCommand('spotify.volumeDown', sC.volumeDown.bind(sC));
 	const toggleRepeating = commands.registerCommand('spotify.toggleRepeating', sC.toggleRepeating.bind(sC));
 	const toggleShuffling = commands.registerCommand('spotify.toggleShuffling', sC.toggleShuffling.bind(sC));
-	return Disposable.from(next, previous, play, pause, playPause, muteVolume, unmuteVolume, volumeUp, volumeDown, toggleRepeating, toggleShuffling);
+	return Disposable.from(next, previous, play, pause, playPause, muteVolume, unmuteVolume, muteUnmuteVolume, volumeUp, volumeDown, toggleRepeating, toggleShuffling);
 }

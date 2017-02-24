@@ -6,6 +6,11 @@
 		"noLib": true,
 		"sourceMap": true,
 		"noImplicitAny": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "strictNullChecks": true,
 		"experimentalDecorators": true
 	},
 	"exclude": [

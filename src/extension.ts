@@ -1,4 +1,4 @@
-import {ExtensionContext, commands} from 'vscode';
+import {ExtensionContext} from 'vscode';
 import {createCommands} from './Commands';
 import {SpotifyStatus} from './SpotifyStatus';
 import {SpotifyStatusController} from './SpotifyStatusController';

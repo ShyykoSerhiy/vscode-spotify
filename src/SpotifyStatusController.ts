@@ -1,6 +1,5 @@
-import {SpotifyStatus} from './SpotifyStatus';
-import * as spotify from 'spotify-node-applescript';
-import {SpoifyClientSingleton} from './spotify/SpotifyClient'
+import { SpotifyStatus } from './SpotifyStatus';
+import { SpoifyClientSingleton } from './spotify/SpotifyClient'
 
 export class SpotifyStatusController {
     private _spotifyStatus: SpotifyStatus;
@@ -12,7 +11,7 @@ export class SpotifyStatusController {
     private _maxRetryCount: number;
 
     constructor(spotifyStatus: SpotifyStatus) {
-        this._timeoutId = null;
+        this._timeoutId = 0;
         this._spotifyStatus = spotifyStatus;
         this._retryCount = 0;
         this._maxRetryCount = 5;
@@ -31,12 +30,12 @@ export class SpotifyStatusController {
      */
     queryStatus() {
         this._clearQueryTimeout();
-        var clearState = ((err: any) => {
+        var clearState = (() => {
             this._retryCount++;
             if (this._retryCount >= this._maxRetryCount) {
                 this._spotifyStatus.state = {
-                    state: null,
-                    track: null,
+                    state: { position: 0, volume: 0, state: '' },
+                    track: { artist: '', name: '' },
                     isRepeating: false,
                     isShuffling: false,
                     isRunning: false
@@ -53,13 +52,15 @@ export class SpotifyStatusController {
     }
 
     dispose() {
-        clearTimeout(this._timeoutId);
+        if (this._timeoutId !== 0) {
+            clearTimeout(this._timeoutId);
+        }
     }
 
     private _clearQueryTimeout() {
-        if (this._timeoutId !== null) {
+        if (this._timeoutId !== 0) {
             clearTimeout(this._timeoutId);
-            this._timeoutId = null;
+            this._timeoutId = 0;
         }
     }
 }
