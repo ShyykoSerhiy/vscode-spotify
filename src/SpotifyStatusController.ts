@@ -1,5 +1,6 @@
 import { SpotifyStatus } from './SpotifyStatus';
-import { SpoifyClientSingleton } from './spotify/SpotifyClient'
+import { SpoifyClientSingleton } from './spotify/SpotifyClient';
+import { getStatusCheckInterval } from './config/SpotifyConfig';
 
 export class SpotifyStatusController {
     private _spotifyStatus: SpotifyStatus;
@@ -22,7 +23,7 @@ export class SpotifyStatusController {
         this._clearQueryTimeout();
         this._timeoutId = setTimeout(() => {
             this.queryStatus();
-        }, 1000);
+        }, getStatusCheckInterval());
     }
 
     /**

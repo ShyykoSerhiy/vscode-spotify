@@ -1,4 +1,4 @@
-import {workspace} from 'vscode';
+import { workspace } from 'vscode';
 
 function getConfig() {
 	return workspace.getConfiguration('spotify');
@@ -11,4 +11,8 @@ export function isButtonToBeShown(buttonName: string): boolean {
 export function getButtonPriority(buttonName: string): number {
 	const config = getConfig();
 	return config.get('priorityBase', 0) + config.get(buttonName + 'Priority', 0);
+}
+
+export function getStatusCheckInterval(): number {
+	return getConfig().get('statusCheckInterval', 5000);
 }
