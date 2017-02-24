@@ -297,7 +297,12 @@ You can also change position of buttons by changing of this parameters:
 	"type": "number",
 	"default": 12,
 	"description": "Priority of toggle shuffling button."
-}
+},
+"spotify.statusCheckInterval": {
+	"type": "number",
+	"default": 5000,
+	"description": "Interval of spotify status checks. Frequent status checks may result in faster battery drain and high CPU load (especially on MacOs)."
+}   
 ```
 
 [MIT](LICENSE)
