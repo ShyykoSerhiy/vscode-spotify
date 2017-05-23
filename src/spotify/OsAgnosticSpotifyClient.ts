@@ -1,4 +1,3 @@
-import { window } from 'vscode';
 import { SpotifyClient } from './SpotifyClient';
 import { Spotilocal } from 'spotilocal';
 import { SpotifyStatus } from '../SpotifyStatus';
