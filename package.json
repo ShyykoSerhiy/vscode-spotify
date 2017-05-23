@@ -226,7 +226,7 @@
         "spotify.trackInfoPriority": {
           "type": "number",
           "default": 0,
-          "description": "Priority of volume track info."
+          "description": "Priority of track info."
         },
         "spotify.toggleRepeatingButtonPriority": {
           "type": "number",
@@ -241,7 +241,7 @@
         "spotify.lyricsButtonPriority": {
           "type": "number",
           "default": 0,
-          "description": "Priority of mute|unmute button."
+          "description": "Priority of lyrics button."
         },
         "spotify.statusCheckInterval": {
           "type": "number",
