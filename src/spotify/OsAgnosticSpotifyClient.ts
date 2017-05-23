@@ -1,9 +1,10 @@
-import {window} from 'vscode';
-import {SpotifyClient} from './SpotifyClient';
-import {Spotilocal} from 'spotilocal';
-import {SpotifyStatus} from '../SpotifyStatus';
-import {SpotifyStatusController} from '../SpotifyStatusController';
-import {SpotifyStatusState} from '../SpotifyStatus';
+import { window } from 'vscode';
+import { SpotifyClient } from './SpotifyClient';
+import { Spotilocal } from 'spotilocal';
+import { SpotifyStatus } from '../SpotifyStatus';
+import { SpotifyStatusController } from '../SpotifyStatusController';
+import { SpotifyStatusState } from '../SpotifyStatus';
+import { showInformationMessage } from '../info/Info';
 
 function returnIfNotInitialized(_ignoredTarget: any, _ignoredPropertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const fn = descriptor.value as Function;
@@ -15,7 +16,7 @@ function returnIfNotInitialized(_ignoredTarget: any, _ignoredPropertyKey: string
     return Object.assign({}, descriptor, {
         value: function () {
             if (!this.initialized) {
-                window.showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
+                showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
                 return;
             }
             return fn.apply(this, arguments);
@@ -32,7 +33,7 @@ function notSupported(_ignoredTarget: any, _ignoredPropertyKey: string, descript
 
     return Object.assign({}, descriptor, {
         value: function () {
-            window.showInformationMessage('This functionality is not supported on this platform.');
+            showInformationMessage('This functionality is not supported on this platform.');
             return;
         }
     })
@@ -61,7 +62,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
             this.showedReinitMessage = false;
         }).catch((_ignorredError) => {
             if (!this.showedReinitMessage){
-                window.showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
+                showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
             }            
             this.showedReinitMessage = true;
             this.initTimeoutId = setTimeout(this.retryInit.bind(this), 20 * 1000);
@@ -77,7 +78,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
     @returnIfNotInitialized
     play() {
         this.spotilocal.pause(false).catch((error) => {
-            window.showInformationMessage(`Failed to play. We are going to retry reinit spotilocal. ${error}`);
+            showInformationMessage(`Failed to play. We are going to retry reinit spotilocal. ${error}`);
             this.retryInit.bind(this);
         });
     }
@@ -86,7 +87,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
         this.spotilocal.pause(true).then(() => {
             this.spotifyStatusController.queryStatus();
         }).catch((error) => {
-            window.showInformationMessage(`Failed to pause. We are going to retry reinit spotilocal. ${error}`);
+            showInformationMessage(`Failed to pause. We are going to retry reinit spotilocal. ${error}`);
             this.retryInit.bind(this);
         });
     }
@@ -99,7 +100,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
                 this.play();
             }
         }).catch((error) => {
-            window.showInformationMessage(`Failed to playPause. We are going to retry reinit spotilocal. ${error}`);
+            showInformationMessage(`Failed to playPause. We are going to retry reinit spotilocal. ${error}`);
             this.retryInit.bind(this)
         });;
     }

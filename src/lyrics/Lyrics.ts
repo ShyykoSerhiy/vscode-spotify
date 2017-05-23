@@ -1,8 +1,8 @@
 import { SpotifyStatus } from '../SpotifyStatus';
 import { xhr } from '../request/Request';
-import { getLyricsServerUrl } from '../config/SpotifyConfig'
-import { Uri, TextDocumentContentProvider, EventEmitter, Event, window, workspace, commands, ViewColumn, ProgressLocation } from 'vscode';
-console.log(window, ViewColumn, xhr, commands);
+import { getLyricsServerUrl } from '../config/SpotifyConfig';
+import { showInformationMessage } from '../info/Info';
+import { Uri, TextDocumentContentProvider, EventEmitter, Event, window, workspace, ProgressLocation } from 'vscode';
 
 let previewUri = Uri.parse('vscode-spotify://authority/vscode-spotify');
 let html = '';
@@ -32,7 +32,7 @@ async function previewLyrics(lyrics: string) {
         const document = await workspace.openTextDocument(previewUri);
         await window.showTextDocument(document);
     } catch (_ignored) {
-        window.showInformationMessage('Failed to show lyrics' + _ignored);
+        showInformationMessage('Failed to show lyrics' + _ignored);
     }
 }
 
