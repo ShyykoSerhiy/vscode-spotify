@@ -77,9 +77,15 @@ export class SpotifyControls {
 			{ id: 'volumeUp', text: '$(arrow-small-up)' },
 			{ id: 'volumeDown', text: '$(arrow-small-down)' },
 			{ id: 'toggleRepeating', text: '$(sync)', dynamicColor: (isRepeating?: boolean) => { return isRepeating ? 'white' : 'darkgrey' } },
-			{ id: 'toggleShuffling', text: '$(git-branch)', dynamicColor: (isShuffling?: boolean) => { return isShuffling ? 'white' : 'darkgrey' } }
+			{ id: 'toggleShuffling', text: '$(git-branch)', dynamicColor: (isShuffling?: boolean) => { return isShuffling ? 'white' : 'darkgrey' } },
+			{ id: 'lyrics', text: '$(book)' }
 		];
-		var commands: { command: string, title: string }[] = extensions.getExtension('shyykoserhiy.vscode-spotify').packageJSON.contributes.commands;
+		const extension = extensions.getExtension('shyykoserhiy.vscode-spotify');
+		if (!extension) {
+			this._buttons = [];
+			return;
+		}
+		var commands: { command: string, title: string }[] = extension.packageJSON.contributes.commands;
 		this._buttons = buttonsInfo.map((item) => {
 			const buttonName = item.id + 'Button';
 			const buttonCommand = 'spotify.' + item.id;

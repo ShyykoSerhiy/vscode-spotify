@@ -4,15 +4,14 @@ import { getStatusCheckInterval } from './config/SpotifyConfig';
 
 export class SpotifyStatusController {
     private _spotifyStatus: SpotifyStatus;
-    private _timeoutId: number;
+    private _timeoutId?: NodeJS.Timer;
     private _retryCount: number;
     /**
      * How many sequential errors is needed to hide all buttons
      */
     private _maxRetryCount: number;
 
-    constructor(spotifyStatus: SpotifyStatus) {
-        this._timeoutId = 0;
+    constructor(spotifyStatus: SpotifyStatus) {        
         this._spotifyStatus = spotifyStatus;
         this._retryCount = 0;
         this._maxRetryCount = 5;
@@ -53,15 +52,15 @@ export class SpotifyStatusController {
     }
 
     dispose() {
-        if (this._timeoutId !== 0) {
+        if (this._timeoutId) {
             clearTimeout(this._timeoutId);
         }
     }
 
     private _clearQueryTimeout() {
-        if (this._timeoutId !== 0) {
+        if (this._timeoutId) {
             clearTimeout(this._timeoutId);
-            this._timeoutId = 0;
+            this._timeoutId = void 0;
         }
     }
 }

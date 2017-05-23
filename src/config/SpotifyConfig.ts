@@ -16,3 +16,7 @@ export function getButtonPriority(buttonName: string): number {
 export function getStatusCheckInterval(): number {
 	return getConfig().get('statusCheckInterval', 5000);
 }
+
+export function getLyricsServerUrl(): string {
+	return getConfig().get<string>('lyricsServerUrl', '');
+}

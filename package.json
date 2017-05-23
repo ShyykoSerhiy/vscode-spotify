@@ -5,7 +5,7 @@
   "publisher": "shyykoserhiy",
   "license": "MIT",
   "engines": {
-    "vscode": "^0.10.1"
+    "vscode": "^1.12.0"
   },
   "icon": "media/icon.png",
   "galleryBanner": {
@@ -71,6 +71,10 @@
       {
         "command": "spotify.toggleShuffling",
         "title": "Spotify Toggle Shuffling"
+      },
+      {
+        "command": "spotify.lyrics",
+        "title": "Spotify Lyrics"
       }
     ],
     "keybindings": [
@@ -159,6 +163,11 @@
           "default": false,
           "description": "Whether to show toggle shuffling button."
         },
+        "spotify.showLyricsButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show lyrics button."
+        },
         "spotify.priorityBase": {
           "type": "number",
           "default": 30,
@@ -229,24 +238,39 @@
           "default": 12,
           "description": "Priority of toggle shuffling button."
         },
+        "spotify.lyricsButtonPriority": {
+          "type": "number",
+          "default": 0,
+          "description": "Priority of mute|unmute button."
+        },
         "spotify.statusCheckInterval": {
           "type": "number",
           "default": 5000,
           "description": "Interval of spotify status checks. Frequent status checks may result in faster battery drain and high CPU load (especially on MacOs)."
-        }        
+        },
+        "spotify.lyricsServerUrl": {
+          "type": "string",
+          "default": "https://vscode-spotify-lyrics.azurewebsites.net/lyrics"
+        }
       }
     }
   },
   "main": "./out/src/extension",
   "scripts": {
-    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
-    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+    "vscode:prepublish": "tsc -p ./",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "@types/superagent": "^2.0.36",
+    "@types/mocha": "^2.2.32",
+    "@types/node": "^6.0.40",
     "typescript": "^2.2.0",
-    "vscode": "0.10.x"
+    "vscode": "^1.0.0"
   },
   "dependencies": {
+    "request-light": "^0.2.1",
     "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master",
     "spotilocal": "0.1.0"
   }
