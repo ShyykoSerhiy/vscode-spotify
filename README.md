@@ -38,20 +38,37 @@ It's undocumented approach and sadly it doesn't provide all the functionality th
 | Volume Down                  | ✅            | ❌                            |
 | Volume Down                  | ✅            | ❌                            |
 | Volume Down                  | ✅            | ❌                            |
+| Lyrics                       | ✅            | ✅                            |
 
 ## What's new.
 
-### v1.0.0
-* [Support for Linux And Windows!](https://github.com/ShyykoSerhiy/vscode-spotify/issues/7).
+## [2.0.0] - 2017-05-22
+### Added
+- Added lyrics button(via Genius API). @see https://github.com/shyykoserhiy/vscode-spotify-lyrics
+- Added prefix 'vscode-spotify' for all messages from this extension. 
 
-### v0.0.5
-* Fixed [Sometimes there is error (unexpected tocken u) that hides all the buttons.](https://github.com/ShyykoSerhiy/vscode-spotify/issues/3).
-* Fixed [Extension reopens Spotify if it gets closed.](https://github.com/ShyykoSerhiy/vscode-spotify/issues/4).
+## [1.1.0] - 2017-02-27
+### Added
+- Added statusCheckInterval param.
 
-### v0.0.4
-* Added Toggle Repeating Button. (not enabled by default. To enable have a look at [Buttons section below](#Buttons)).
-* Added Toggle Shuffling Button. (not enabled by default. To enable have a look at [Buttons section below](#Buttons)).
-* Fixed [Wrong stopped/playing state](https://github.com/ShyykoSerhiy/vscode-spotify/issues/2).
+## [1.0.0] - 2016-09-14
+### Added
+- initial implementation of windows & linux support.
+
+## [0.0.5] - 2015-12-08
+### Added
+- added dynamic colors for buttons
+- added spotify.toggleRepeating and spotify.toggleShuffling commands
+- added buttons to status bar
+
+### Fixed
+- Extension reopens Spotify if it gets closed. #4
+- Sometimes there is error (unexpected tocken u), that hides all the buttons. #3
+- Wrong stopped/playing state #2
+
+## [0.0.2] - 2015-11-25
+### Added
+- initial release
 
 ## Commands
 List of commands:
