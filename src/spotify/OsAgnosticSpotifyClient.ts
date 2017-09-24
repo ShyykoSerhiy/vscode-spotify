@@ -1,5 +1,6 @@
 import { SpotifyClient } from './SpotifyClient';
 import { Spotilocal } from 'spotilocal';
+import { Status } from 'spotilocal/src/status';
 import { SpotifyStatus } from '../SpotifyStatus';
 import { SpotifyStatusController } from '../SpotifyStatusController';
 import { SpotifyStatusState } from '../SpotifyStatus';
@@ -36,6 +37,23 @@ function notSupported(_ignoredTarget: any, _ignoredPropertyKey: string, descript
             return;
         }
     })
+}
+
+function convertSpotilocalStatus(spotilocalStatus: Status): SpotifyStatusState {
+    return {
+        isRunning: true,
+        state: {
+            volume: spotilocalStatus.volume,
+            position: spotilocalStatus.playing_position,
+            state: spotilocalStatus.playing ? 'playing' : 'paused'
+        },
+        track: {
+            artist: spotilocalStatus.track.artist_resource.name,
+            name: spotilocalStatus.track.track_resource.name
+        },
+        isRepeating: spotilocalStatus.repeat,
+        isShuffling: spotilocalStatus.shuffle
+    };
 }
 
 export class OsAgnosticSpotifyClient implements SpotifyClient {
@@ -103,25 +121,14 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
             this.retryInit.bind(this)
         });;
     }
-    getStatus(): Promise<SpotifyStatusState> {
+    pollStatus(cb: (status: SpotifyStatusState) => void): Promise<void> {
         if (!this.initialized) {
-            return Promise.reject<SpotifyStatusState>('Failed to get status. spotilocal is not initialized');
+            return Promise.reject<void>('Failed to initiate status polling. spotilocal is not initialized');
         }
-        return this.spotilocal.getStatus().then((status) => {
-            return {
-                isRunning: true,
-                state: {
-                    volume: status.volume,
-                    position: status.playing_position,
-                    state: status.playing ? 'playing' : 'paused'
-                },
-                track: {
-                    artist: status.track.artist_resource.name,
-                    name: status.track.track_resource.name
-                },
-                isRepeating: status.repeat,
-                isShuffling: status.shuffle
-            }
+
+        return this.spotilocal.getStatus().then(status => {
+            cb(convertSpotilocalStatus(status));
+            return this.spotilocal.pollStatus(status => cb(convertSpotilocalStatus(status)));
         });
     }
     @notSupported

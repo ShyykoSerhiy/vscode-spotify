@@ -31,5 +31,5 @@ export interface SpotifyClient {
     volumeDown(): void;
     toggleRepeating(): void;
     toggleShuffling(): void;
-    getStatus(): Promise<SpotifyStatusState>;
+    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number): Promise<void>;
 }

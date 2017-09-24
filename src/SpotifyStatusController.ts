@@ -11,7 +11,7 @@ export class SpotifyStatusController {
      */
     private _maxRetryCount: number;
 
-    constructor(spotifyStatus: SpotifyStatus) {        
+    constructor(spotifyStatus: SpotifyStatus) {
         this._spotifyStatus = spotifyStatus;
         this._retryCount = 0;
         this._maxRetryCount = 5;
@@ -44,11 +44,11 @@ export class SpotifyStatusController {
             }
             this.scheduleQueryStatus();
         });
-        SpoifyClientSingleton.getSpotifyClient(this._spotifyStatus, this).getStatus().then((status) => {
+
+        SpoifyClientSingleton.getSpotifyClient(this._spotifyStatus, this).pollStatus(status => {
             this._spotifyStatus.state = status;
             this._retryCount = 0;
-            this.scheduleQueryStatus();
-        }).catch(clearState);
+        }, getStatusCheckInterval).catch(clearState);
     }
 
     dispose() {

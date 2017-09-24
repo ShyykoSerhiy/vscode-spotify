@@ -53,7 +53,7 @@ export class OsxSpotifyClient implements SpotifyClient {
     toggleShuffling() {
         spotify.toggleShuffling(this._queryStatus);
     }
-    getStatus(): Promise<SpotifyStatusState> {
+    private getStatus(): Promise<SpotifyStatusState> {
         return this._promiseIsRunning().then((isRunning) => {
             if (!isRunning) {
                 return Promise.reject<SpotifyStatusState>('Spotify isn\'t running');
@@ -73,6 +73,17 @@ export class OsxSpotifyClient implements SpotifyClient {
                 }
                 return state;
             });
+        });
+    }
+    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number): Promise<void> {
+        return new Promise<void>((_, reject) => {
+            const _poll = () => {
+                this.getStatus().then(status => {
+                    cb(status);
+                    setTimeout(() => _poll(), getInterval());
+                }).catch(reject);
+            };
+            _poll();
         });
     }
     private _queryStatus(){
