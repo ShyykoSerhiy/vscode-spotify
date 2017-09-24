@@ -131,7 +131,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
 
             return new Promise<void>((_, reject) => {
                 const _poll = () => {
-                    this.spotilocal.getStatus('play,pause', 0).then(status => {
+                    this.spotilocal.getStatus(['play', 'pause'], 0).then(status => {
                         cb(convertSpotilocalStatus(status));
                         _poll();
                     }).catch(reject);

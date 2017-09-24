@@ -272,6 +272,6 @@
   "dependencies": {
     "request-light": "^0.2.1",
     "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master",
-    "spotilocal": "https://github.com/levrik/spotilocal#status_polling_v2"
+    "spotilocal": "0.4.0"
   }
 }
