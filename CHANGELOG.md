@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.0.1] - 2017-09-23
+### Fixed
+- Failed to initialize vscode-spotify. We'll keep trying every 20 seconds. (New VSCode Insiders / New Spotify ?) #17
+
 ## [2.0.0] - 2017-05-22
 ### Added
 - Added lyrics button(via Genius API). @see https://github.com/shyykoserhiy/vscode-spotify-lyrics
