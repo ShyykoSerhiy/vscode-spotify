@@ -263,15 +263,15 @@
     "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/superagent": "^2.0.36",
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
+    "@types/superagent": "^2.0.36",
     "typescript": "^2.2.0",
     "vscode": "^1.0.0"
   },
   "dependencies": {
     "request-light": "^0.2.1",
     "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master",
-    "spotilocal": "0.1.0"
+    "spotilocal": "0.2.0"
   }
 }
