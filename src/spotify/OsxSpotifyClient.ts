@@ -1,4 +1,4 @@
-import {SpotifyClient} from './SpotifyClient';
+import {SpotifyClient, createCancelablePromise} from './SpotifyClient';
 import * as spotify from 'spotify-node-applescript';
 import {SpotifyStatus} from '../SpotifyStatus';
 import {SpotifyStatusController} from '../SpotifyStatusController';
@@ -75,9 +75,13 @@ export class OsxSpotifyClient implements SpotifyClient {
             });
         });
     }
-    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number): Promise<void> {
-        return new Promise<void>((_, reject) => {
+    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number)  {
+        let canceled = false;
+        const p = createCancelablePromise<void>((_, reject) => {
             const _poll = () => {
+                if (canceled) {
+                    return;
+                }
                 this.getStatus().then(status => {
                     cb(status);
                     setTimeout(() => _poll(), getInterval());
@@ -85,6 +89,11 @@ export class OsxSpotifyClient implements SpotifyClient {
             };
             _poll();
         });
+        p.promise = p.promise.catch((err) => {
+            canceled === true;
+            throw err;
+        });
+        return p;
     }
     private _queryStatus(){
         this.spotifyStatusController.queryStatus();

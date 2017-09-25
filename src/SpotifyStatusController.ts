@@ -6,6 +6,7 @@ export class SpotifyStatusController {
     private _spotifyStatus: SpotifyStatus;
     private _timeoutId?: NodeJS.Timer;
     private _retryCount: number;
+    private _cancelCb?: ()=>void;
     /**
      * How many sequential errors is needed to hide all buttons
      */
@@ -19,6 +20,7 @@ export class SpotifyStatusController {
     }
 
     scheduleQueryStatus() {
+        this._cancelPreviousPoll();
         this._clearQueryTimeout();
         this._timeoutId = setTimeout(() => {
             this.queryStatus();
@@ -29,6 +31,7 @@ export class SpotifyStatusController {
      * Retrieves status of spotify and passes it to spotifyStatus;
      */
     queryStatus() {
+        this._cancelPreviousPoll();
         this._clearQueryTimeout();
         var clearState = (() => {
             this._retryCount++;
@@ -45,10 +48,12 @@ export class SpotifyStatusController {
             this.scheduleQueryStatus();
         });
 
-        SpoifyClientSingleton.getSpotifyClient(this._spotifyStatus, this).pollStatus(status => {
+        const { promise, cancel } = SpoifyClientSingleton.getSpotifyClient(this._spotifyStatus, this).pollStatus(status => {
             this._spotifyStatus.state = status;
             this._retryCount = 0;
-        }, getStatusCheckInterval).catch(clearState);
+        }, getStatusCheckInterval)
+        this._cancelCb = cancel;
+        promise.catch(clearState);        
     }
 
     dispose() {
@@ -62,5 +67,9 @@ export class SpotifyStatusController {
             clearTimeout(this._timeoutId);
             this._timeoutId = void 0;
         }
+    }
+
+    private _cancelPreviousPoll(){
+        this._cancelCb && this._cancelCb();
     }
 }

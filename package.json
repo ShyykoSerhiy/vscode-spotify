@@ -250,7 +250,13 @@
         },
         "spotify.lyricsServerUrl": {
           "type": "string",
-          "default": "https://vscode-spotify-lyrics.azurewebsites.net/lyrics"
+          "default": "https://vscode-spotify-lyrics.azurewebsites.net/lyrics",
+          "description": "Url for lyrics server. @see https://github.com/ShyykoSerhiy/vscode-spotify-lyrics ."
+        },
+        "spotify.useCombinedApproachOnMacOS": {
+          "type": "boolean",
+          "default": "false",          
+          "description": "Whether to use experimental applescript + http implementation of spotify client to reduce CPU usage on MacOs. MacOs only."
         }
       }
     }
@@ -272,6 +278,6 @@
   "dependencies": {
     "request-light": "^0.2.1",
     "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master",
-    "spotilocal": "0.4.1"
+    "spotilocal": "0.4.2"
   }
 }

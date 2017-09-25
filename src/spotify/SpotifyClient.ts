@@ -2,7 +2,9 @@ import {SpotifyStatus} from '../SpotifyStatus';
 import {SpotifyStatusController} from '../SpotifyStatusController';
 import {OsAgnosticSpotifyClient} from './OsAgnosticSpotifyClient';
 import {OsxSpotifyClient} from './OsxSpotifyClient';
+import {OsxHttpSpotifyClient} from './OsxHttpSpotifyClient';
 import {SpotifyStatusState} from '../SpotifyStatus';
+import {getUseCombinedApproachOnMacOS} from '../config/SpotifyConfig';
 import * as os from 'os';
 
 export class SpoifyClientSingleton {
@@ -12,10 +14,21 @@ export class SpoifyClientSingleton {
             return this.spotifyClient;
         }
         this.spotifyClient = (os.platform() === 'darwin') ?
-            new OsxSpotifyClient(spotifyStatus, spotifyStatusController) :
+            (getUseCombinedApproachOnMacOS() ? new OsxHttpSpotifyClient(spotifyStatus, spotifyStatusController) : new OsxSpotifyClient(spotifyStatus, spotifyStatusController)) :
             new OsAgnosticSpotifyClient(spotifyStatus, spotifyStatusController);
         return this.spotifyClient;
     }
+}
+
+export function createCancelablePromise<T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) {
+    let cancel: () => void = null as any;
+    const promise = new Promise<T>((resolve, reject) => {
+        cancel = () => {
+            reject('canceled');
+        }
+        executor(resolve, reject);
+    })
+    return { promise, cancel }
 }
 
 export interface SpotifyClient {
@@ -31,5 +44,5 @@ export interface SpotifyClient {
     volumeDown(): void;
     toggleRepeating(): void;
     toggleShuffling(): void;
-    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number): Promise<void>;
+    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number): { promise: Promise<void>, cancel: () => void };
 }

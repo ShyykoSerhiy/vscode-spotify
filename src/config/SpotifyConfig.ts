@@ -20,3 +20,7 @@ export function getStatusCheckInterval(): number {
 export function getLyricsServerUrl(): string {
 	return getConfig().get<string>('lyricsServerUrl', '');
 }
+
+export function getUseCombinedApproachOnMacOS(): boolean {
+	return getConfig().get<boolean>('useCombinedApproachOnMacOS', false);
+}

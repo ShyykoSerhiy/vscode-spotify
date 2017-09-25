@@ -1,4 +1,4 @@
-import { SpotifyClient } from './SpotifyClient';
+import { SpotifyClient, createCancelablePromise } from './SpotifyClient';
 import { Spotilocal } from 'spotilocal';
 import { Status } from 'spotilocal/src/status';
 import { SpotifyStatus } from '../SpotifyStatus';
@@ -56,6 +56,8 @@ function convertSpotilocalStatus(spotilocalStatus: Status): SpotifyStatusState {
     };
 }
 
+const EMPTY_FN = () => { };
+
 export class OsAgnosticSpotifyClient implements SpotifyClient {
     private spotifyStatus: SpotifyStatus;
     private spotifyStatusController: SpotifyStatusController;
@@ -101,9 +103,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
     }
     @returnIfNotInitialized
     pause() {
-        this.spotilocal.pause(true).then(() => {
-            this.spotifyStatusController.queryStatus();
-        }).catch((error) => {
+        this.spotilocal.pause(true).catch((error) => {
             showInformationMessage(`Failed to pause. We are going to retry reinit spotilocal. ${error}`);
             this.retryInit.bind(this);
         });
@@ -121,24 +121,36 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
             this.retryInit.bind(this)
         });;
     }
-    pollStatus(cb: (status: SpotifyStatusState) => void): Promise<void> {
+    pollStatus(cb: (status: SpotifyStatusState) => void) {
         if (!this.initialized) {
-            return Promise.reject<void>('Failed to initiate status polling. spotilocal is not initialized');
+            return { promise: Promise.reject<void>('Failed to initiate status polling. spotilocal is not initialized'), cancel: EMPTY_FN };
         }
 
-        return this.spotilocal.getStatus().then(status => {
-            cb(convertSpotilocalStatus(status));
-
-            return new Promise<void>((_, reject) => {
+        let canceled = false;
+        const p = createCancelablePromise<void>((_resolve, reject) => {
+            this.spotilocal.getStatus().then(status => {
+                cb(convertSpotilocalStatus(status));
                 const _poll = () => {
+                    if (canceled) {
+                        return;
+                    }
                     this.spotilocal.getStatus(['play', 'pause'], 0).then(status => {
                         cb(convertSpotilocalStatus(status));
                         _poll();
                     }).catch(reject);
                 };
                 _poll();
-            });
+            }).catch(reject);
         });
+        p.promise = p.promise.catch((err) => {
+            if (err && err.code === 'ECONNREFUSED'){
+                this.retryInit();
+            }
+
+            canceled = true;
+            throw err;
+        });
+        return p;
     }
     @notSupported
     muteVolume() {
