@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.1.0] - 2017-09-24
+### Added 
+- Implemented status long-polling on Windows and Linux #19 (kudos to @levrik(Levin Rickert) (https://github.com/levrik))
+- Experimental applescript + http implementation of spotify client to reduce CPU usage on MacOs and improve status updating. Set spotify.useCombinedApproachOnMacOS to true to try out! (fixes https://github.com/ShyykoSerhiy/vscode-spotify/issues/12)
+### Fixed
+- High CPU usage on MacOS #12 (via spotify.useCombinedApproachOnMacOS)
+
 ## [2.0.1] - 2017-09-23
 ### Fixed
 - Failed to initialize vscode-spotify. We'll keep trying every 20 seconds. (New VSCode Insiders / New Spotify ?) #17
