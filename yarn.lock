@@ -1395,9 +1395,9 @@ split@0.3:
   dependencies:
     applescript "1.0.0"
 
-spotilocal@0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/spotilocal/-/spotilocal-0.4.0.tgz#5ed37ecbdc7d7d7769d2050e32e4a3b0a49ae132"
+spotilocal@0.4.1:
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/spotilocal/-/spotilocal-0.4.1.tgz#ff21075840e43412111c4716bc5bd274e10be45f"
   dependencies:
     chai "^3.5.0"
     ssl-root-cas "^1.2.2"
