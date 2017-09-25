@@ -40,36 +40,6 @@ It's undocumented approach and sadly it doesn't provide all the functionality th
 | Volume Down                  | ✅            | ❌                            |
 | Lyrics                       | ✅            | ✅                            |
 
-## What's new.
-
-## [2.0.0] - 2017-05-22
-### Added
-- Added lyrics button(via Genius API). @see https://github.com/shyykoserhiy/vscode-spotify-lyrics
-- Added prefix 'vscode-spotify' for all messages from this extension. 
-
-## [1.1.0] - 2017-02-27
-### Added
-- Added statusCheckInterval param.
-
-## [1.0.0] - 2016-09-14
-### Added
-- initial implementation of windows & linux support.
-
-## [0.0.5] - 2015-12-08
-### Added
-- added dynamic colors for buttons
-- added spotify.toggleRepeating and spotify.toggleShuffling commands
-- added buttons to status bar
-
-### Fixed
-- Extension reopens Spotify if it gets closed. #4
-- Sometimes there is error (unexpected tocken u), that hides all the buttons. #3
-- Wrong stopped/playing state #2
-
-## [0.0.2] - 2015-11-25
-### Added
-- initial release
-
 ## Commands
 List of commands:
 ```json
@@ -314,12 +284,7 @@ You can also change position of buttons by changing of this parameters:
 	"type": "number",
 	"default": 12,
 	"description": "Priority of toggle shuffling button."
-},
-"spotify.statusCheckInterval": {
-	"type": "number",
-	"default": 5000,
-	"description": "Interval of spotify status checks. Frequent status checks may result in faster battery drain and high CPU load (especially on MacOs)."
-}   
+}
 ```
 
 [MIT](LICENSE)
