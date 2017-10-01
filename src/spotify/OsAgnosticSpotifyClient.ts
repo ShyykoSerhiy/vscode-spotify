@@ -5,6 +5,7 @@ import { SpotifyStatus } from '../SpotifyStatus';
 import { SpotifyStatusController } from '../SpotifyStatusController';
 import { SpotifyStatusState } from '../SpotifyStatus';
 import { showInformationMessage } from '../info/Info';
+import { getShowInitializationError } from '../config/SpotifyConfig'
 
 function returnIfNotInitialized(_ignoredTarget: any, _ignoredPropertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const fn = descriptor.value as Function;
@@ -15,7 +16,7 @@ function returnIfNotInitialized(_ignoredTarget: any, _ignoredPropertyKey: string
 
     return Object.assign({}, descriptor, {
         value: function () {
-            if (!this.initialized) {
+            if (!this.initialized && getShowInitializationError()) {
                 showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
                 return;
             }
@@ -79,10 +80,11 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
         this.spotilocal.init().then(() => {
             this.initialized = true;
             this.showedReinitMessage = false;
-        }).catch((_ignorredError) => {
-            if (!this.showedReinitMessage){
+        }).catch((ignorredError) => {
+            if (!this.showedReinitMessage && getShowInitializationError()) {
                 showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
             }            
+            console.error('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.', ignorredError);
             this.showedReinitMessage = true;
             this.initTimeoutId = setTimeout(this.retryInit.bind(this), 20 * 1000);
         })

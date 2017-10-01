@@ -24,3 +24,7 @@ export function getLyricsServerUrl(): string {
 export function getUseCombinedApproachOnMacOS(): boolean {
 	return getConfig().get<boolean>('useCombinedApproachOnMacOS', false);
 }
+
+export function getShowInitializationError(): boolean {
+	return getConfig().get<boolean>('showInitializationError', false);
+}

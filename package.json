@@ -257,6 +257,11 @@
           "type": "boolean",
           "default": "false",          
           "description": "Whether to use experimental applescript + http implementation of spotify client to reduce CPU usage on MacOs. MacOs only."
+        },
+        "spotify.showInitializationError": {
+          "type": "boolean",
+          "default": false,          
+          "description": "Whether to show initialization error."
         }
       }
     }
