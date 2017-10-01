@@ -255,7 +255,7 @@
         },
         "spotify.useCombinedApproachOnMacOS": {
           "type": "boolean",
-          "default": "false",          
+          "default": true,          
           "description": "Whether to use experimental applescript + http implementation of spotify client to reduce CPU usage on MacOs. MacOs only."
         },
         "spotify.showInitializationError": {
