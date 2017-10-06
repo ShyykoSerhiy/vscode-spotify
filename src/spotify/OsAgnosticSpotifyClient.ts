@@ -77,9 +77,12 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
     private retryInit() {
         this.initialized = false;        
         this.initTimeoutId && clearTimeout(this.initTimeoutId);
-        this.spotilocal.init().then(() => {
+        const lastUsedPort = this.spotifyStatusController.globalState.get<number>("lastUsedPort");
+        this.spotilocal.init(lastUsedPort).then(() => {
             this.initialized = true;
             this.showedReinitMessage = false;
+
+            this.spotifyStatusController.globalState.update("lastUsedPort", this.spotilocal.port);
         }).catch((ignorredError) => {
             if (!this.showedReinitMessage && getShowInitializationError()) {
                 showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
@@ -87,7 +90,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
             console.error('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.', ignorredError);
             this.showedReinitMessage = true;
             this.initTimeoutId = setTimeout(this.retryInit.bind(this), 20 * 1000);
-        })
+        });
     }
 
     @notSupported

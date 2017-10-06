@@ -255,12 +255,12 @@
         },
         "spotify.useCombinedApproachOnMacOS": {
           "type": "boolean",
-          "default": true,          
+          "default": true,
           "description": "Whether to use experimental applescript + http implementation of spotify client to reduce CPU usage on MacOs. MacOs only."
         },
         "spotify.showInitializationError": {
           "type": "boolean",
-          "default": false,          
+          "default": false,
           "description": "Whether to show initialization error."
         }
       }
@@ -283,6 +283,6 @@
   "dependencies": {
     "request-light": "^0.2.1",
     "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master",
-    "spotilocal": "0.4.2"
+    "spotilocal": "levrik/spotilocal#default-port"
   }
 }

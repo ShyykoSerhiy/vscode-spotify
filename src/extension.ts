@@ -8,7 +8,7 @@ import {SpotifyStatusController} from './SpotifyStatusController';
 export function activate(context: ExtensionContext) {    
     // This line of code will only be executed once when your extension is activated.        
     let spotifyStatus = new SpotifyStatus();
-    let controller = new SpotifyStatusController(spotifyStatus);
+    let controller = new SpotifyStatusController(spotifyStatus, context.globalState);
 
     // Add to a list of disposables which are disposed when this extension is deactivated.
     context.subscriptions.push(controller);

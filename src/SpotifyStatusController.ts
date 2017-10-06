@@ -1,8 +1,10 @@
+import { Memento } from 'vscode';
 import { SpotifyStatus } from './SpotifyStatus';
 import { SpoifyClientSingleton } from './spotify/SpotifyClient';
 import { getStatusCheckInterval } from './config/SpotifyConfig';
 
 export class SpotifyStatusController {
+    public globalState: Memento;
     private _spotifyStatus: SpotifyStatus;
     private _timeoutId?: NodeJS.Timer;
     private _retryCount: number;
@@ -12,7 +14,8 @@ export class SpotifyStatusController {
      */
     private _maxRetryCount: number;
 
-    constructor(spotifyStatus: SpotifyStatus) {
+    constructor(spotifyStatus: SpotifyStatus, globalState: Memento) {
+        this.globalState = globalState;
         this._spotifyStatus = spotifyStatus;
         this._retryCount = 0;
         this._maxRetryCount = 5;

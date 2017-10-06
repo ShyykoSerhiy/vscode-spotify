@@ -1395,9 +1395,9 @@ split@0.3:
   dependencies:
     applescript "1.0.0"
 
-spotilocal@0.4.2:
+spotilocal@levrik/spotilocal#default-port:
   version "0.4.2"
-  resolved "https://registry.yarnpkg.com/spotilocal/-/spotilocal-0.4.2.tgz#b8aea1bbb4f1f7e5989ab5da240b0e3a448ce2c7"
+  resolved "https://codeload.github.com/levrik/spotilocal/tar.gz/efc66a70c74e5b63a7a1156223f3f6eee020e395"
   dependencies:
     chai "^3.5.0"
     ssl-root-cas "^1.2.2"
