@@ -283,6 +283,6 @@
   "dependencies": {
     "request-light": "^0.2.1",
     "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master",
-    "spotilocal": "levrik/spotilocal#default-port"
+    "spotilocal": "0.4.4"
   }
 }
