@@ -1,11 +1,12 @@
 import { SpotifyStatus } from '../SpotifyStatus';
 import { xhr } from '../request/Request';
-import { getLyricsServerUrl } from '../config/SpotifyConfig';
+import { getLyricsServerUrl, openPanelLyrics } from '../config/SpotifyConfig';
 import { showInformationMessage } from '../info/Info';
 import { Uri, TextDocumentContentProvider, EventEmitter, Event, window, workspace, ProgressLocation } from 'vscode';
 
 let previewUri = Uri.parse('vscode-spotify://authority/vscode-spotify');
 let html = '';
+
 class TextContentProvider implements TextDocumentContentProvider {
     private _onDidChange = new EventEmitter<Uri>();
 
@@ -24,13 +25,12 @@ class TextContentProvider implements TextDocumentContentProvider {
 
 let provider = new TextContentProvider();
 
-
 async function previewLyrics(lyrics: string) {
     html = lyrics.trim();
     provider.update(previewUri);
     try {
         const document = await workspace.openTextDocument(previewUri);
-        await window.showTextDocument(document);
+        await window.showTextDocument(document, openPanelLyrics(), true);
     } catch (_ignored) {
         showInformationMessage('Failed to show lyrics' + _ignored);
     }

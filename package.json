@@ -168,6 +168,14 @@
           "default": true,
           "description": "Whether to show lyrics button."
         },
+        "spotify.openPanelLyrics": {
+          "type": "number",
+          "default": 1,
+          "enum": [
+            1, 2, 3
+          ],
+          "description": "Panel to display the Lyrics"
+        },
         "spotify.priorityBase": {
           "type": "number",
           "default": 30,

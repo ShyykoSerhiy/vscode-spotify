@@ -21,6 +21,10 @@ export function getLyricsServerUrl(): string {
 	return getConfig().get<string>('lyricsServerUrl', '');
 }
 
+export function openPanelLyrics(): number {
+	return getConfig().get<number>('openPanelLyrics', 1);
+}
+
 export function getUseCombinedApproachOnMacOS(): boolean {
 	return getConfig().get<boolean>('useCombinedApproachOnMacOS', false);
 }
