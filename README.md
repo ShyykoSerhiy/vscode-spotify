@@ -141,7 +141,7 @@ For more info on hotkeys please look at https://code.visualstudio.com/docs/custo
 
 ## Buttons
 This extension provides variety of buttons to controll spotify from status bar. By default 4 buttons are enabled:
-1. Previus track
+1. Previous track
 2. Play|pause
 3. Next track
 4. Mute|unmute
