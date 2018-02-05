@@ -103,6 +103,11 @@
       "type": "object",
       "title": "vscode-spotify configuration",
       "properties": {
+        "spotify.trackInfoFormat": {
+          "type": "string",
+          "default": "artistName - trackName - albumName",
+          "description": "Current track info that will be displayed. Available keywords: albumName, artistName,  trackName"
+        },
         "spotify.showNextButton": {
           "type": "boolean",
           "default": true,

@@ -1,6 +1,6 @@
 import {window, StatusBarItem, StatusBarAlignment} from 'vscode';
 import {SpotifyControls} from './SpotifyControls';
-import {getButtonPriority} from './config/SpotifyConfig';
+import {getTrackInfoFormat, getButtonPriority} from './config/SpotifyConfig';
 
 export interface Track {
     album: string,
@@ -65,9 +65,8 @@ export class SpotifyStatus {
 
         if (this._state.isRunning) {
             const {isRepeating, isShuffling} = this._state;
-            const {album, artist, name} = this._state.track;
             const {state: playing, volume} = this._state.state;
-            var text = `${artist} - ${name} - ${album}`;
+            var text = _formattedTrackInfo(this._state.track);
             if (text !== this._statusBarItem.text) {//we need this guard to prevent flickering
                 this._statusBarItem.text = text;
                 this.redraw();//we need to redraw due to a bug with priority
@@ -110,4 +109,17 @@ export class SpotifyStatus {
             this._spotifyControls
         }
     }
+}
+
+function _formattedTrackInfo(track: Track): string {
+    const { album, artist, name } = track;
+    const keywordsMap:{[index:string]: string} = {
+        albumName: album,
+        artistName: artist,
+        trackName: name,
+    }
+    let a = getTrackInfoFormat().replace(/albumName|artistName|trackName/gi, matched => {
+        return keywordsMap[matched];
+    });
+    return a;
 }
