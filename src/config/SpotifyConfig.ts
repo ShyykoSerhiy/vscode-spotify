@@ -32,3 +32,7 @@ export function getUseCombinedApproachOnMacOS(): boolean {
 export function getShowInitializationError(): boolean {
 	return getConfig().get<boolean>('showInitializationError', false);
 }
+
+export function getTrackInfoFormat(): string {
+	return getConfig().get<string>('trackInfoFormat', '');
+}

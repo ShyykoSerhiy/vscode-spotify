@@ -41,7 +41,7 @@ export class SpotifyStatusController {
             if (this._retryCount >= this._maxRetryCount) {
                 this._spotifyStatus.state = {
                     state: { position: 0, volume: 0, state: '' },
-                    track: { artist: '', name: '' },
+                    track: { album: '', artist: '', name: '' },
                     isRepeating: false,
                     isShuffling: false,
                     isRunning: false
@@ -56,7 +56,7 @@ export class SpotifyStatusController {
             this._retryCount = 0;
         }, getStatusCheckInterval)
         this._cancelCb = cancel;
-        promise.catch(clearState);        
+        promise.catch(clearState);
     }
 
     dispose() {
