@@ -49,6 +49,7 @@ function convertSpotilocalStatus(spotilocalStatus: Status): SpotifyStatusState {
             state: spotilocalStatus.playing ? 'playing' : 'paused'
         },
         track: {
+            album: spotilocalStatus.track.album_resource.name,
             artist: spotilocalStatus.track.artist_resource.name,
             name: spotilocalStatus.track.track_resource.name
         },
@@ -65,7 +66,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
     private spotilocal: Spotilocal;
     private initialized: boolean;
     private showedReinitMessage: boolean;
-    private initTimeoutId: number;    
+    private initTimeoutId: number;
 
     constructor(spotifyStatus: SpotifyStatus, spotifyStatusController: SpotifyStatusController) {
         this.spotifyStatus = spotifyStatus;
@@ -75,7 +76,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
         this.retryInit();
     }
     private retryInit() {
-        this.initialized = false;        
+        this.initialized = false;
         this.initTimeoutId && clearTimeout(this.initTimeoutId);
         const lastUsedPort = this.spotifyStatusController.globalState.get<number>("lastUsedPort");
         this.spotilocal.init(lastUsedPort).then(() => {
@@ -86,7 +87,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
         }).catch((ignorredError) => {
             if (!this.showedReinitMessage && getShowInitializationError()) {
                 showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
-            }            
+            }
             console.error('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.', ignorredError);
             this.showedReinitMessage = true;
             this.initTimeoutId = setTimeout(this.retryInit.bind(this), 20 * 1000);

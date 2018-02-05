@@ -3,6 +3,7 @@ import {SpotifyControls} from './SpotifyControls';
 import {getButtonPriority} from './config/SpotifyConfig';
 
 export interface Track {
+    album: string,
     artist: string,
     name: string
 }
@@ -31,7 +32,7 @@ export class SpotifyStatus {
     private _statusBarItem: StatusBarItem;
     private _spotifyControls: SpotifyControls;
     /**
-     * 'Current'(last retrieved) state of spotify. 
+     * 'Current'(last retrieved) state of spotify.
      */
     private _state: SpotifyStatusState;
     private _hidden: boolean;
@@ -52,7 +53,7 @@ export class SpotifyStatus {
      * Updates spotify status bar inside vscode
      */
     public updateSpotifyStatus() {
-        // Create as needed 
+        // Create as needed
         if (!this._statusBarItem) {
             this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left, getButtonPriority('trackInfoPriority'));
             this._statusBarItem.show();
@@ -64,11 +65,11 @@ export class SpotifyStatus {
 
         if (this._state.isRunning) {
             const {isRepeating, isShuffling} = this._state;
-            const {artist, name} = this._state.track;            
+            const {album, artist, name} = this._state.track;
             const {state: playing, volume} = this._state.state;
-            var text = `${artist} - ${name}`;
+            var text = `${artist} - ${name} - ${album}`;
             if (text !== this._statusBarItem.text) {//we need this guard to prevent flickering
-                this._statusBarItem.text = `${artist} - ${name}`;
+                this._statusBarItem.text = text;
                 this.redraw();//we need to redraw due to a bug with priority
             }
             if (this._spotifyControls.updateDynamicButtons(playing === 'playing', volume === 0, isRepeating, isShuffling)) {
@@ -91,7 +92,7 @@ export class SpotifyStatus {
             this._spotifyControls.hideAll();
             this._hidden = true;
         }
-    }  
+    }
     /**
      * True if on last state of Spotify it was muted(volume was equal 0)
      */
