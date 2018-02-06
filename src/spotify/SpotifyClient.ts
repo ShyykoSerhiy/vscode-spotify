@@ -15,7 +15,7 @@ export class SpoifyClientSingleton {
         }
         this.spotifyClient = (os.platform() === 'darwin') ?
             (getUseCombinedApproachOnMacOS() ? new OsxHttpSpotifyClient(spotifyStatus, spotifyStatusController) : new OsxSpotifyClient(spotifyStatus, spotifyStatusController)) :
-            new OsAgnosticSpotifyClient(spotifyStatus, spotifyStatusController);
+            new OsAgnosticSpotifyClient(spotifyStatusController);
         return this.spotifyClient;
     }
 }

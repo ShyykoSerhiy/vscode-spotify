@@ -1,7 +1,6 @@
 import { SpotifyClient, createCancelablePromise } from './SpotifyClient';
 import { Spotilocal } from 'spotilocal';
 import { Status } from 'spotilocal/src/status';
-import { SpotifyStatus } from '../SpotifyStatus';
 import { SpotifyStatusController } from '../SpotifyStatusController';
 import { SpotifyStatusState } from '../SpotifyStatus';
 import { showInformationMessage } from '../info/Info';
@@ -61,15 +60,13 @@ function convertSpotilocalStatus(spotilocalStatus: Status): SpotifyStatusState {
 const EMPTY_FN = () => { };
 
 export class OsAgnosticSpotifyClient implements SpotifyClient {
-    private spotifyStatus: SpotifyStatus;
     private spotifyStatusController: SpotifyStatusController;
     private spotilocal: Spotilocal;
     private initialized: boolean;
     private showedReinitMessage: boolean;
     private initTimeoutId: number;
 
-    constructor(spotifyStatus: SpotifyStatus, spotifyStatusController: SpotifyStatusController) {
-        this.spotifyStatus = spotifyStatus;
+    constructor(spotifyStatusController: SpotifyStatusController) {
         this.spotifyStatusController = spotifyStatusController;
         this.spotilocal = new Spotilocal();
 

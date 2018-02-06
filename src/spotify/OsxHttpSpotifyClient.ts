@@ -13,7 +13,7 @@ export class OsxHttpSpotifyClient extends OsxSpotifyClient implements SpotifyCli
 
     constructor(spotifyStatus: SpotifyStatus, spotifyStatusController: SpotifyStatusController) {
         super(spotifyStatus, spotifyStatusController)
-        this.osAgnosticSpotifyClient = new OsAgnosticSpotifyClient(spotifyStatus, spotifyStatusController);
+        this.osAgnosticSpotifyClient = new OsAgnosticSpotifyClient(spotifyStatusController);
     }
 
     pollStatus(cb: (status: SpotifyStatusState) => void, _getInterval: () => number) {
