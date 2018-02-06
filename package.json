@@ -1,7 +1,7 @@
 {
   "name": "vscode-spotify",
   "description": "Use Spotify inside vscode.",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "publisher": "shyykoserhiy",
   "license": "MIT",
   "engines": {
@@ -105,8 +105,8 @@
       "properties": {
         "spotify.trackInfoFormat": {
           "type": "string",
-          "default": "artistName - trackName - albumName",
-          "description": "Current track info that will be displayed. Available keywords: albumName, artistName,  trackName"
+          "default": "artistName - trackName",
+          "description": "Current track info that will be displayed. Available keywords: albumName, artistName, trackName"
         },
         "spotify.showNextButton": {
           "type": "boolean",

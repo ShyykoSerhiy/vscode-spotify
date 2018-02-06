@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.0] - 2018-02-06
+### Added
+- Show album title (via config spotify.trackInfoFormat) #28 (kudos to @mrcasals(Marc Riera) (https://github.com/mrcasals))
+- Lyrics in split panel window (via spotify.openPanelLyrics) #22 (kudos to @xeBuz(Jesús Roldán) (https://github.com/xeBuz))
+
 ## [2.2.1] - 2017-10-10
 ### Fixed
 - Remember last successfully used port (initialize speed up) #21 (kudos to @levrik(Levin Rickert) (https://github.com/levrik))
