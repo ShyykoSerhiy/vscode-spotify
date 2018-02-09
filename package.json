@@ -1,7 +1,7 @@
 {
   "name": "vscode-spotify",
   "description": "Use Spotify inside vscode.",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "publisher": "shyykoserhiy",
   "license": "MIT",
   "engines": {
@@ -299,7 +299,7 @@
   "dependencies": {
     "redux": "^3.7.2",
     "request-light": "^0.2.1",
-    "spotify-node-applescript": "git+http://github.com/ShyykoSerhiy/spotify-node-applescript.git#master",
+    "spotify-node-applescript": "1.1.1",
     "spotilocal": "0.4.4"
   }
 }
