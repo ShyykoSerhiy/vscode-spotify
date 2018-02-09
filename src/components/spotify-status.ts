@@ -1,29 +1,8 @@
-import {window, StatusBarItem, StatusBarAlignment} from 'vscode';
-import {SpotifyControls} from './SpotifyControls';
-import {getTrackInfoFormat, getButtonPriority} from './config/SpotifyConfig';
-
-export interface Track {
-    album: string,
-    artist: string,
-    name: string
-}
-
-export interface State {
-    volume: number,
-    position: number,
-    state: string
-}
-
-export interface SpotifyStatusState {
-    /**
-     * true if spotify is open
-     */
-    isRunning: boolean,
-    state: State,
-    track: Track,
-    isRepeating: boolean,
-    isShuffling: boolean
-}
+import { window, StatusBarItem, StatusBarAlignment } from 'vscode';
+import { SpotifyControls } from './spotify-controls';
+import { getTrackInfoFormat, getButtonPriority } from '../config/spotify-config';
+import { getStore } from '../store/store';
+import { ITrack } from '../state/state';
 
 export class SpotifyStatus {
     /**
@@ -31,28 +10,17 @@ export class SpotifyStatus {
      */
     private _statusBarItem: StatusBarItem;
     private _spotifyControls: SpotifyControls;
-    /**
-     * 'Current'(last retrieved) state of spotify.
-     */
-    private _state: SpotifyStatusState;
     private _hidden: boolean;
 
-    /**
-     * Sets state of spotify. Trigers 'updateSpotifyStatus' method.
-     */
-    set state(state: SpotifyStatusState) {
-        this._state = state;
-        this.updateSpotifyStatus();
-    }
-
-    get state(): SpotifyStatusState {
-        return this._state;
+    constructor() {
+        getStore().subscribe(() => this.render());
     }
 
     /**
      * Updates spotify status bar inside vscode
      */
-    public updateSpotifyStatus() {
+    public render() {
+        const state = getStore().getState();
         // Create as needed
         if (!this._statusBarItem) {
             this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left, getButtonPriority('trackInfoPriority'));
@@ -63,10 +31,9 @@ export class SpotifyStatus {
             this._spotifyControls.showVisible();
         }
 
-        if (this._state.isRunning) {
-            const {isRepeating, isShuffling} = this._state;
-            const {state: playing, volume} = this._state.state;
-            var text = _formattedTrackInfo(this._state.track);
+        if (state.isRunning) {
+            const { state: playing, volume, isRepeating, isShuffling } = state.playerState;
+            var text = _formattedTrackInfo(state.track);
             if (text !== this._statusBarItem.text) {//we need this guard to prevent flickering
                 this._statusBarItem.text = text;
                 this.redraw();//we need to redraw due to a bug with priority
@@ -74,15 +41,17 @@ export class SpotifyStatus {
             if (this._spotifyControls.updateDynamicButtons(playing === 'playing', volume === 0, isRepeating, isShuffling)) {
                 this.redraw();//we need to redraw due to a bug with priority
             }
-            if (this._hidden){
+            if (this._hidden) {
                 this.redraw();
             }
         } else {
             this.redraw();
         }
     }
-    redraw() {
-        if (this._state.isRunning) {
+
+    private redraw() {
+        const state = getStore().getState();
+        if (state.isRunning) {
             this._statusBarItem.show();
             this._spotifyControls.showVisible();
             this._hidden = false;
@@ -91,12 +60,6 @@ export class SpotifyStatus {
             this._spotifyControls.hideAll();
             this._hidden = true;
         }
-    }
-    /**
-     * True if on last state of Spotify it was muted(volume was equal 0)
-     */
-    isMuted() {
-        return this.state && this.state.state.volume === 0;
     }
     /**
      * Disposes status bar items(if exist)
@@ -111,9 +74,9 @@ export class SpotifyStatus {
     }
 }
 
-function _formattedTrackInfo(track: Track): string {
+function _formattedTrackInfo(track: ITrack): string {
     const { album, artist, name } = track;
-    const keywordsMap:{[index:string]: string} = {
+    const keywordsMap: { [index: string]: string } = {
         albumName: album,
         artistName: artist,
         trackName: name,

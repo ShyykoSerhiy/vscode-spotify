@@ -1,16 +1,11 @@
-import {SpotifyClient, createCancelablePromise} from './SpotifyClient';
+import { SpotifyClient, createCancelablePromise } from './spotify-client';
 import * as spotify from 'spotify-node-applescript';
-import {SpotifyStatus} from '../SpotifyStatus';
-import {SpotifyStatusController} from '../SpotifyStatusController';
-import {SpotifyStatusState} from '../SpotifyStatus';
+import { ISpotifyStatusState } from '../state/state';
+import { isMuted } from '../store/store';
 
 export class OsxSpotifyClient implements SpotifyClient {
-    private spotifyStatus: SpotifyStatus;
-    private spotifyStatusController: SpotifyStatusController;
 
-    constructor(spotifyStatus: SpotifyStatus, spotifyStatusController: SpotifyStatusController) {
-        this.spotifyStatus = spotifyStatus;
-        this.spotifyStatusController = spotifyStatusController;
+    constructor() {
         this._queryStatus = this._queryStatus.bind(this);
     }
     next() {
@@ -35,7 +30,7 @@ export class OsxSpotifyClient implements SpotifyClient {
         spotify.unmuteVolume(this._queryStatus);
     }
     muteUnmuteVolume() {
-        if (this.spotifyStatus.isMuted()) {
+        if (isMuted()) {
             spotify.unmuteVolume(this._queryStatus)
         } else {
             spotify.muteVolume(this._queryStatus)
@@ -53,10 +48,10 @@ export class OsxSpotifyClient implements SpotifyClient {
     toggleShuffling() {
         spotify.toggleShuffling(this._queryStatus);
     }
-    private getStatus(): Promise<SpotifyStatusState> {
+    private getStatus(): Promise<ISpotifyStatusState> {
         return this._promiseIsRunning().then((isRunning) => {
             if (!isRunning) {
-                return Promise.reject<SpotifyStatusState>('Spotify isn\'t running');
+                return Promise.reject<ISpotifyStatusState>('Spotify isn\'t running');
             }
             return Promise.all<spotify.State | spotify.Track | boolean>([
                 this._promiseGetState(),
@@ -64,18 +59,20 @@ export class OsxSpotifyClient implements SpotifyClient {
                 this._promiseIsRepeating(),
                 this._promiseIsShuffling()
             ]).then((values) => {
-                const state = {
-                    state: values[0] as spotify.State,
+                const spState = values[0] as spotify.State & { state: 'playing' | 'paused' };
+                const state: ISpotifyStatusState = {
+                    playerState: Object.assign(spState, {
+                        isRepeating: values[2] as boolean,
+                        isShuffling: values[3] as boolean,
+                    }),
                     track: values[1] as spotify.Track,
-                    isRepeating: values[2] as boolean,
-                    isShuffling: values[3] as boolean,
                     isRunning: true
                 }
                 return state;
             });
         });
     }
-    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number)  {
+    pollStatus(cb: (status: ISpotifyStatusState) => void, getInterval: () => number) {
         let canceled = false;
         const p = createCancelablePromise<void>((_, reject) => {
             const _poll = () => {
@@ -95,8 +92,8 @@ export class OsxSpotifyClient implements SpotifyClient {
         });
         return p;
     }
-    private _queryStatus(){
-        this.spotifyStatusController.queryStatus();
+    private _queryStatus() {
+        //this.spotifyStatusController.queryStatus(); //fixime
     }
     private _promiseIsRunning() {
         return new Promise<boolean>((resolve, reject) => {

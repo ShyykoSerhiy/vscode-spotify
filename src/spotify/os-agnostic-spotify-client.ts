@@ -1,10 +1,9 @@
-import { SpotifyClient, createCancelablePromise } from './SpotifyClient';
+import { SpotifyClient, createCancelablePromise } from './spotify-client';
 import { Spotilocal } from 'spotilocal';
 import { Status } from 'spotilocal/src/status';
-import { SpotifyStatusController } from '../SpotifyStatusController';
-import { SpotifyStatusState } from '../SpotifyStatus';
+import { ISpotifyStatusState } from '../state/state';
 import { showInformationMessage } from '../info/Info';
-import { getShowInitializationError } from '../config/SpotifyConfig'
+import { getShowInitializationError, setLastUsedPort, getLastUsedPort } from '../config/spotify-config'
 
 function returnIfNotInitialized(_ignoredTarget: any, _ignoredPropertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const fn = descriptor.value as Function;
@@ -39,48 +38,46 @@ function notSupported(_ignoredTarget: any, _ignoredPropertyKey: string, descript
     })
 }
 
-function convertSpotilocalStatus(spotilocalStatus: Status): SpotifyStatusState {
+function convertSpotilocalStatus(spotilocalStatus: Status): ISpotifyStatusState {
     return {
         isRunning: true,
-        state: {
+        playerState: {
             volume: spotilocalStatus.volume,
             position: spotilocalStatus.playing_position,
-            state: spotilocalStatus.playing ? 'playing' : 'paused'
+            state: spotilocalStatus.playing ? 'playing' : 'paused',
+            isRepeating: spotilocalStatus.repeat,
+            isShuffling: spotilocalStatus.shuffle
         },
         track: {
             album: spotilocalStatus.track.album_resource.name,
             artist: spotilocalStatus.track.artist_resource.name,
             name: spotilocalStatus.track.track_resource.name
-        },
-        isRepeating: spotilocalStatus.repeat,
-        isShuffling: spotilocalStatus.shuffle
+        }
     };
 }
 
 const EMPTY_FN = () => { };
 
 export class OsAgnosticSpotifyClient implements SpotifyClient {
-    private spotifyStatusController: SpotifyStatusController;
     private spotilocal: Spotilocal;
     private initialized: boolean;
     private showedReinitMessage: boolean;
     private initTimeoutId: number;
 
-    constructor(spotifyStatusController: SpotifyStatusController) {
-        this.spotifyStatusController = spotifyStatusController;
+    constructor() {
         this.spotilocal = new Spotilocal();
-
         this.retryInit();
     }
+
     private retryInit() {
         this.initialized = false;
         this.initTimeoutId && clearTimeout(this.initTimeoutId);
-        const lastUsedPort = this.spotifyStatusController.globalState.get<number>("lastUsedPort");
+        const lastUsedPort = getLastUsedPort();
         this.spotilocal.init(lastUsedPort).then(() => {
             this.initialized = true;
             this.showedReinitMessage = false;
 
-            this.spotifyStatusController.globalState.update("lastUsedPort", this.spotilocal.port);
+            setLastUsedPort(this.spotilocal.port);
         }).catch((ignorredError) => {
             if (!this.showedReinitMessage && getShowInitializationError()) {
                 showInformationMessage('Failed to initialize vscode-spotify. We\'ll keep trying every 20 seconds.');
@@ -124,7 +121,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
             this.retryInit.bind(this)
         });;
     }
-    pollStatus(cb: (status: SpotifyStatusState) => void) {
+    pollStatus(cb: (status: ISpotifyStatusState) => void) {
         if (!this.initialized) {
             return { promise: Promise.reject<void>('Failed to initiate status polling. spotilocal is not initialized'), cancel: EMPTY_FN };
         }
@@ -146,7 +143,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
             }).catch(reject);
         });
         p.promise = p.promise.catch((err) => {
-            if (err && err.code === 'ECONNREFUSED'){
+            if (err && err.code === 'ECONNREFUSED') {
                 this.retryInit();
             }
 

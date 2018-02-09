@@ -1,5 +1,5 @@
 import {window, StatusBarAlignment, StatusBarItem, extensions} from 'vscode';
-import {getButtonPriority, isButtonToBeShown} from './config/SpotifyConfig';
+import {getButtonPriority, isButtonToBeShown} from '../config/spotify-config';
 
 export interface Button {
 	/**

@@ -1,21 +1,19 @@
-import {SpotifyStatus} from '../SpotifyStatus';
-import {SpotifyStatusController} from '../SpotifyStatusController';
-import {OsAgnosticSpotifyClient} from './OsAgnosticSpotifyClient';
-import {OsxSpotifyClient} from './OsxSpotifyClient';
-import {OsxHttpSpotifyClient} from './OsxHttpSpotifyClient';
-import {SpotifyStatusState} from '../SpotifyStatus';
-import {getUseCombinedApproachOnMacOS} from '../config/SpotifyConfig';
+import {OsAgnosticSpotifyClient} from './os-agnostic-spotify-client';
+import {OsxSpotifyClient} from './osx-spotify-client';
+import {OsxHttpSpotifyClient} from './osx-http-spotify-client';
+import {ISpotifyStatusState} from '../state/state';
+import {getUseCombinedApproachOnMacOS} from '../config/spotify-config';
 import * as os from 'os';
 
 export class SpoifyClientSingleton {
     private static spotifyClient: SpotifyClient;
-    public static getSpotifyClient(spotifyStatus: SpotifyStatus, spotifyStatusController: SpotifyStatusController) {
+    public static getSpotifyClient() {
         if (this.spotifyClient) {
             return this.spotifyClient;
         }
         this.spotifyClient = (os.platform() === 'darwin') ?
-            (getUseCombinedApproachOnMacOS() ? new OsxHttpSpotifyClient(spotifyStatus, spotifyStatusController) : new OsxSpotifyClient(spotifyStatus, spotifyStatusController)) :
-            new OsAgnosticSpotifyClient(spotifyStatusController);
+            (getUseCombinedApproachOnMacOS() ? new OsxHttpSpotifyClient() : new OsxSpotifyClient()) :
+            new OsAgnosticSpotifyClient();
         return this.spotifyClient;
     }
 }
@@ -44,5 +42,5 @@ export interface SpotifyClient {
     volumeDown(): void;
     toggleRepeating(): void;
     toggleShuffling(): void;
-    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number): { promise: Promise<void>, cancel: () => void };
+    pollStatus(cb: (status: ISpotifyStatusState) => void, getInterval: () => number): { promise: Promise<void>, cancel: () => void };
 }

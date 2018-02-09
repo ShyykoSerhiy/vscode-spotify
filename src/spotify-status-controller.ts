@@ -1,22 +1,19 @@
 import { Memento } from 'vscode';
-import { SpotifyStatus } from './SpotifyStatus';
-import { SpoifyClientSingleton } from './spotify/SpotifyClient';
-import { getStatusCheckInterval } from './config/SpotifyConfig';
+import { SpoifyClientSingleton } from './spotify/spotify-client';
+import { getStatusCheckInterval } from './config/spotify-config';
+import { getStore } from './store/store';
+import { updateStateAction } from './actions/actions';
 
 export class SpotifyStatusController {
-    public globalState: Memento;
-    private _spotifyStatus: SpotifyStatus;
     private _timeoutId?: NodeJS.Timer;
     private _retryCount: number;
-    private _cancelCb?: ()=>void;
+    private _cancelCb?: () => void;
     /**
      * How many sequential errors is needed to hide all buttons
      */
     private _maxRetryCount: number;
 
-    constructor(spotifyStatus: SpotifyStatus, globalState: Memento) {
-        this.globalState = globalState;
-        this._spotifyStatus = spotifyStatus;
+    constructor() {
         this._retryCount = 0;
         this._maxRetryCount = 5;
         this.queryStatus();
@@ -39,22 +36,23 @@ export class SpotifyStatusController {
         var clearState = (() => {
             this._retryCount++;
             if (this._retryCount >= this._maxRetryCount) {
-                this._spotifyStatus.state = {
-                    state: { position: 0, volume: 0, state: '' },
+                getStore().dispatch(updateStateAction({
+                    playerState: {
+                        position: 0, volume: 0, state: 'paused', isRepeating: false,
+                        isShuffling: false
+                    },
                     track: { album: '', artist: '', name: '' },
-                    isRepeating: false,
-                    isShuffling: false,
                     isRunning: false
-                };
+                }));
                 this._retryCount = 0;
             }
             this.scheduleQueryStatus();
         });
 
-        const { promise, cancel } = SpoifyClientSingleton.getSpotifyClient(this._spotifyStatus, this).pollStatus(status => {
-            this._spotifyStatus.state = status;
+        const { promise, cancel } = SpoifyClientSingleton.getSpotifyClient().pollStatus(status => {
+            getStore().dispatch(updateStateAction(status));
             this._retryCount = 0;
-        }, getStatusCheckInterval)
+        }, getStatusCheckInterval);
         this._cancelCb = cancel;
         promise.catch(clearState);
     }
@@ -72,7 +70,7 @@ export class SpotifyStatusController {
         }
     }
 
-    private _cancelPreviousPoll(){
+    private _cancelPreviousPoll() {
         this._cancelCb && this._cancelCb();
     }
 }

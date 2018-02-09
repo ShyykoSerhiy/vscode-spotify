@@ -1,7 +1,7 @@
-import { SpotifyStatus } from '../SpotifyStatus';
 import { xhr } from '../request/Request';
-import { getLyricsServerUrl, openPanelLyrics } from '../config/SpotifyConfig';
+import { getLyricsServerUrl, openPanelLyrics } from '../config/spotify-config';
 import { showInformationMessage } from '../info/Info';
+import { getStore } from '../store/store';
 import { Uri, TextDocumentContentProvider, EventEmitter, Event, window, workspace, ProgressLocation } from 'vscode';
 
 let previewUri = Uri.parse('vscode-spotify://authority/vscode-spotify');
@@ -37,20 +37,18 @@ async function previewLyrics(lyrics: string) {
 }
 
 export class LyricsController {
-    private spotifyStatus: SpotifyStatus;
-
-    public constructor(spotifyStatus: SpotifyStatus) {
-        this.spotifyStatus = spotifyStatus;
+    public constructor() {
     }
 
     public async findLyrics() {
         window.withProgress({ location: ProgressLocation.Window, title: 'Searching for lyrics. This might take a while.' }, () => {
             return this._findLyrics();
-        });        
+        });
     }
 
     private async _findLyrics() {
-        const { artist, name } = this.spotifyStatus.state.track;
+        const state = getStore().getState();
+        const { artist, name } = state.track;
 
         try {
             const result = await xhr({ url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(name)}` });
