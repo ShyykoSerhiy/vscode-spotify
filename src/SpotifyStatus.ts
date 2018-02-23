@@ -55,7 +55,7 @@ export class SpotifyStatus {
     public updateSpotifyStatus() {
         // Create as needed
         if (!this._statusBarItem) {
-            this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left, getButtonPriority('trackInfoPriority'));
+            this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left, getButtonPriority('trackInfo'));
             this._statusBarItem.show();
         }
         if (!this._spotifyControls) {
