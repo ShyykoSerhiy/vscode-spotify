@@ -23,7 +23,7 @@ export class SpotifyStatus {
         const state = getStore().getState();
         // Create as needed
         if (!this._statusBarItem) {
-            this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left, getButtonPriority('trackInfoPriority'));
+            this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left, getButtonPriority('trackInfo'));
             this._statusBarItem.show();
         }
         if (!this._spotifyControls) {

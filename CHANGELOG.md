@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.3.2] - 2018-02-23
+### Fixed
+- `trackInfoPriority` setting has no effect (#30) (kudos to realbizkit(András Szepes)(https://github.com/realbizkit))
+
 ## [2.3.1] - 2018-02-09
 ### Fixed
 - Increasing volume at max makes it go to 0 (#15)
