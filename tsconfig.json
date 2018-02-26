@@ -10,8 +10,7 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
-		"experimentalDecorators": true,
-		"noEmit": true
+		"experimentalDecorators": true
 	},
 	"exclude": [
 		"node_modules"

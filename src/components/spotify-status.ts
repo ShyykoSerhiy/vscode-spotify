@@ -1,7 +1,7 @@
 import { window, StatusBarItem, StatusBarAlignment } from 'vscode';
 import { SpotifyControls } from './spotify-controls';
 import { getTrackInfoFormat, getButtonPriority } from '../config/spotify-config';
-import { getStore } from '../store/store';
+import { getState, getStore } from '../store/store';
 import { ITrack } from '../state/state';
 
 export class SpotifyStatus {
@@ -10,7 +10,6 @@ export class SpotifyStatus {
      */
     private _statusBarItem: StatusBarItem;
     private _spotifyControls: SpotifyControls;
-    private _hidden: boolean;
 
     constructor() {
         getStore().subscribe(() => this.render());
@@ -20,7 +19,7 @@ export class SpotifyStatus {
      * Updates spotify status bar inside vscode
      */
     public render() {
-        const state = getStore().getState();
+        const state = getState();
         // Create as needed
         if (!this._statusBarItem) {
             this._statusBarItem = window.createStatusBarItem(StatusBarAlignment.Left, getButtonPriority('trackInfo'));
@@ -30,37 +29,27 @@ export class SpotifyStatus {
             this._spotifyControls = new SpotifyControls();
             this._spotifyControls.showVisible();
         }
-
+        
         if (state.isRunning) {
             const { state: playing, volume, isRepeating, isShuffling } = state.playerState;
             var text = _formattedTrackInfo(state.track);
+            let toRedraw = false;
             if (text !== this._statusBarItem.text) {//we need this guard to prevent flickering
                 this._statusBarItem.text = text;
-                this.redraw();//we need to redraw due to a bug with priority
+                toRedraw = true;
             }
             if (this._spotifyControls.updateDynamicButtons(playing === 'playing', volume === 0, isRepeating, isShuffling)) {
-                this.redraw();//we need to redraw due to a bug with priority
+                toRedraw = true;
             }
-            if (this._hidden) {
-                this.redraw();
+            if (toRedraw) {
+                this._statusBarItem.show();
+                this._spotifyControls.showVisible();
             }
-        } else {
-            this.redraw();
-        }
-    }
-
-    private redraw() {
-        const state = getStore().getState();
-        if (state.isRunning) {
-            this._statusBarItem.show();
-            this._spotifyControls.showVisible();
-            this._hidden = false;
         } else {
             this._statusBarItem.hide();
             this._spotifyControls.hideAll();
-            this._hidden = true;
         }
-    }
+    }    
     /**
      * Disposes status bar items(if exist)
      */

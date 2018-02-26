@@ -1,7 +1,7 @@
 import {OsAgnosticSpotifyClient} from './os-agnostic-spotify-client';
 import {OsxSpotifyClient} from './osx-spotify-client';
 import {OsxHttpSpotifyClient} from './osx-http-spotify-client';
-import {ISpotifyStatusState} from '../state/state';
+import {ISpotifyStatusStatePartial} from '../state/state';
 import {getUseCombinedApproachOnMacOS} from '../config/spotify-config';
 import * as os from 'os';
 
@@ -42,5 +42,5 @@ export interface SpotifyClient {
     volumeDown(): void;
     toggleRepeating(): void;
     toggleShuffling(): void;
-    pollStatus(cb: (status: ISpotifyStatusState) => void, getInterval: () => number): { promise: Promise<void>, cancel: () => void };
+    pollStatus(cb: (status: ISpotifyStatusStatePartial) => void, getInterval: () => number): { promise: Promise<void>, cancel: () => void };
 }

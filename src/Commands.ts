@@ -1,6 +1,7 @@
 import { commands, Disposable } from 'vscode';
 import { SpoifyClientSingleton } from './spotify/spotify-client';
 import { LyricsController, registration } from './lyrics/Lyrics';
+import { actionsCreator } from './actions/actions';
 
 export function createCommands(): { dispose: () => void } {
 	var sC = SpoifyClientSingleton.getSpotifyClient();
@@ -18,5 +19,7 @@ export function createCommands(): { dispose: () => void } {
 	const volumeDown = commands.registerCommand('spotify.volumeDown', sC.volumeDown.bind(sC));
 	const toggleRepeating = commands.registerCommand('spotify.toggleRepeating', sC.toggleRepeating.bind(sC));
 	const toggleShuffling = commands.registerCommand('spotify.toggleShuffling', sC.toggleShuffling.bind(sC));
-	return Disposable.from(lyrics, next, previous, play, pause, playPause, muteVolume, unmuteVolume, muteUnmuteVolume, volumeUp, volumeDown, toggleRepeating, toggleShuffling, registration);
+	const signIn = commands.registerCommand('spotify.signIn', actionsCreator.actionSignIn);
+	const signOut = commands.registerCommand('spotify.signOut', actionsCreator.actionSignOut);
+	return Disposable.from(lyrics, next, previous, play, pause, playPause, muteVolume, unmuteVolume, muteUnmuteVolume, volumeUp, volumeDown, toggleRepeating, toggleShuffling, registration, signIn, signOut);
 }

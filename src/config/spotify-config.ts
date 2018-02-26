@@ -1,16 +1,27 @@
 import { workspace, Memento } from 'vscode';
+import { getState } from '../store/store';
+import { BUTTON_ID_SIGN_IN, BUTTON_ID_SIGN_OUT } from '../consts/consts';
+
 
 function getConfig() {
 	return workspace.getConfiguration('spotify');
 }
 
-export function isButtonToBeShown(buttonName: string): boolean {
-	return getConfig().get('show' + buttonName[0].toUpperCase() + buttonName.slice(1), false);
+export function isButtonToBeShown(buttonId: string): boolean {
+	const { loginState } = getState();
+	if (buttonId === `${BUTTON_ID_SIGN_IN}Button`) {
+		return !loginState;
+	}
+	if (buttonId === `${BUTTON_ID_SIGN_OUT}Button`) {
+		return !!loginState;
+	}
+
+	return getConfig().get('show' + buttonId[0].toUpperCase() + buttonId.slice(1), false);
 }
 
-export function getButtonPriority(buttonName: string): number {
+export function getButtonPriority(buttonId: string): number {
 	const config = getConfig();
-	return config.get('priorityBase', 0) + config.get(buttonName + 'Priority', 0);
+	return config.get('priorityBase', 0) + config.get(buttonId + 'Priority', 0);
 }
 
 export function getStatusCheckInterval(): number {
@@ -19,6 +30,10 @@ export function getStatusCheckInterval(): number {
 
 export function getLyricsServerUrl(): string {
 	return getConfig().get<string>('lyricsServerUrl', '');
+}
+
+export function getAuthServerUrl(): string {
+	return getConfig().get<string>('authServerUrl', '');
 }
 
 export function openPanelLyrics(): number {
@@ -39,7 +54,7 @@ export function getTrackInfoFormat(): string {
 
 let globalState: Memento;
 
-export function registerGlobalState(memento: Memento)  {
+export function registerGlobalState(memento: Memento) {
 	globalState = memento;
 }
 

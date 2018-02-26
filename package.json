@@ -75,6 +75,14 @@
       {
         "command": "spotify.lyrics",
         "title": "Spotify Lyrics"
+      },
+      {
+        "command": "spotify.signIn",
+        "title": "Spotify Sign In"
+      },
+      {
+        "command": "spotify.signOut",
+        "title": "Spotify Sign Out"
       }
     ],
     "keybindings": [
@@ -277,6 +285,11 @@
           "type": "boolean",
           "default": false,
           "description": "Whether to show initialization error."
+        },
+        "spotify.authServerUrl": {
+          "type": "string",
+          "default": "https://vscode-spotify-auth.azurewebsites.net/",
+          "description": "Url to auth server. @see https://github.com/ShyykoSerhiy/vscode-spotify-auth"
         }
       }
     }
@@ -284,11 +297,13 @@
   "main": "./out/src/extension",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -watch -p ./",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
+    "@types/express": "^4.11.1",
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
     "@types/redux": "^3.6.0",
@@ -297,6 +312,7 @@
     "vscode": "^1.0.0"
   },
   "dependencies": {
+    "express": "^4.16.2",
     "redux": "^3.7.2",
     "request-light": "^0.2.1",
     "spotify-node-applescript": "1.1.1",

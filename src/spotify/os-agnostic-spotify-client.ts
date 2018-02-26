@@ -1,7 +1,7 @@
 import { SpotifyClient, createCancelablePromise } from './spotify-client';
 import { Spotilocal } from 'spotilocal';
 import { Status } from 'spotilocal/src/status';
-import { ISpotifyStatusState } from '../state/state';
+import { ISpotifyStatusStatePartial } from '../state/state';
 import { showInformationMessage } from '../info/Info';
 import { getShowInitializationError, setLastUsedPort, getLastUsedPort } from '../config/spotify-config'
 
@@ -38,7 +38,7 @@ function notSupported(_ignoredTarget: any, _ignoredPropertyKey: string, descript
     })
 }
 
-function convertSpotilocalStatus(spotilocalStatus: Status): ISpotifyStatusState {
+function convertSpotilocalStatus(spotilocalStatus: Status): ISpotifyStatusStatePartial {
     return {
         isRunning: true,
         playerState: {
@@ -121,7 +121,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
             this.retryInit.bind(this)
         });;
     }
-    pollStatus(cb: (status: ISpotifyStatusState) => void) {
+    pollStatus(cb: (status: ISpotifyStatusStatePartial) => void) {
         if (!this.initialized) {
             return { promise: Promise.reject<void>('Failed to initiate status polling. spotilocal is not initialized'), cancel: EMPTY_FN };
         }

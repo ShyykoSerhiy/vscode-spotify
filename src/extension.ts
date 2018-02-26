@@ -2,11 +2,13 @@ import { ExtensionContext } from 'vscode';
 import { createCommands } from './commands';
 import { SpotifyStatus } from './components/spotify-status';
 import { SpotifyStatusController } from './spotify-status-controller';
+import { registerGlobalState } from './config/spotify-config';
 
 // This method is called when your extension is activated. Activation is
 // controlled by the activation events defined in package.json.
 export function activate(context: ExtensionContext) {
     // This line of code will only be executed once when your extension is activated.        
+    registerGlobalState(context.globalState);
     let spotifyStatus = new SpotifyStatus();
     let controller = new SpotifyStatusController();
 

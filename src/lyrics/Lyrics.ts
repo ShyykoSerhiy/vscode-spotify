@@ -1,7 +1,7 @@
 import { xhr } from '../request/Request';
 import { getLyricsServerUrl, openPanelLyrics } from '../config/spotify-config';
 import { showInformationMessage } from '../info/Info';
-import { getStore } from '../store/store';
+import { getState } from '../store/store';
 import { Uri, TextDocumentContentProvider, EventEmitter, Event, window, workspace, ProgressLocation } from 'vscode';
 
 let previewUri = Uri.parse('vscode-spotify://authority/vscode-spotify');
@@ -47,7 +47,7 @@ export class LyricsController {
     }
 
     private async _findLyrics() {
-        const state = getStore().getState();
+        const state = getState();
         const { artist, name } = state.track;
 
         try {

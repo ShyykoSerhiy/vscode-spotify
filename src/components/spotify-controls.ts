@@ -1,5 +1,6 @@
 import {window, StatusBarAlignment, StatusBarItem, extensions} from 'vscode';
 import {getButtonPriority, isButtonToBeShown} from '../config/spotify-config';
+import {BUTTON_ID_SIGN_IN, BUTTON_ID_SIGN_OUT} from '../consts/consts';
 
 export interface Button {
 	/**
@@ -78,7 +79,9 @@ export class SpotifyControls {
 			{ id: 'volumeDown', text: '$(arrow-small-down)' },
 			{ id: 'toggleRepeating', text: '$(sync)', dynamicColor: (isRepeating?: boolean) => { return isRepeating ? 'white' : 'darkgrey' } },
 			{ id: 'toggleShuffling', text: '$(git-branch)', dynamicColor: (isShuffling?: boolean) => { return isShuffling ? 'white' : 'darkgrey' } },
-			{ id: 'lyrics', text: '$(book)' }
+			{ id: 'lyrics', text: '$(book)' },
+			{ id: BUTTON_ID_SIGN_IN, text: '$(sign-in)' },
+			{ id: BUTTON_ID_SIGN_OUT, text: '$(sign-out)' }
 		];
 		const extension = extensions.getExtension('shyykoserhiy.vscode-spotify');
 		if (!extension) {

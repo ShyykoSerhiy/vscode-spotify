@@ -1,8 +1,6 @@
-import { Memento } from 'vscode';
 import { SpoifyClientSingleton } from './spotify/spotify-client';
 import { getStatusCheckInterval } from './config/spotify-config';
-import { getStore } from './store/store';
-import { updateStateAction } from './actions/actions';
+import { actionsCreator } from './actions/actions';
 
 export class SpotifyStatusController {
     private _timeoutId?: NodeJS.Timer;
@@ -36,21 +34,21 @@ export class SpotifyStatusController {
         var clearState = (() => {
             this._retryCount++;
             if (this._retryCount >= this._maxRetryCount) {
-                getStore().dispatch(updateStateAction({
+                actionsCreator.updateStateAction({
                     playerState: {
                         position: 0, volume: 0, state: 'paused', isRepeating: false,
                         isShuffling: false
                     },
                     track: { album: '', artist: '', name: '' },
                     isRunning: false
-                }));
+                });
                 this._retryCount = 0;
             }
             this.scheduleQueryStatus();
         });
 
         const { promise, cancel } = SpoifyClientSingleton.getSpotifyClient().pollStatus(status => {
-            getStore().dispatch(updateStateAction(status));
+            actionsCreator.updateStateAction(status);
             this._retryCount = 0;
         }, getStatusCheckInterval);
         this._cancelCb = cancel;

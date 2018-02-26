@@ -13,10 +13,14 @@ export function getStore() {
     return store;
 }
 
+export function getState() {
+    return getStore().getState();
+}
+
 /**
  * True if on last state of Spotify it was muted(volume was equal 0)
  */
 export function isMuted() {
-    const state = getStore().getState();
+    const state = getState();
     return state && state.playerState.volume === 0;
 }

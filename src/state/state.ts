@@ -4,6 +4,11 @@ export interface ITrack {
     name: string
 }
 
+export interface ILoginState {
+    accessToken: string,
+    refreshToken: string
+}
+
 export interface IPlayerState {
     /**
      * 
@@ -18,10 +23,10 @@ export interface IPlayerState {
     /**
      * true if shuffling is enabled
      */
-    isShuffling: boolean
+    isShuffling: boolean    
 }
 
-export interface ISpotifyStatusState {
+export interface ISpotifyStatusStatePartial {
     /**
      * true if spotify is open
      */
@@ -33,7 +38,11 @@ export interface ISpotifyStatusState {
     /**
      * current track
      */
-    track: ITrack,
+    track: ITrack
+}
+
+export interface ISpotifyStatusState extends ISpotifyStatusStatePartial {    
+    loginState: ILoginState | null
 }
 
 export const defaultState: ISpotifyStatusState = {
@@ -49,5 +58,6 @@ export const defaultState: ISpotifyStatusState = {
         artist: '',
         name: ''
     },
-    isRunning: false
+    isRunning: false,
+    loginState: null
 } 

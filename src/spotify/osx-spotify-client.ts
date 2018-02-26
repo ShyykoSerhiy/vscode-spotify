@@ -1,6 +1,6 @@
 import { SpotifyClient, createCancelablePromise } from './spotify-client';
 import * as spotify from 'spotify-node-applescript';
-import { ISpotifyStatusState } from '../state/state';
+import { ISpotifyStatusStatePartial } from '../state/state';
 import { isMuted } from '../store/store';
 
 export class OsxSpotifyClient implements SpotifyClient {
@@ -48,10 +48,10 @@ export class OsxSpotifyClient implements SpotifyClient {
     toggleShuffling() {
         spotify.toggleShuffling(this._queryStatus);
     }
-    private getStatus(): Promise<ISpotifyStatusState> {
+    private getStatus(): Promise<ISpotifyStatusStatePartial> {
         return this._promiseIsRunning().then((isRunning) => {
             if (!isRunning) {
-                return Promise.reject<ISpotifyStatusState>('Spotify isn\'t running');
+                return Promise.reject<ISpotifyStatusStatePartial>('Spotify isn\'t running');
             }
             return Promise.all<spotify.State | spotify.Track | boolean>([
                 this._promiseGetState(),
@@ -60,7 +60,7 @@ export class OsxSpotifyClient implements SpotifyClient {
                 this._promiseIsShuffling()
             ]).then((values) => {
                 const spState = values[0] as spotify.State & { state: 'playing' | 'paused' };
-                const state: ISpotifyStatusState = {
+                const state: ISpotifyStatusStatePartial = {
                     playerState: Object.assign(spState, {
                         isRepeating: values[2] as boolean,
                         isShuffling: values[3] as boolean,
@@ -72,7 +72,7 @@ export class OsxSpotifyClient implements SpotifyClient {
             });
         });
     }
-    pollStatus(cb: (status: ISpotifyStatusState) => void, getInterval: () => number) {
+    pollStatus(cb: (status: ISpotifyStatusStatePartial) => void, getInterval: () => number) {
         let canceled = false;
         const p = createCancelablePromise<void>((_, reject) => {
             const _poll = () => {
