@@ -81,12 +81,12 @@
       {
         "command": "spotify.next",
         "key": "ctrl+shift+]",
-        "mac": "cmd+shift+]"
+        "mac": "ctrl+cmd+]"
       },
       {
         "command": "spotify.previous",
         "key": "ctrl+shift+[",
-        "mac": "cmd+shift+["
+        "mac": "ctrl+cmd+["
       },
       {
         "command": "spotify.volumeUp",
