@@ -179,20 +179,55 @@ export class LinuxSpotifyClient implements SpotifyClient {
         return (foundSpotifySink != null)? ((foundSpotifySink.length > 1)? true : false) : false
     }
 
-    @notSupported
     muteVolume() {
+        let sinkInputs = Array.prototype
+        let applications = Array.prototype
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
-                console.log(d.split('\n'))
+                let sinkedArr = d.split('Sinked Input #')
+                return (sinkedArr != null)? sinkedArr.filter(this.findSpotify) : []
             })
+            .then((a: string[]) => {
+                if (a.length > 0) {
+                    let currentVol = a[0].match(/(\d{1,3})%/i);
+                    if (currentVol != null) {
+                        let sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
+                        if (currentVol.length > 1) {
+                            if (parseInt(currentVol[1]) > 0 && sinkNum != null) {
+                                this.currentOnVolume = currentVol[1];
+                                terminalCommand('pactl set-sink-input-volume ' + sinkNum[1] + ' 0%')
+                            }
+                        }
+                    }
+                }
+            })
+        .catch(e => console.log(e))
     }
    
-    @notSupported
     unmuteVolume() {
+        let sinkInputs = Array.prototype
+        let applications = Array.prototype
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
-                console.log(d.split('\n'))
+                let sinkedArr = d.split('Sinked Input #')
+                return (sinkedArr != null)? sinkedArr.filter(this.findSpotify) : []
             })
+            .then((a: string[]) => {
+                if (a.length > 0) {
+                    let currentVol = a[0].match(/(\d{1,3})%/i);
+                    console.log("CURRENTVOL:", currentVol)
+                    if (currentVol != null) {
+                        let sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
+                        console.log("ARRAY:", a)
+                        console.log("SINKEDINPUTS:", sinkNum)
+                        if (currentVol.length > 1) {
+                            if(parseInt(currentVol[1]) === 0 && sinkNum != null)
+                                terminalCommand('pactl set-sink-input-volume ' + sinkNum[1] + ' ' + this.currentOnVolume + '%')
+                        }   
+                    }
+                }
+            })
+        .catch(e => console.log(e))
     }
 
     muteUnmuteVolume() {
@@ -214,23 +249,54 @@ export class LinuxSpotifyClient implements SpotifyClient {
                         if (currentVol.length > 1) {
                             if (parseInt(currentVol[1]) > 0 && sinkNum != null) {
                                 this.currentOnVolume = currentVol[1];
-                                terminalCommand('pactl set-sink-input-volume '+sinkNum[1]+' 0%')
+                                terminalCommand('pactl set-sink-input-volume ' + sinkNum[1] + ' 0%')
                             }
                             else if(parseInt(currentVol[1]) === 0 && sinkNum != null) {
-                                terminalCommand('pactl set-sink-input-volume '+sinkNum[1]+' ' + this.currentOnVolume + '%')
+                                terminalCommand('pactl set-sink-input-volume ' + sinkNum[1] + ' ' + this.currentOnVolume + '%')
                             }
-                        }
-                        
+                        }   
                     }
-                    
                 }
-            }).catch(e => console.log(e))
+            })
+        .catch(e => console.log(e))
     }
-    @notSupported
+    
     volumeUp() {
+        let sinkInputs = Array.prototype
+        let applications = Array.prototype
+        terminalCommand('pactl list sink-inputs')
+            .then((d: string) => {
+                let sinkedArr = d.split('Sinked Input #')
+                return (sinkedArr != null)? sinkedArr.filter(this.findSpotify) : []
+            })
+            .then((a: string[]) => {
+                if (a.length > 0) {
+                    let sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
+                    if (sinkNum != null) {
+                        terminalCommand('pactl set-sink-input-volume ' + sinkNum[1] + ' +5%')
+                    }
+                }
+            })
+        .catch(e => console.log(e))
     }
-    @notSupported
+
     volumeDown() {
+        let sinkInputs = Array.prototype
+        let applications = Array.prototype
+        terminalCommand('pactl list sink-inputs')
+            .then((d: string) => {
+                let sinkedArr = d.split('Sinked Input #')
+                return (sinkedArr != null)? sinkedArr.filter(this.findSpotify) : []
+            })
+            .then((a: string[]) => {
+                if (a.length > 0) {
+                    let sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
+                    if (sinkNum != null) {
+                        terminalCommand('pactl set-sink-input-volume ' + sinkNum[1] + ' -5%')
+                    }
+                }
+            })
+        .catch(e => console.log(e))
     }
     @notSupported
     toggleRepeating() {
