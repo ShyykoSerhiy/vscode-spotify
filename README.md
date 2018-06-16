@@ -1,4 +1,6 @@
 # vscode-spotify
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat)](#contributors)
+
 Use Spotify inside vscode.
 Provides integration with Spotify Desktop client. 
 
@@ -40,6 +42,12 @@ It's undocumented approach and sadly it doesn't provide all the functionality th
 | Volume Down                  | ✅            | ❌                            |
 | Lyrics                       | ✅            | ✅                            |
 
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+| [<img src="https://avatars1.githubusercontent.com/u/1106995?v=4" width="100px;"/><br /><sub><b>shyyko.serhiy</b></sub>](https://github.com/ShyykoSerhiy)<br />[💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=ShyykoSerhiy "Code") [🎨](#design-ShyykoSerhiy "Design") [📖](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=ShyykoSerhiy "Documentation") [🤔](#ideas-ShyykoSerhiy "Ideas, Planning, & Feedback") [👀](#review-ShyykoSerhiy "Reviewed Pull Requests") | [<img src="https://avatars3.githubusercontent.com/u/9491603?v=4" width="100px;"/><br /><sub><b>Levin Rickert</b></sub>](https://www.levrik.io)<br />[🐛](https://github.com/ShyykoSerhiy/vscode-spotify/issues?q=author%3Alevrik "Bug reports") [💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=levrik "Code") | [<img src="https://avatars3.githubusercontent.com/u/491891?v=4" width="100px;"/><br /><sub><b>Marc Riera</b></sub>](https://github.com/mrcasals)<br />[💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=mrcasals "Code") | [<img src="https://avatars2.githubusercontent.com/u/1844664?v=4" width="100px;"/><br /><sub><b>Evan Brodie</b></sub>](https://github.com/ecbrodie)<br />[💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=ecbrodie "Code") [🐛](https://github.com/ShyykoSerhiy/vscode-spotify/issues?q=author%3Aecbrodie "Bug reports") | [<img src="https://avatars1.githubusercontent.com/u/5939522?v=4" width="100px;"/><br /><sub><b>Stéphane</b></sub>](https://github.com/Stephanyan)<br />[📖](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=Stephanyan "Documentation") | [<img src="https://avatars1.githubusercontent.com/u/11082710?v=4" width="100px;"/><br /><sub><b>Ryan Gordon</b></sub>](https://github.com/Ryan-Gordon)<br />[📖](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=Ryan-Gordon "Documentation") [🤔](#ideas-Ryan-Gordon "Ideas, Planning, & Feedback") |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 ## Commands
 List of commands:
 ```json
