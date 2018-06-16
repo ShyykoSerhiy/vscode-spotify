@@ -42,6 +42,13 @@ It's undocumented approach and sadly it doesn't provide all the functionality th
 | Volume Down                  | ✅            | ❌                            |
 | Lyrics                       | ✅            | ✅                            |
 
+## Contributing 
+This project follows the
+[all-contributors](https://github.com/kentcdodds/all-contributors)
+specification. Contributions of any kind are welcome, any contributions you make you will be recognised for in the README.
+
+A list of contributors to this project
+([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
