@@ -296,6 +296,7 @@
     "vscode": "^1.0.0"
   },
   "dependencies": {
+    "child_process": "^1.0.2",
     "request-light": "^0.2.1",
     "spotify-node-applescript": "1.1.1",
     "spotilocal": "0.4.4"
