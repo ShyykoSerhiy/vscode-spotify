@@ -1,6 +1,7 @@
 import {SpotifyStatus} from '../SpotifyStatus';
 import {SpotifyStatusController} from '../SpotifyStatusController';
 import {OsAgnosticSpotifyClient} from './OsAgnosticSpotifyClient';
+import { LinuxSpotifyClient} from './LinuxSpotifyClient';
 import {OsxSpotifyClient} from './OsxSpotifyClient';
 import {OsxHttpSpotifyClient} from './OsxHttpSpotifyClient';
 import {SpotifyStatusState} from '../SpotifyStatus';
@@ -13,9 +14,14 @@ export class SpoifyClientSingleton {
         if (this.spotifyClient) {
             return this.spotifyClient;
         }
+        
         this.spotifyClient = (os.platform() === 'darwin') ?
-            (getUseCombinedApproachOnMacOS() ? new OsxHttpSpotifyClient(spotifyStatus, spotifyStatusController) : new OsxSpotifyClient(spotifyStatus, spotifyStatusController)) :
-            new OsAgnosticSpotifyClient(spotifyStatusController);
+            (getUseCombinedApproachOnMacOS() ? 
+                  new OsxHttpSpotifyClient(spotifyStatus, spotifyStatusController) 
+                : new OsxSpotifyClient(spotifyStatus, spotifyStatusController)) 
+                : ((os.platform() === 'linux') ? 
+                      new LinuxSpotifyClient(spotifyStatusController) 
+                    : new OsAgnosticSpotifyClient(spotifyStatusController));
         return this.spotifyClient;
     }
 }
