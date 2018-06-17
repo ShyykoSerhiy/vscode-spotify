@@ -11,6 +11,16 @@ const PlayNextTrackDebianCmd        = 'dbus-send  --print-reply --dest=org.mpris
 const PlayPreviousTrackDebianCmd    = 'dbus-send  --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous'
 
 let terminalCommand = (cmd: string) => {
+    /**
+     * This is a wrapper for executing terminal commands
+     * by using NodeJs' built in "child process" library.
+     * This function initially returns a Promise.
+     * 
+     * @param {string} cmd This is the command to execute
+     * @return {string} the standard output of the executed command on successful execution
+     * @return {boolean} returns false if the executed command is unsuccessful
+     * 
+     */
     return new Promise((resolve, reject) => {
         exec(cmd, (e,stdout,stderr) => {
             if (e)      { return resolve(false); }
@@ -84,7 +94,7 @@ export class LinuxSpotifyClient implements SpotifyClient {
     constructor(spotifyStatusController: SpotifyStatusController) {
         this.spotifyStatusController = spotifyStatusController;
         this.spotilocal = new Spotilocal();
-        this.currentOnVolume = "0"
+        this.currentOnVolume = "0" // Used to capture what the volume is as a string when volume is not zero.
 
         this.retryInit();
     }
@@ -175,13 +185,20 @@ export class LinuxSpotifyClient implements SpotifyClient {
     }
     
     findSpotify(s: string) {
+        /**
+         *  This function checks to see which "Sinked Input #"
+         *  is actually running spotify.
+         * 
+         *  @param {string} s The sting that might be contain the Sinked Input #
+         *  we are looking for.
+         *  @return {boolean} This function was intended to be used with map in order
+         *  to remap an Array where there should only be one element after we "findSpotify"
+         */
         let foundSpotifySink = s.match(/(Spotify)/i)
         return (foundSpotifySink != null)? ((foundSpotifySink.length > 1)? true : false) : false
     }
 
     muteVolume() {
-        let sinkInputs = Array.prototype
-        let applications = Array.prototype
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
                 let sinkedArr = d.split('Sinked Input #')
@@ -205,8 +222,6 @@ export class LinuxSpotifyClient implements SpotifyClient {
     }
    
     unmuteVolume() {
-        let sinkInputs = Array.prototype
-        let applications = Array.prototype
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
                 let sinkedArr = d.split('Sinked Input #')
@@ -231,8 +246,6 @@ export class LinuxSpotifyClient implements SpotifyClient {
     }
 
     muteUnmuteVolume() {
-        let sinkInputs = Array.prototype
-        let applications = Array.prototype
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
                 let sinkedArr = d.split('Sinked Input #')
@@ -262,8 +275,6 @@ export class LinuxSpotifyClient implements SpotifyClient {
     }
     
     volumeUp() {
-        let sinkInputs = Array.prototype
-        let applications = Array.prototype
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
                 let sinkedArr = d.split('Sinked Input #')
@@ -281,8 +292,6 @@ export class LinuxSpotifyClient implements SpotifyClient {
     }
 
     volumeDown() {
-        let sinkInputs = Array.prototype
-        let applications = Array.prototype
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
                 let sinkedArr = d.split('Sinked Input #')
