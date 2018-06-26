@@ -8,7 +8,10 @@ Note that some of functionality only available on macOS (see [How it works secti
 On macOS this extension uses https://github.com/andrehaveman/spotify-node-applescript (basically a wrapper for https://developer.spotify.com/applescript-api/)
 to communicate with Spotify. 
 
-On Windows and Linux it uses https://github.com/ShyykoSerhiy/spotilocal to communicate with Spotify's local web server. 
+On Windows, it uses https://github.com/ShyykoSerhiy/spotilocal to communicate with Spotify's local web server. 
+
+On Linux, it uses a combination of https://github.com/ShyykoSerhiy/spotilocal, dbus, and pactl to communicate with Spotify's local web server, along with command line based commands.
+
 It's undocumented approach and sadly it doesn't provide all the functionality that is available on macOS.
 
 ## Features
@@ -20,25 +23,22 @@ It's undocumented approach and sadly it doesn't provide all the functionality th
 
 ## Compatibility table
 
-| Feature                      | macOS         | Windows and Linux            |
-| ---------------------------- |:-------------:| ----------------------------:|
-| Show current song            | ✅            | ✅                            |
-| Play Next Song               | ✅            | ❌                            |
-| Play Previous Song           | ✅            | ❌                            |
-| Play                         | ✅            | ✅                            |
-| Pause                        | ✅            | ✅                            |
-| Play Pause                   | ✅            | ✅                            |
-| Mute Volume                  | ✅            | (shows muted state) ⭕        |
-| Unmute Volume                | ✅            | (shows unmuted state)  ⭕     |
-| Mute Unmute Volume           | ✅            | (shows muted unmuted state)⭕ |
-| Volume Up                    | ✅            | ❌                            |
-| Volume Down                  | ✅            | ❌                            |
-| Toggle Repeating             | ✅            | (shows repeating state)  ⭕   |
-| Toggle Shuffling             | ✅            | (shows shuffling state)  ⭕   |
-| Volume Down                  | ✅            | ❌                            |
-| Volume Down                  | ✅            | ❌                            |
-| Volume Down                  | ✅            | ❌                            |
-| Lyrics                       | ✅            | ✅                            |
+| Feature                      | macOS         | Linux                        | Windows                      |
+| ---------------------------- |:-------------:| :--------------------------- | :--------------------------- |
+| Show current song            | ✅            | ✅                            | ✅                            |
+| Play Next Song               | ✅            | ✅                            | ❌                            |
+| Play Previous Song           | ✅            | ✅                            | ❌                            |
+| Play                         | ✅            | ✅                            | ✅                            |
+| Pause                        | ✅            | ✅                            | ✅                            |
+| Play Pause                   | ✅            | ✅                            | ✅                            |
+| Mute Volume                  | ✅            | ✅                            | (shows muted state) ⭕        |
+| Unmute Volume                | ✅            | ✅                            | (shows unmuted state)  ⭕     |
+| Mute Unmute Volume           | ✅            | ✅                            | (shows muted unmuted state)⭕ |
+| Volume Up                    | ✅            | ✅                            | ❌                             |
+| Volume Down                  | ✅            | ✅                            | ❌                             |
+| Toggle Repeating             | ✅            | (shows repeating state)  ⭕   | (shows repeating state)  ⭕   |
+| Toggle Shuffling             | ✅            | (shows shuffling state)  ⭕   | (shows shuffling state)  ⭕   |
+| Lyrics                       | ✅            | ✅                            | ✅                             |
 
 ## Commands
 List of commands:
