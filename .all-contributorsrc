@@ -68,8 +68,6 @@
         "doc",
         "ideas"
       ]
-<<<<<<< Updated upstream
-=======
     },
     {
       "login": "audstanley",
@@ -97,7 +95,6 @@
       "contributions": [
         "code"
       ]
->>>>>>> Stashed changes
     }
   ],
   "repoType": "github"
