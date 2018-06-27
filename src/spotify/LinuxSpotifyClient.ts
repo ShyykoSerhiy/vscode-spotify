@@ -17,7 +17,7 @@ let terminalCommand = (cmd: string) => {
      * @return {boolean} returns false if the executed command is unsuccessful
      * 
      */
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _reject) => {
         exec(cmd, (e,stdout,stderr) => {
             if (e)      { return resolve(false); }
             if (stderr) { return resolve(false); }
