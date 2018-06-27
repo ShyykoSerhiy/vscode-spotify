@@ -1,0 +1,74 @@
+{
+  "projectName": "vscode-spotify",
+  "projectOwner": "ShyykoSerhiy",
+  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat)](#contributors)",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "ShyykoSerhiy",
+      "name": "shyyko.serhiy",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/1106995?v=4",
+      "profile": "https://github.com/ShyykoSerhiy",
+      "contributions": [
+        "code",
+        "design",
+        "doc",
+        "ideas",
+        "review"
+      ]
+    },
+    {
+      "login": "levrik",
+      "name": "Levin Rickert",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/9491603?v=4",
+      "profile": "https://www.levrik.io",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "mrcasals",
+      "name": "Marc Riera",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/491891?v=4",
+      "profile": "https://github.com/mrcasals",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "ecbrodie",
+      "name": "Evan Brodie",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1844664?v=4",
+      "profile": "https://github.com/ecbrodie",
+      "contributions": [
+        "code",
+        "bug"
+      ]
+    },
+    {
+      "login": "Stephanyan",
+      "name": "Stéphane",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5939522?v=4",
+      "profile": "https://github.com/Stephanyan",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Ryan-Gordon",
+      "name": "Ryan Gordon",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/11082710?v=4",
+      "profile": "https://github.com/Ryan-Gordon",
+      "contributions": [
+        "doc",
+        "ideas"
+      ]
+    }
+  ],
+  "repoType": "github"
+}
