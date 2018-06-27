@@ -68,6 +68,36 @@
         "doc",
         "ideas"
       ]
+<<<<<<< Updated upstream
+=======
+    },
+    {
+      "login": "audstanley",
+      "name": "Richard Stanley",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/2934052?v=4",
+      "profile": "http://www.audstanley.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "realbizkit",
+      "name": "realbizkit",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/25567148?v=4",
+      "profile": "https://github.com/realbizkit",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "xeBuz",
+      "name": "Jesús Roldán",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/662916?v=4",
+      "profile": "http://jesusroldan.com",
+      "contributions": [
+        "code"
+      ]
+>>>>>>> Stashed changes
     }
   ],
   "repoType": "github"
