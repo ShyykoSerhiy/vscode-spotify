@@ -60,11 +60,11 @@ function convertSpotilocalStatus(spotilocalStatus: Status): SpotifyStatusState {
 const EMPTY_FN = () => { };
 
 export class OsAgnosticSpotifyClient implements SpotifyClient {
-    private spotifyStatusController: SpotifyStatusController;
-    private spotilocal: Spotilocal;
-    private initialized: boolean;
-    private showedReinitMessage: boolean;
-    private initTimeoutId: number;
+    protected spotifyStatusController: SpotifyStatusController;
+    protected spotilocal: Spotilocal;
+    protected initialized: boolean;
+    protected showedReinitMessage: boolean;
+    protected initTimeoutId: number;
 
     constructor(spotifyStatusController: SpotifyStatusController) {
         this.spotifyStatusController = spotifyStatusController;
