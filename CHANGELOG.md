@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.5.0] - 2018-06-26
+### Fixed
+- Use dbus on Linux (improved linux support) (#14) (kudos to audstanley(Richard Stanley)(https://github.com/audstanley))
+
 ## [2.4.0] - 2018-03-25
 ### Fixed
 - Change default mac keybindings for play previous/next (#34) (kudos to ecbrodie(Evan Brodie)(https://github.com/ecbrodie)) @see the reasoning behind this at https://github.com/ShyykoSerhiy/vscode-spotify/pull/34
