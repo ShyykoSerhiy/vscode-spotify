@@ -1,7 +1,7 @@
 {
   "name": "vscode-spotify",
   "description": "Use Spotify inside vscode.",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "publisher": "shyykoserhiy",
   "license": "MIT",
   "engines": {
@@ -270,7 +270,7 @@
         },
         "spotify.useCombinedApproachOnMacOS": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Whether to use experimental applescript + http implementation of spotify client to reduce CPU usage on MacOs. MacOs only."
         },
         "spotify.showInitializationError": {
