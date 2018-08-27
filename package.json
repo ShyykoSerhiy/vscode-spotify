@@ -294,7 +294,6 @@
   "devDependencies": {
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
-    "@types/superagent": "^2.0.36",
     "all-contributors-cli": "^5.0.0",
     "typescript": "^2.2.0",
     "vscode": "^1.0.0"
@@ -302,7 +301,6 @@
   "dependencies": {
     "child_process": "^1.0.2",
     "request-light": "^0.2.1",
-    "spotify-node-applescript": "1.1.1",
-    "spotilocal": "0.4.4"
+    "spotify-node-applescript": "1.1.1"
   }
 }
