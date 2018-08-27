@@ -8,7 +8,7 @@ export class SpotifyStatusController {
     private _spotifyStatus: SpotifyStatus;
     private _timeoutId?: NodeJS.Timer;
     private _retryCount: number;
-    private _cancelCb?: ()=>void;
+    private _cancelCb?: () => void;
     /**
      * How many sequential errors is needed to hide all buttons
      */
@@ -40,7 +40,7 @@ export class SpotifyStatusController {
             this._retryCount++;
             if (this._retryCount >= this._maxRetryCount) {
                 this._spotifyStatus.state = {
-                    state: { position: 0, volume: 0, state: '' },
+                    state: { position: 0, volume: 0, state: 'paused' },
                     track: { album: '', artist: '', name: '' },
                     isRepeating: false,
                     isShuffling: false,
@@ -72,7 +72,7 @@ export class SpotifyStatusController {
         }
     }
 
-    private _cancelPreviousPoll(){
+    private _cancelPreviousPoll() {
         this._cancelCb && this._cancelCb();
     }
 }

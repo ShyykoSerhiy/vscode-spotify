@@ -1,3 +1,7 @@
+/**
+ * @deprecated @see https://github.com/ShyykoSerhiy/spotilocal/issues/7#issuecomment-416002808
+ */
+
 import { SpotifyClient, createCancelablePromise } from './SpotifyClient';
 import { Spotilocal } from 'spotilocal';
 import { Status } from 'spotilocal/src/status';
@@ -124,7 +128,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
             this.retryInit.bind(this)
         });;
     }
-    pollStatus(cb: (status: SpotifyStatusState) => void) {
+    pollStatus(cb: (status: SpotifyStatusState) => void, _getInterval: () => number) {
         if (!this.initialized) {
             return { promise: Promise.reject<void>('Failed to initiate status polling. spotilocal is not initialized'), cancel: EMPTY_FN };
         }
@@ -146,7 +150,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
             }).catch(reject);
         });
         p.promise = p.promise.catch((err) => {
-            if (err && err.code === 'ECONNREFUSED'){
+            if (err && err.code === 'ECONNREFUSED') {
                 this.retryInit();
             }
 

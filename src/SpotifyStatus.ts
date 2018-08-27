@@ -1,6 +1,6 @@
-import {window, StatusBarItem, StatusBarAlignment} from 'vscode';
-import {SpotifyControls} from './SpotifyControls';
-import {getTrackInfoFormat, getButtonPriority} from './config/SpotifyConfig';
+import { window, StatusBarItem, StatusBarAlignment } from 'vscode';
+import { SpotifyControls } from './SpotifyControls';
+import { getTrackInfoFormat, getButtonPriority } from './config/SpotifyConfig';
 
 export interface Track {
     album: string,
@@ -11,7 +11,7 @@ export interface Track {
 export interface State {
     volume: number,
     position: number,
-    state: string
+    state: 'playing' | 'paused'
 }
 
 export interface SpotifyStatusState {
@@ -64,8 +64,8 @@ export class SpotifyStatus {
         }
 
         if (this._state.isRunning) {
-            const {isRepeating, isShuffling} = this._state;
-            const {state: playing, volume} = this._state.state;
+            const { isRepeating, isShuffling } = this._state;
+            const { state: playing, volume } = this._state.state;
             var text = _formattedTrackInfo(this._state.track);
             if (text !== this._statusBarItem.text) {//we need this guard to prevent flickering
                 this._statusBarItem.text = text;
@@ -74,7 +74,7 @@ export class SpotifyStatus {
             if (this._spotifyControls.updateDynamicButtons(playing === 'playing', volume === 0, isRepeating, isShuffling)) {
                 this.redraw();//we need to redraw due to a bug with priority
             }
-            if (this._hidden){
+            if (this._hidden) {
                 this.redraw();
             }
         } else {
@@ -113,7 +113,7 @@ export class SpotifyStatus {
 
 function _formattedTrackInfo(track: Track): string {
     const { album, artist, name } = track;
-    const keywordsMap:{[index:string]: string} = {
+    const keywordsMap: { [index: string]: string } = {
         albumName: album,
         artistName: artist,
         trackName: name,

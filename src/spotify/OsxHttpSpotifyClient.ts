@@ -1,3 +1,7 @@
+/**
+ * @deprecated @see https://github.com/ShyykoSerhiy/spotilocal/issues/7#issuecomment-416002808
+ */
+
 import { SpotifyClient } from './SpotifyClient';
 import { OsxSpotifyClient } from './OsxSpotifyClient';
 import { OsAgnosticSpotifyClient } from './OsAgnosticSpotifyClient'
@@ -17,6 +21,6 @@ export class OsxHttpSpotifyClient extends OsxSpotifyClient implements SpotifyCli
     }
 
     pollStatus(cb: (status: SpotifyStatusState) => void, _getInterval: () => number) {
-        return this.osAgnosticSpotifyClient.pollStatus(cb);
+        return this.osAgnosticSpotifyClient.pollStatus(cb, _getInterval);
     }
 }
