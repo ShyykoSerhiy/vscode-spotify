@@ -290,6 +290,11 @@
           "type": "string",
           "default": "https://vscode-spotify-auth.azurewebsites.net/",
           "description": "Url to auth server. @see https://github.com/ShyykoSerhiy/vscode-spotify-auth"
+        },
+        "spotify.spotifyApiUrl": {
+          "type": "string",
+          "default": "https://api.spotify.com/v1",
+          "description": "Url to spotify api server. @see https://beta.developer.spotify.com/documentation/web-api/reference/playlists/"
         }
       }
     }

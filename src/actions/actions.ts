@@ -4,7 +4,21 @@ import { getStore } from '../store/store';
 import { getAuthServerUrl } from '../config/spotify-config'
 import { createDisposableAuthSever } from '../auth/server/local';
 import { showInformationMessage } from '../info/Info';
+import { getPlaylists } from '../webapi/spotify';
 
+function bind() {
+    return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
+        var originalMethod = descriptor.value;
+
+        //editing the descriptor/value parameter
+        descriptor.value = function (...args: any[]) {
+            return originalMethod.apply(_target, args);
+        }.bind(_target);
+
+        // return edited descriptor as opposed to overwriting the descriptor
+        return descriptor;
+    }
+}
 
 function actionCreator() {
     return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
@@ -31,6 +45,8 @@ export interface UpdateStateAction {
 
 export interface SignInAction {
     type: typeof SIGN_IN_ACTION
+    accessToken: string,
+    refreshToken: string
 }
 
 export interface SignOutAction {
@@ -39,6 +55,7 @@ export interface SignOutAction {
 
 class ActionCreator {
     @actionCreator()
+    @bind()
     updateStateAction(state: Partial<ISpotifyStatusState>): UpdateStateAction {
         return {
             type: UPDATE_STATE_ACTION,
@@ -46,11 +63,12 @@ class ActionCreator {
         };
     }
 
+    @bind()
     actionSignIn() {
-        commands.executeCommand('vscode.open', Uri.parse(getAuthServerUrl())).then(() => {
+        commands.executeCommand('vscode.open', Uri.parse(`${getAuthServerUrl()}?login=true`)).then(() => {
             const { createServerPromise, dispose } = createDisposableAuthSever();
             createServerPromise.then(({ access_token, refresh_token }) => {
-                console.log(access_token, refresh_token);
+                this._actionSignIn(access_token, refresh_token);                
             }).catch((e) => {
                 showInformationMessage(`Failed to retrieve access token : ${JSON.stringify(e)}`);
             }).then(() => {
@@ -59,14 +77,23 @@ class ActionCreator {
         });
     }
 
-    /*@actionCreator()
-    private _actionSignIn(): SignInAction {
-        return {
-            type: SIGN_IN_ACTION
-        };
-    }*/
+    @bind()
+    loadPlaylists() {
+        getPlaylists().then();
+    }
 
     @actionCreator()
+    @bind()
+    private _actionSignIn(accessToken: string, refreshToken: string): SignInAction {
+        return {
+            accessToken,
+            refreshToken,
+            type: SIGN_IN_ACTION
+        };
+    }
+
+    @actionCreator()
+    @bind()
     actionSignOut(): SignOutAction {
         return {
             type: SIGN_OUT_ACTION
@@ -74,6 +101,6 @@ class ActionCreator {
     }
 }
 
-export type Action = UpdateStateAction;
+export type Action = UpdateStateAction | SignInAction | SignOutAction;
 
 export const actionsCreator = new ActionCreator();

@@ -36,6 +36,10 @@ export function getAuthServerUrl(): string {
 	return getConfig().get<string>('authServerUrl', '');
 }
 
+export function getSpotifyApiUrl(): string {
+	return getConfig().get<string>('spotifyApiUrl', '');
+}
+
 export function openPanelLyrics(): number {
 	return getConfig().get<number>('openPanelLyrics', 1);
 }
