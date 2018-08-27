@@ -97,7 +97,6 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
             }
             return result;
         } catch (_ignored) {
-            console.log(_ignored);
         }
         return Promise.reject<SpotifyStatusState>('Spotify isn\'t running');
     }
