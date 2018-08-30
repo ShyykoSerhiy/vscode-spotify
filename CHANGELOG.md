@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.6.1] - 2018-08-30
+### Fixed
+- Fixed Play, Pause, PlayPause, Volume controlls on linux. ONLY on Linux(dbus)
+- Fixed performance issue on MacOs(to manny querys)
+
 ## [2.6.0] - 2018-08-27
 ### Fixed
 - Fix for Status Bar Icons Disappeared (#42). ONLY on Linux(dbus)
