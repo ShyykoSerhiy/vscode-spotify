@@ -64,6 +64,8 @@ const terminalCommand = (cmd: string) => {
     });
 };
 
+interface ICurrentVol { sinkNum: string | null, volume: number }
+
 export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements SpotifyClient {
     private currentOnVolume: number;
 
@@ -143,7 +145,7 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
         return (foundSpotifySink != null) ? ((foundSpotifySink.length > 1) ? true : false) : false
     }
 
-    async getCurrentVolume() {
+    async getCurrentVolume(): Promise<ICurrentVol> {
         try {
             const d = await terminalCommand('pactl list sink-inputs');
             const sinkedArr = d.split('Sinked Input #')
@@ -153,7 +155,7 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
                 if (currentVol != null) {
                     let sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
                     if (currentVol.length > 1) {
-                        if (parseInt(currentVol[1]) > 0 && sinkNum != null) {
+                        if (parseInt(currentVol[1]) >= 0 && sinkNum != null) {
                             return { sinkNum: sinkNum[1], volume: parseInt(currentVol[1]) };
                         }
                     }
@@ -164,26 +166,30 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
         return { sinkNum: null, volume: 0 };
     }
 
-    async muteVolume() {
-        const v = await this.getCurrentVolume();
+    async muteVolume(currentVol?: ICurrentVol) {
+        const v = currentVol || await this.getCurrentVolume();
         if (v.sinkNum && v.volume !== 0) {
             this.currentOnVolume = v.volume;
-            terminalCommand(`pactl set-sink-input-volume ${v.sinkNum} ${this.currentOnVolume}%`);
+            this._setVolume(v.sinkNum, 0);
         }
     }
 
-    async unmuteVolume() {
-        const v = await this.getCurrentVolume();
+    async unmuteVolume(currentVol?: ICurrentVol) {
+        const v = currentVol || await this.getCurrentVolume();
         if (v.sinkNum && v.volume === 0) {
-            terminalCommand(`pactl set-sink-input-volume ${v.sinkNum} ${this.currentOnVolume}%`);
+            this._setVolume(v.sinkNum, this.currentOnVolume || 100);
         }
     }
 
     async muteUnmuteVolume() {
         const v = await this.getCurrentVolume();
-        if (v.sinkNum && v.volume > 0) {
-            terminalCommand(`pactl set-sink-input-volume ${v.sinkNum} ${this.currentOnVolume}%`)
-        } else { }
+        if (v.sinkNum) {
+            if (v.volume === 0) {
+                this.unmuteVolume(v);
+            } else {
+                this.muteVolume(v);
+            }
+        }
     }
 
     volumeUp() {
@@ -218,5 +224,9 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
                 }
             })
             .catch(e => console.log(e))
+    }
+
+    private _setVolume(sinkNum: string, volume: number) {
+        terminalCommand(`pactl set-sink-input-volume ${sinkNum} ${volume}%`);
     }
 }
