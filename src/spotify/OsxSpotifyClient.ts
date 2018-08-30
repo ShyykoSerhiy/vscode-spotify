@@ -90,7 +90,7 @@ export class OsxSpotifyClient implements SpotifyClient {
             _poll();
         });
         p.promise = p.promise.catch((err) => {
-            canceled === true;
+            canceled = true;
             throw err;
         });
         return p;
