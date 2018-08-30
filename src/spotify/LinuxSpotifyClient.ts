@@ -119,7 +119,7 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
             _poll();
         });
         p.promise = p.promise.catch((err) => {
-            canceled === true;
+            canceled = true;
             throw err;
         });
         return p;
@@ -133,17 +133,19 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
         terminalCommand(PauseDebianCmd)
     }
 
-    playPause() {
-        terminalCommand(PlayPauseDebianCmd)
-        
+    async playPause() {
+        await terminalCommand(PlayPauseDebianCmd)
+        this._queryStatus()
     }
 
-    next() {
-        terminalCommand(PlayNextTrackDebianCmd)
+    async next() {
+        await terminalCommand(PlayNextTrackDebianCmd)
+        this._queryStatus()
     }
 
-    previous() {
-        terminalCommand(PlayPreviousTrackDebianCmd)
+    async previous() {
+        await terminalCommand(PlayPreviousTrackDebianCmd)
+        this._queryStatus()
     }
 
     findSpotify(s: string) {
@@ -243,5 +245,13 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
 
     private _setVolume(sinkNum: string, volume: number) {
         terminalCommand(`pactl set-sink-input-volume ${sinkNum} ${volume}%`);
+    }
+
+    private _queryStatus = () => {
+        // spotify with dbfus doesn't return correct state right after next/prev/pause/play
+        // command executtion. we need to wait
+        setTimeout(() => {
+            this.spotifyStatusController.queryStatus();
+        }, /*magic number*/600);
     }
 }
