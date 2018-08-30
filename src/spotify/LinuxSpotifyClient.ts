@@ -8,6 +8,8 @@ const SP_DEST = "org.mpris.MediaPlayer2.spotify"
 const SP_PATH = "/org/mpris/MediaPlayer2"
 const SP_MEMB = "org.mpris.MediaPlayer2.Player"
 const DB_P_GET = "org.freedesktop.DBus.Properties.Get";
+const PlayPauseDebianCmd = `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.PlayPause`
+const PauseDebianCmd = `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.Pause`
 const PlayNextTrackDebianCmd = `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.Next`
 const PlayPreviousTrackDebianCmd = `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.Previous`
 const GetPlaybackStatus = `dbus-send --print-reply --dest=${SP_DEST} ${SP_PATH} ${DB_P_GET} string:${SP_MEMB} string:PlaybackStatus`
@@ -121,6 +123,19 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
             throw err;
         });
         return p;
+    }
+
+    play() {
+        terminalCommand(PlayPauseDebianCmd)
+    }
+
+    pause() {
+        terminalCommand(PauseDebianCmd)
+    }
+
+    playPause() {
+        terminalCommand(PlayPauseDebianCmd)
+        
     }
 
     next() {
