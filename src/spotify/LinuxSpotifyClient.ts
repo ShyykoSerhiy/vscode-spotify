@@ -8,10 +8,13 @@ const SP_DEST = "org.mpris.MediaPlayer2.spotify"
 const SP_PATH = "/org/mpris/MediaPlayer2"
 const SP_MEMB = "org.mpris.MediaPlayer2.Player"
 const DB_P_GET = "org.freedesktop.DBus.Properties.Get";
-const PlayPauseDebianCmd = `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.PlayPause`
-const PauseDebianCmd = `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.Pause`
-const PlayNextTrackDebianCmd = `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.Next`
-const PlayPreviousTrackDebianCmd = `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.Previous`
+const createCommandString = (command: string) => {
+    return `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.${command}`
+}
+const PlayPauseDebianCmd = createCommandString('PlayPause');
+const PauseDebianCmd = createCommandString('Pause')
+const PlayNextTrackDebianCmd = createCommandString('Next')
+const PlayPreviousTrackDebianCmd = createCommandString('Previous')
 const GetPlaybackStatus = `dbus-send --print-reply --dest=${SP_DEST} ${SP_PATH} ${DB_P_GET} string:${SP_MEMB} string:PlaybackStatus`
 //@see https://gist.github.com/wandernauta/6800547
 /**
