@@ -4,6 +4,7 @@ import { getStore } from '../store/store';
 import { getAuthServerUrl } from '../config/spotify-config'
 import { createDisposableAuthSever } from '../auth/server/local';
 import { showInformationMessage } from '../info/info';
+import { getApi } from 'spotify-common/src/spotify/api';
 
 function bind() {
     return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
@@ -60,6 +61,11 @@ class ActionCreator {
             type: UPDATE_STATE_ACTION,
             state
         };
+    }
+
+    @bind()
+    loadPlaylists() {
+        
     }
 
     @bind()

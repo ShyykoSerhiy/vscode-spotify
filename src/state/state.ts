@@ -1,3 +1,5 @@
+import { Api } from 'spotify-common/src/spotify/api';
+
 export interface ITrack {
     album: string,
     artist: string,
@@ -42,7 +44,8 @@ export interface ISpotifyStatusStatePartial {
 }
 
 export interface ISpotifyStatusState extends ISpotifyStatusStatePartial {    
-    loginState: ILoginState | null
+    loginState: ILoginState | null,
+    api: Api
 }
 
 export const defaultState: ISpotifyStatusState = {
