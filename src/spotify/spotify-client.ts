@@ -1,7 +1,7 @@
 import {SpotifyStatus} from '../SpotifyStatus';
 import {SpotifyStatusController} from '../SpotifyStatusController';
 import {OsAgnosticSpotifyClient} from './OsAgnosticSpotifyClient';
-import { LinuxSpotifyClient} from './LinuxSpotifyClient';
+import { LinuxSpotifyClient} from './linux-spotify-client';
 import {OsxSpotifyClient} from './OsxSpotifyClient';
 import {OsxHttpSpotifyClient} from './OsxHttpSpotifyClient';
 import {SpotifyStatusState} from '../SpotifyStatus';

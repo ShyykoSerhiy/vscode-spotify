@@ -1,5 +1,5 @@
 import { SpotifyClient, createCancelablePromise } from './SpotifyClient';
-import { SpotifyStatusController } from '../SpotifyStatusController';
+import { SpotifyStatusController } from '../spotify-status-controller';
 import { exec } from 'child_process';
 import { OsAgnosticSpotifyClient } from './OsAgnosticSpotifyClient';
 import { SpotifyStatusState } from '../SpotifyStatus';
