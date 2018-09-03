@@ -4,7 +4,6 @@ import { getStore } from '../store/store';
 import { getAuthServerUrl } from '../config/spotify-config'
 import { createDisposableAuthSever } from '../auth/server/local';
 import { showInformationMessage } from '../info/info';
-import { getPlaylists } from '../webapi/spotify';
 
 function bind() {
     return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
@@ -75,11 +74,6 @@ class ActionCreator {
                 dispose();
             });
         });
-    }
-
-    @bind()
-    loadPlaylists() {
-        getPlaylists().then();
     }
 
     @actionCreator()
