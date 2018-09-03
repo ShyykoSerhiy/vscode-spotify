@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [2.6.1] - 2018-08-30
+### Fixed
+- Fixed Play, Pause, PlayPause, Volume controlls on linux. ONLY on Linux(dbus)
+- Fixed performance issue on MacOs(to manny querys)
+
+## [2.6.0] - 2018-08-27
+### Fixed
+- Fix for Status Bar Icons Disappeared (#42). ONLY on Linux(dbus)
+
+## [2.5.1] - 2018-07-23
+### Fixed
+- Emergency fix for Status Bar Icons Disappeared (#42). ONLY on MacOS
+
+## [2.5.0] - 2018-06-26
+### Fixed
+- Use dbus on Linux (improved linux support) (#14) (kudos to audstanley(Richard Stanley)(https://github.com/audstanley))
+
+## [2.4.0] - 2018-03-25
+### Fixed
+- Change default mac keybindings for play previous/next (#34) (kudos to ecbrodie(Evan Brodie)(https://github.com/ecbrodie)) @see the reasoning behind this at https://github.com/ShyykoSerhiy/vscode-spotify/pull/34
+
 ## [2.3.2] - 2018-02-23
 ### Fixed
 - `trackInfoPriority` setting has no effect (#30) (kudos to realbizkit(András Szepes)(https://github.com/realbizkit))

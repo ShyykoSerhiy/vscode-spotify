@@ -1,7 +1,7 @@
 {
   "name": "vscode-spotify",
   "description": "Use Spotify inside vscode.",
-  "version": "2.3.2",
+  "version": "2.6.1",
   "publisher": "shyykoserhiy",
   "license": "MIT",
   "engines": {
@@ -89,12 +89,12 @@
       {
         "command": "spotify.next",
         "key": "ctrl+shift+]",
-        "mac": "cmd+shift+]"
+        "mac": "ctrl+cmd+]"
       },
       {
         "command": "spotify.previous",
         "key": "ctrl+shift+[",
-        "mac": "cmd+shift+["
+        "mac": "ctrl+cmd+["
       },
       {
         "command": "spotify.volumeUp",
@@ -278,7 +278,7 @@
         },
         "spotify.useCombinedApproachOnMacOS": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Whether to use experimental applescript + http implementation of spotify client to reduce CPU usage on MacOs. MacOs only."
         },
         "spotify.showInitializationError": {
@@ -305,7 +305,10 @@
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "node ./node_modules/vscode/bin/test"
+    "test": "node ./node_modules/vscode/bin/test",
+    "contributors:add": "all-contributors add",
+    "contributors:generate": "all-contributors generate",
+    "contributors:check": "all-contributors check"
   },
   "devDependencies": {
     "@types/express": "^4.11.1",
@@ -313,14 +316,15 @@
     "@types/node": "^6.0.40",
     "@types/redux": "^3.6.0",
     "@types/superagent": "^2.0.36",
+    "all-contributors-cli": "^5.0.0",
     "typescript": "^2.2.0",
     "vscode": "^1.0.0"
   },
   "dependencies": {
     "express": "^4.16.2",
     "redux": "^3.7.2",
+    "child_process": "^1.0.2",
     "request-light": "^0.2.1",
-    "spotify-node-applescript": "1.1.1",
-    "spotilocal": "0.4.4"
+    "spotify-node-applescript": "1.1.1"
   }
 }

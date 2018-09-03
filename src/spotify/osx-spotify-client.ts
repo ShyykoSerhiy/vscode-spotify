@@ -1,7 +1,8 @@
-import { SpotifyClient, createCancelablePromise } from './spotify-client';
+import { SpotifyClient, createCancelablePromise } from './SpotifyClient';
 import * as spotify from 'spotify-node-applescript';
-import { ISpotifyStatusStatePartial } from '../state/state';
-import { isMuted } from '../store/store';
+import { SpotifyStatus } from '../SpotifyStatus';
+import { SpotifyStatusController } from '../SpotifyStatusController';
+import { SpotifyStatusState } from '../SpotifyStatus';
 
 export class OsxSpotifyClient implements SpotifyClient {
 
@@ -69,10 +70,10 @@ export class OsxSpotifyClient implements SpotifyClient {
                     isRunning: true
                 }
                 return state;
-            });
+            }) as any;
         });
     }
-    pollStatus(cb: (status: ISpotifyStatusStatePartial) => void, getInterval: () => number) {
+    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number) {
         let canceled = false;
         const p = createCancelablePromise<void>((_, reject) => {
             const _poll = () => {
@@ -87,13 +88,13 @@ export class OsxSpotifyClient implements SpotifyClient {
             _poll();
         });
         p.promise = p.promise.catch((err) => {
-            canceled === true;
+            canceled = true;
             throw err;
         });
         return p;
     }
     private _queryStatus() {
-        //this.spotifyStatusController.queryStatus(); //fixime
+        this.spotifyStatusController.queryStatus();
     }
     private _promiseIsRunning() {
         return new Promise<boolean>((resolve, reject) => {

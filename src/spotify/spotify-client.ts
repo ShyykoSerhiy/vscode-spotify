@@ -1,8 +1,11 @@
-import {OsAgnosticSpotifyClient} from './os-agnostic-spotify-client';
-import {OsxSpotifyClient} from './osx-spotify-client';
-import {OsxHttpSpotifyClient} from './osx-http-spotify-client';
-import {ISpotifyStatusStatePartial} from '../state/state';
-import {getUseCombinedApproachOnMacOS} from '../config/spotify-config';
+import {SpotifyStatus} from '../SpotifyStatus';
+import {SpotifyStatusController} from '../SpotifyStatusController';
+import {OsAgnosticSpotifyClient} from './OsAgnosticSpotifyClient';
+import { LinuxSpotifyClient} from './LinuxSpotifyClient';
+import {OsxSpotifyClient} from './OsxSpotifyClient';
+import {OsxHttpSpotifyClient} from './OsxHttpSpotifyClient';
+import {SpotifyStatusState} from '../SpotifyStatus';
+import {getUseCombinedApproachOnMacOS} from '../config/SpotifyConfig';
 import * as os from 'os';
 
 export class SpoifyClientSingleton {
@@ -11,9 +14,14 @@ export class SpoifyClientSingleton {
         if (this.spotifyClient) {
             return this.spotifyClient;
         }
+        
         this.spotifyClient = (os.platform() === 'darwin') ?
-            (getUseCombinedApproachOnMacOS() ? new OsxHttpSpotifyClient() : new OsxSpotifyClient()) :
-            new OsAgnosticSpotifyClient();
+            (getUseCombinedApproachOnMacOS() ? 
+                  new OsxHttpSpotifyClient(spotifyStatus, spotifyStatusController) 
+                : new OsxSpotifyClient(spotifyStatus, spotifyStatusController)) 
+                : ((os.platform() === 'linux') ? 
+                      new LinuxSpotifyClient(spotifyStatusController) 
+                    : new OsAgnosticSpotifyClient(spotifyStatusController));
         return this.spotifyClient;
     }
 }
