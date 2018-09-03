@@ -1,6 +1,6 @@
 import { commands, Disposable } from 'vscode';
 import { SpoifyClientSingleton } from './spotify/spotify-client';
-import { LyricsController, registration } from './lyrics/Lyrics';
+import { LyricsController, registration } from './lyrics/lyrics';
 import { actionsCreator } from './actions/actions';
 
 export function createCommands(): { dispose: () => void } {

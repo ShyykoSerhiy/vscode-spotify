@@ -1,6 +1,6 @@
-import { xhr } from '../request/Request';
+import { xhr } from '../request/request';
 import { getLyricsServerUrl, openPanelLyrics } from '../config/spotify-config';
-import { showInformationMessage } from '../info/Info';
+import { showInformationMessage } from '../info/info';
 import { getState } from '../store/store';
 import { Uri, TextDocumentContentProvider, EventEmitter, Event, window, workspace, ProgressLocation } from 'vscode';
 

@@ -1,8 +1,7 @@
-import { SpotifyClient, createCancelablePromise } from './SpotifyClient';
-import { SpotifyStatusController } from '../spotify-status-controller';
+import { SpotifyClient, createCancelablePromise } from './spotify-client';
 import { exec } from 'child_process';
-import { OsAgnosticSpotifyClient } from './OsAgnosticSpotifyClient';
-import { SpotifyStatusState } from '../SpotifyStatus';
+import { OsAgnosticSpotifyClient } from './os-agnostic-spotify-client';
+import { ISpotifyStatusStatePartial } from '../state/state';
 
 const SP_DEST = "org.mpris.MediaPlayer2.spotify"
 const SP_PATH = "/org/mpris/MediaPlayer2"
@@ -74,11 +73,11 @@ interface ICurrentVol { sinkNum: string | null, volume: number }
 export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements SpotifyClient {
     private currentOnVolume: number;
 
-    constructor(spotifyStatusController: SpotifyStatusController) {
-        super(spotifyStatusController);
+    constructor() {
+        super()
     }
 
-    private async getStatus(): Promise<SpotifyStatusState> {
+    private async getStatus(): Promise<ISpotifyStatusStatePartial> {
         try {
             const playbackStatus = await terminalCommand(GetPlaybackStatus);
             const metadata = await terminalCommand(GetMetadataCommand);
@@ -87,27 +86,27 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
             }
             const state = ~playbackStatus.indexOf('Playing') ? 'playing' : 'paused';
 
-            const result: SpotifyStatusState = {
-                state: {
+            const result: ISpotifyStatusStatePartial = {
+                playerState: {
                     state,
                     volume: 100,//dbus doesn't return real value for this 
-                    position: 0//dbus doesn't return real value for this
+                    position: 0,//dbus doesn't return real value for this,
+                    isRepeating: false,//dbus doesn't return real value for this
+                    isShuffling: false,//dbus doesn't return real value for this    
                 },
                 track: {
                     album: (/album\|(.+)/g.exec(metadata) || [])[1],
                     artist: (/artist\|(.+)/g.exec(metadata) || [])[1],
                     name: (/title\|(.+)/g.exec(metadata) || [])[1]
                 },
-                isRepeating: false,//dbus doesn't return real value for this
-                isShuffling: false,//dbus doesn't return real value for this
                 isRunning: true
             }
             return result;
         } catch (_ignored) {
         }
-        return Promise.reject<SpotifyStatusState>('Spotify isn\'t running');
+        return Promise.reject<ISpotifyStatusStatePartial>('Spotify isn\'t running');
     }
-    pollStatus(cb: (status: SpotifyStatusState) => void, getInterval: () => number) {
+    pollStatus(cb: (status: ISpotifyStatusStatePartial) => void, getInterval: () => number) {
         let canceled = false;
         const p = createCancelablePromise<void>((_, reject) => {
             const _poll = () => {
@@ -253,8 +252,13 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
     private _queryStatus = () => {
         // spotify with dbfus doesn't return correct state right after next/prev/pause/play
         // command executtion. we need to wait
-        setTimeout(() => {
-            this.spotifyStatusController.queryStatus();
-        }, /*magic number*/600);
+        //setTimeout(() => {
+        //    this.spotifyStatusController.queryStatus();
+        //}, /*magic number*/600);
+
+        // fixme
+        console.error('NOT IMPLEMENTED');
+        throw new Error('NOT IMPLEMENTED')
+        
     }
 }

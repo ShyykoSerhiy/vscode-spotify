@@ -3,7 +3,7 @@ import { ISpotifyStatusState } from '../state/state';
 import { getStore } from '../store/store';
 import { getAuthServerUrl } from '../config/spotify-config'
 import { createDisposableAuthSever } from '../auth/server/local';
-import { showInformationMessage } from '../info/Info';
+import { showInformationMessage } from '../info/info';
 import { getPlaylists } from '../webapi/spotify';
 
 function bind() {

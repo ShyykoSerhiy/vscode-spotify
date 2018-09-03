@@ -1,7 +1,6 @@
-import { SpotifyClient, createCancelablePromise } from './SpotifyClient';
-import { SpotifyStatusController } from '../SpotifyStatusController';
-import { SpotifyStatusState } from '../SpotifyStatus';
-import { showInformationMessage } from '../info/Info';
+import { SpotifyClient, createCancelablePromise } from './spotify-client';
+import { ISpotifyStatusStatePartial } from '../state/state';
+import { showInformationMessage } from '../info/info';
 
 function notSupported(_ignoredTarget: any, _ignoredPropertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const fn = descriptor.value as Function;
@@ -19,10 +18,8 @@ function notSupported(_ignoredTarget: any, _ignoredPropertyKey: string, descript
 }
 
 export class OsAgnosticSpotifyClient implements SpotifyClient {
-    protected spotifyStatusController: SpotifyStatusController;
 
-    constructor(spotifyStatusController: SpotifyStatusController) {
-        this.spotifyStatusController = spotifyStatusController;
+    constructor() {
     }
 
     @notSupported
@@ -41,7 +38,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
     playPause() {
     }
     @notSupported
-    pollStatus(_cb: (status: SpotifyStatusState) => void, _getInterval: () => number) {
+    pollStatus(_cb: (status: ISpotifyStatusStatePartial) => void, _getInterval: () => number) {
         return createCancelablePromise<void>((_resolve, _reject) => {});
     }
     @notSupported

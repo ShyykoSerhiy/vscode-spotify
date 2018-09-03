@@ -276,11 +276,6 @@
           "default": "https://vscode-spotify-lyrics.azurewebsites.net/lyrics",
           "description": "Url for lyrics server. @see https://github.com/ShyykoSerhiy/vscode-spotify-lyrics ."
         },
-        "spotify.useCombinedApproachOnMacOS": {
-          "type": "boolean",
-          "default": false,
-          "description": "Whether to use experimental applescript + http implementation of spotify client to reduce CPU usage on MacOs. MacOs only."
-        },
         "spotify.showInitializationError": {
           "type": "boolean",
           "default": false,

@@ -1,4 +1,4 @@
-import { xhr } from '../request/Request';
+import { xhr } from '../request/request';
 import { getSpotifyApiUrl } from '../config/spotify-config';
 import { getState } from '../store/store';
 
