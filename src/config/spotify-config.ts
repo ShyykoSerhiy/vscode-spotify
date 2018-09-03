@@ -2,8 +2,7 @@ import { workspace, Memento } from 'vscode';
 import { getState } from '../store/store';
 import { BUTTON_ID_SIGN_IN, BUTTON_ID_SIGN_OUT } from '../consts/consts';
 
-
-function getConfig() {
+export function getConfig() {
 	return workspace.getConfiguration('spotify');
 }
 

@@ -1,14 +1,23 @@
+import { Memento } from 'vscode';
 import { createStore, Store } from 'redux';
 import { ISpotifyStatusState, defaultState } from '../state/state';
 import rootReducer from '../reducers/root-reducer';
+import { persistStore, persistReducer } from 'redux-persist';
+import { createVscodeStorage, createDummyStorage } from './storage/vscode-storage';
 
 export type SpotifyStore = Store<ISpotifyStatusState>;
 
 let store: SpotifyStore;
 
-export function getStore() {
+export function getStore(memento?: Memento) {
     if (!store) {
-        store = createStore(rootReducer, defaultState);
+        const persistConfig = {
+            key: 'root',
+            storage: memento ? createVscodeStorage(memento) : createDummyStorage()
+        }
+        const persistedReducer = persistReducer(persistConfig, rootReducer)
+        store = createStore(persistedReducer, defaultState);
+        persistStore(store);
     }
     return store;
 }
