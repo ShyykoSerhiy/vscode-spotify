@@ -6,7 +6,7 @@ Provides integration with Spotify Desktop client.
 
 Note that some of functionality only available on macOS (see [How it works section](#how-it-works) )
 
-**This is extension requires Spotify Premium to work on Windows**
+**This extension requires Spotify Premium to work on Windows**
 
 ## How it works
 On macOS this extension uses https://github.com/andrehaveman/spotify-node-applescript (basically a wrapper for https://developer.spotify.com/applescript-api/)
