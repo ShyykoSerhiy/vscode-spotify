@@ -21,5 +21,25 @@ export function createCommands(): { dispose: () => void } {
 	const toggleShuffling = commands.registerCommand('spotify.toggleShuffling', sC.toggleShuffling.bind(sC));
 	const signIn = commands.registerCommand('spotify.signIn', actionsCreator.actionSignIn);
 	const signOut = commands.registerCommand('spotify.signOut', actionsCreator.actionSignOut);
-	return Disposable.from(lyrics, next, previous, play, pause, playPause, muteVolume, unmuteVolume, muteUnmuteVolume, volumeUp, volumeDown, toggleRepeating, toggleShuffling, registration, signIn, signOut);
+	const loadPlaylists = commands.registerCommand('spotify.loadPlaylists', actionsCreator.loadPlaylists);
+	const loadTracks = commands.registerCommand('spotify.loadTracks', actionsCreator.loadTracksForSelectedPlaylist);
+	return Disposable.from(lyrics,
+		next,
+		previous,
+		play,
+		pause,
+		playPause,
+		muteVolume,
+		unmuteVolume,
+		muteUnmuteVolume,
+		volumeUp,
+		volumeDown,
+		toggleRepeating,
+		toggleShuffling,
+		registration,
+		signIn,
+		signOut,
+		loadPlaylists,
+		loadTracks
+	);
 }

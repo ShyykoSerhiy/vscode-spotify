@@ -5,7 +5,7 @@
   "publisher": "shyykoserhiy",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.12.0"
+    "vscode": "^1.27.1"
   },
   "icon": "media/icon.png",
   "galleryBanner": {
@@ -23,6 +23,27 @@
     "*"
   ],
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vscode-spotify",
+          "title": "vscode-spotify",
+          "icon": "resources/dark/logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "vscode-spotify": [
+        {
+          "id": "vscode-spotify-playlists",
+          "name": "Playlists"
+        },
+        {
+          "id": "vscode-spotify-tracks",
+          "name": "Tracks"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "spotify.next",
@@ -83,6 +104,14 @@
       {
         "command": "spotify.signOut",
         "title": "Spotify Sign Out"
+      },
+      {
+        "command": "spotify.loadPlaylists",
+        "title": "Spotify Load Playlists"
+      },
+      {
+        "command": "spotify.loadTracks",
+        "title": "Spotify Load Tracks"
       }
     ],
     "keybindings": [
@@ -266,6 +295,16 @@
           "default": 0,
           "description": "Priority of lyrics button."
         },
+        "spotify.signInButtonPriority": {
+          "type": "number",
+          "default": 15,
+          "description": "Priority of sign in button."
+        },
+        "spotify.signOutButtonPriority": {
+          "type": "number",
+          "default": 15,
+          "description": "Priority of sign out button."
+        },
         "spotify.statusCheckInterval": {
           "type": "number",
           "default": 5000,
@@ -283,7 +322,7 @@
         },
         "spotify.authServerUrl": {
           "type": "string",
-          "default": "https://vscode-spotify-auth.azurewebsites.net/",
+          "default": "https://vscode-spotify-auth.azurewebsites.net",
           "description": "Url to auth server. @see https://github.com/ShyykoSerhiy/vscode-spotify-auth"
         },
         "spotify.spotifyApiUrl": {
@@ -309,6 +348,7 @@
     "@types/express": "^4.11.1",
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
+    "@types/react": "^16.4.13",
     "@types/redux": "^3.6.0",
     "@types/redux-persist": "^4.3.1",
     "@types/superagent": "^2.0.36",
@@ -316,9 +356,10 @@
     "typescript": "^2.2.0",
     "vscode": "^1.0.0"
   },
-  "dependencies": {    
+  "dependencies": {
     "child_process": "^1.0.2",
     "express": "^4.16.2",
+    "immutable": "^3.8.2",
     "redux": "^3.7.2",
     "redux-persist": "^5.10.0",
     "request-light": "^0.2.1",

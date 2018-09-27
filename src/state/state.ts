@@ -1,3 +1,6 @@
+import { Playlist, Track } from 'spotify-common/lib/spotify/consts';
+import { Map } from 'immutable';
+
 export interface ITrack {
     album: string,
     artist: string,
@@ -9,6 +12,9 @@ export interface ILoginState {
     refreshToken: string
 }
 
+export type Playlist = Playlist;
+export type Track = Track;
+
 export interface IPlayerState {
     /**
      * 
@@ -17,13 +23,13 @@ export interface IPlayerState {
     position: number,
     state: 'playing' | 'paused',
     /**
- * true if repeating is enabled
- */
+    * true if repeating is enabled
+    */
     isRepeating: boolean,
     /**
      * true if shuffling is enabled
      */
-    isShuffling: boolean    
+    isShuffling: boolean
 }
 
 export interface ISpotifyStatusStatePartial {
@@ -41,23 +47,70 @@ export interface ISpotifyStatusStatePartial {
     track: ITrack
 }
 
-export interface ISpotifyStatusState extends ISpotifyStatusStatePartial {    
+export interface ISpotifyStatusState extends ISpotifyStatusStatePartial {
     loginState: ILoginState | null,
+    playlists: Playlist[],
+    selectedPlaylist: Playlist | null,
+    /**
+     * Map<Playlist.id>
+     */
+    tracks: Map<Playlist["id"], Track[]>
+    selectedTrack: Track | null
 }
 
-export const defaultState: ISpotifyStatusState = {
-    playerState: {
-        position: 0,
-        volume: 0,
-        state: 'paused',
-        isRepeating: false,
-        isShuffling: false,
+export const DUMMY_PLAYLIST: Playlist = {
+    "collaborative": false,
+    "external_urls": {
+        "spotify": '',
     },
-    track: {
-        album: '',
-        artist: '',
-        name: ''
+    "href": '',
+    "id": 'No Playlists',
+    "images": [{
+        "height": 100,
+        "url": "none",
+        "width": 100,
+    }],
+    "name": "It seems that you don't have any playlists. To refresh use spotify.loadPlaylists command.",
+    "owner": {
+        "display_name": '',
+        "external_urls": {
+            "spotify": '',
+        },
+        "href": '',
+        "id": '',
+        "type": '',
+        "uri": '',
     },
-    isRunning: false,
-    loginState: null
-} 
+    "primary_color": null,
+    "public": false,
+    "snapshot_id": '',
+    "tracks": {
+        "href": '',
+        "total": 0,
+    },
+    "type": '',
+    "uri": '',
+};
+
+export const getDefaultState = ():ISpotifyStatusState=>{
+    return {
+        playerState: {
+            position: 0,
+            volume: 0,
+            state: 'paused',
+            isRepeating: false,
+            isShuffling: false,
+        },
+        track: {
+            album: '',
+            artist: '',
+            name: ''
+        },
+        isRunning: false,
+        loginState: null,
+        playlists: [],
+        selectedPlaylist: null,
+        tracks: Map(),
+        selectedTrack: null
+    };
+}

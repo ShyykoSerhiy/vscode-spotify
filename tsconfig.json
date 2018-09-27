@@ -10,8 +10,7 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
-		"experimentalDecorators": true,
-		"skipLibCheck": true
+		"experimentalDecorators": true
 	},
 	"exclude": [
 		"node_modules"

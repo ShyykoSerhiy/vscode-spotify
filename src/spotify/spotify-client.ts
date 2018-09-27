@@ -1,8 +1,8 @@
-import { OsAgnosticSpotifyClient } from './os-agnostic-spotify-client';
 import { LinuxSpotifyClient } from './linux-spotify-client';
 import { OsxSpotifyClient } from './osx-spotify-client';
 import { ISpotifyStatusStatePartial } from '../state/state';
 import * as os from 'os';
+import { WebApiSpotifyClient } from './web-api-spotify-client';
 
 export class SpoifyClientSingleton {
     private static spotifyClient: SpotifyClient;
@@ -11,11 +11,17 @@ export class SpoifyClientSingleton {
             return this.spotifyClient;
         }
 
-        this.spotifyClient = (os.platform() === 'darwin') ?
-            new OsxSpotifyClient()
-            : ((os.platform() === 'linux') ?
-                new LinuxSpotifyClient()
-                : new OsAgnosticSpotifyClient());
+        const platform = os.platform();
+        if (platform === 'darwin') {
+            //this.spotifyClient = new OsxSpotifyClient();
+        }
+        if (platform === 'linux') {
+            this.spotifyClient = new LinuxSpotifyClient();
+        }
+        if (!this.spotifyClient) {
+            this.spotifyClient = new WebApiSpotifyClient();
+        }
+
         return this.spotifyClient;
     }
 }

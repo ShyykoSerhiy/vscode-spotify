@@ -2,7 +2,6 @@ import * as express from 'express';
 import { Server } from 'http';
 import { getAuthServerUrl } from '../../config/spotify-config';
 
-
 export interface CreateDisposableAuthSeverPromiseResult {
     access_token: string,
     refresh_token: string,
@@ -24,7 +23,7 @@ export const createDisposableAuthSever = () => {
                 } else {
                     rej(error);
                 }
-                response.redirect(`${getAuthServerUrl()}?message=${encodeURIComponent('You can now close this tab')}`);
+                response.redirect(`${getAuthServerUrl()}/?message=${encodeURIComponent('You can now close this tab')}`);
                 request.destroy();
             });
 

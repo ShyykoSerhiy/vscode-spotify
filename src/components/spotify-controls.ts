@@ -64,6 +64,8 @@ export class SpotifyControls {
 	private _muteUnmuteVolumeButton: ButtonWithDynamicText;
 	private _toggleRepeatingButton: ButtonWithDynamicColor;
 	private _toggleShufflingButton: ButtonWithDynamicColor;
+	private _signInButton: Button;
+	private _signOutButton: Button;
 
 	constructor() {
 		var buttonsInfo = [
@@ -117,6 +119,14 @@ export class SpotifyControls {
 			}
 			if (button.id === 'toggleShuffling') {
 				this._toggleShufflingButton = button as ButtonWithDynamicColor;
+				return;
+			}
+			if (button.id === BUTTON_ID_SIGN_IN) {
+				this._signInButton = button;
+				return;
+			}
+			if (button.id === BUTTON_ID_SIGN_OUT) {
+				this._signOutButton = button;
 			}
 		})
 	}
@@ -127,15 +137,24 @@ export class SpotifyControls {
 	/**
 	 * Updates dynamicText buttons
 	 */
-	updateDynamicButtons(playing: boolean, muted: boolean, repeating:boolean, shuffling: boolean):boolean {
+	updateDynamicButtons(playing: boolean, muted: boolean, repeating: boolean, shuffling: boolean): boolean {
 		var changed = false;
 		changed = this._updateText(this._playPauseButton, playing) || changed;
 		changed = this._updateText(this._muteUnmuteVolumeButton, muted) || changed;
 		changed = this._updateColor(this._toggleRepeatingButton, repeating) || changed;
-		changed = this._updateColor(this._toggleShufflingButton, shuffling) || changed; 
+		changed = this._updateColor(this._toggleShufflingButton, shuffling) || changed;
 		return changed;
-    }
+	}
 	
+	private _hideShowButton(button: Button){
+		button.visible = isButtonToBeShown(button.buttonName);
+		button.visible ? button.statusBarItem.show() : button.statusBarItem.hide();
+	}
+
+	showHideAuthButtons(){
+		this._hideShowButton(this._signInButton);
+		this._hideShowButton(this._signOutButton);
+	}
 	/**
 	* Show buttons that are visible
 	*/
@@ -144,10 +163,15 @@ export class SpotifyControls {
 	}
 
 	/**
-	 * Hides all the buttons
+	 * Hides all the buttons except auth buttons
 	 */
 	hideAll() {
-		this.buttons.forEach((button) => { button.statusBarItem.hide(); });
+		this.buttons.forEach((button) => { 
+			if (button === this._signInButton || button === this._signOutButton) {
+				return;
+			}
+			button.statusBarItem.hide(); 
+		});
 	}
 	/**
 	* Disposes all the buttons

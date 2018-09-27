@@ -2,7 +2,7 @@ import { window, StatusBarItem, StatusBarAlignment } from 'vscode';
 import { SpotifyControls } from './spotify-controls';
 import { getTrackInfoFormat, getButtonPriority } from '../config/spotify-config';
 import { getState, getStore } from '../store/store';
-import { ITrack } from '../state/state';
+import { ITrack, ILoginState } from '../state/state';
 
 export class SpotifyStatus {
     /**
@@ -10,9 +10,12 @@ export class SpotifyStatus {
      */
     private _statusBarItem: StatusBarItem;
     private _spotifyControls: SpotifyControls;
+    private loginState: ILoginState | null = null;
 
     constructor() {
-        getStore().subscribe(() => this.render());
+        getStore().subscribe(() => {
+            this.render()
+        });
     }
 
     /**
@@ -29,7 +32,11 @@ export class SpotifyStatus {
             this._spotifyControls = new SpotifyControls();
             this._spotifyControls.showVisible();
         }
-        
+        if (this.loginState !== state.loginState) {
+            this.loginState = state.loginState;
+            this._spotifyControls.showHideAuthButtons();
+        }
+
         if (state.isRunning) {
             const { state: playing, volume, isRepeating, isShuffling } = state.playerState;
             var text = _formattedTrackInfo(state.track);
@@ -49,7 +56,7 @@ export class SpotifyStatus {
             this._statusBarItem.hide();
             this._spotifyControls.hideAll();
         }
-    }    
+    }
     /**
      * Disposes status bar items(if exist)
      */
