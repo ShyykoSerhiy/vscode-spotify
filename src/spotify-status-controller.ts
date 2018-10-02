@@ -1,4 +1,4 @@
-import { SpoifyClientSingleton, CANCELED_REASON, NOT_RUNNING_REASON } from './spotify/spotify-client';
+import { SpoifyClientSingleton, CANCELED_REASON } from './spotify/spotify-client';
 import { getStatusCheckInterval } from './config/spotify-config';
 import { actionsCreator } from './actions/actions';
 import autobind from 'autobind-decorator';

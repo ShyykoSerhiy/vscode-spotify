@@ -48,7 +48,7 @@ export class WebApiSpotifyClient implements SpotifyClient {
         this._queryStatusFunc();
     }
 
-    playPause(api?: Api) {
+    playPause() {
         const { playerState } = getState();
         if (playerState.state === 'playing') {
             this.pause();

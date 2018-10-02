@@ -47,7 +47,7 @@ export class TreeTrackProvider implements vscode.TreeDataProvider<Track> {
 		});
 	}
 
-	getParent(t: Track) {
+	getParent(_t: Track) {
 		return void 0; // all tracks are in root
 	}
 
