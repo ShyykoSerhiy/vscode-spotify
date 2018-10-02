@@ -2,7 +2,7 @@ import { SpotifyClient, createCancelablePromise, QueryStatusFunction, NOT_RUNNIN
 import { ISpotifyStatusStatePartial } from '../state/state';
 import { getState } from '../store/store';
 import { withApi, getSpotifyWebApi, withErrorAsync } from '../actions/actions';
-import { Api } from 'spotify-common/lib/spotify/api';
+import { Api } from '@vscodespotify/spotify-common/lib/spotify/api';
 import { log } from '../info/info';
 
 export class WebApiSpotifyClient implements SpotifyClient {

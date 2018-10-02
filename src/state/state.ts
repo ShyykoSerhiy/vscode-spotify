@@ -1,4 +1,4 @@
-import { Playlist as Playlist, Track } from 'spotify-common/lib/spotify/consts';
+import { Playlist as Playlist, Track } from '@vscodespotify/spotify-common/lib/spotify/consts';
 import { Map } from 'immutable';
 
 export interface ITrack {

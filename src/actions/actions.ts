@@ -4,8 +4,8 @@ import { getStore, getState } from '../store/store';
 import { getAuthServerUrl } from '../config/spotify-config'
 import { createDisposableAuthSever } from '../auth/server/local';
 import { showInformationMessage, showWarningMessage, log } from '../info/info';
-import { getApi, Api } from 'spotify-common/lib/spotify/api';
-import { Playlist, Track } from 'spotify-common/lib/spotify/consts';
+import { getApi, Api } from '@vscodespotify/spotify-common/lib/spotify/api';
+import { Playlist, Track } from '@vscodespotify/spotify-common/lib/spotify/consts';
 import autobind from 'autobind-decorator';
 
 export function withApi() {
