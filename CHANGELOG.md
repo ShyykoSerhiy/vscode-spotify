@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.0-beta] - 2018-10-02
+### Added
+- Spotify Web Api implementation to enable this extension on Windows.
+- Playlist/tracks custom view TreeDataProviders.
+### Refactored
+- Refactored state to use Redux.
+### Fixed
+- Spotilocal is not initialized. #46
+- Installed vscode-spotify extension but not working #43
+- Status Bar Icons Disappeared #42
+- Utilize the new Spotify Player API #27
+
 ## [2.6.1] - 2018-08-30
 ### Fixed
 - Fixed Play, Pause, PlayPause, Volume controlls on linux. ONLY on Linux(dbus)

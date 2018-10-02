@@ -1,7 +1,7 @@
 {
   "name": "vscode-spotify",
   "description": "Use Spotify inside vscode.",
-  "version": "2.6.1",
+  "version": "3.0.0-beta",
   "publisher": "shyykoserhiy",
   "license": "MIT",
   "engines": {
