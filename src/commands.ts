@@ -1,10 +1,10 @@
 import { commands, Disposable } from 'vscode';
-import { SpoifyClientSingleton } from './spotify/spotify-client';
+import { SpotifyClient } from './spotify/spotify-client';
 import { LyricsController, registration } from './lyrics/lyrics';
 import { actionsCreator } from './actions/actions';
+import { Playlist } from './state/state';
 
-export function createCommands(): { dispose: () => void } {
-	var sC = SpoifyClientSingleton.getSpotifyClient();
+export function createCommands(sC: SpotifyClient): { dispose: () => void } {
 	const lC = new LyricsController();
 	const lyrics = commands.registerCommand('spotify.lyrics', lC.findLyrics.bind(lC));
 	const next = commands.registerCommand('spotify.next', sC.next.bind(sC));
@@ -23,6 +23,13 @@ export function createCommands(): { dispose: () => void } {
 	const signOut = commands.registerCommand('spotify.signOut', actionsCreator.actionSignOut);
 	const loadPlaylists = commands.registerCommand('spotify.loadPlaylists', actionsCreator.loadPlaylists);
 	const loadTracks = commands.registerCommand('spotify.loadTracks', actionsCreator.loadTracksForSelectedPlaylist);
+	/**
+	 * private
+	 */
+	const playTrack = commands.registerCommand('spotify.playTrack', async (offset: number, playlist: Playlist) => {
+		await actionsCreator.playTrack(offset, playlist);
+		sC.queryStatusFunc();
+	});
 	return Disposable.from(lyrics,
 		next,
 		previous,
@@ -40,6 +47,7 @@ export function createCommands(): { dispose: () => void } {
 		signIn,
 		signOut,
 		loadPlaylists,
-		loadTracks
+		loadTracks,
+		playTrack
 	);
 }

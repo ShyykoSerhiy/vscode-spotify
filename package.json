@@ -308,17 +308,12 @@
         "spotify.statusCheckInterval": {
           "type": "number",
           "default": 5000,
-          "description": "Interval of spotify status checks. Frequent status checks may result in faster battery drain and high CPU load (especially on MacOs)."
+          "description": "Interval of spotify status checks. Frequent status checks may result in faster battery drain and high CPU load (especially on MacOs). Note that with web api implementation 5000 is mimimal possible value."
         },
         "spotify.lyricsServerUrl": {
           "type": "string",
           "default": "https://vscode-spotify-lyrics.azurewebsites.net/lyrics",
           "description": "Url for lyrics server. @see https://github.com/ShyykoSerhiy/vscode-spotify-lyrics ."
-        },
-        "spotify.showInitializationError": {
-          "type": "boolean",
-          "default": false,
-          "description": "Whether to show initialization error."
         },
         "spotify.authServerUrl": {
           "type": "string",
@@ -329,6 +324,16 @@
           "type": "string",
           "default": "https://api.spotify.com/v1",
           "description": "Url to spotify api server. @see https://beta.developer.spotify.com/documentation/web-api/reference/playlists/"
+        },
+        "spotify.forceWebApiImplementation": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to force web api implementation on Linux or MacOs. If you you want this enabled, please, consider using your own spotify.authServerUrl ."
+        },
+        "spotify.enableLogs": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to enable logs."
         }
       }
     }
@@ -345,6 +350,7 @@
     "contributors:check": "all-contributors check"
   },
   "devDependencies": {
+    "@types/autobind-decorator": "^2.1.0",
     "@types/express": "^4.11.1",
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
@@ -357,9 +363,11 @@
     "vscode": "^1.0.0"
   },
   "dependencies": {
+    "autobind-decorator": "^2.1.0",
     "child_process": "^1.0.2",
     "express": "^4.16.2",
     "immutable": "^3.8.2",
+    "moment": "^2.22.2",
     "redux": "^3.7.2",
     "redux-persist": "^5.10.0",
     "request-light": "^0.2.1",

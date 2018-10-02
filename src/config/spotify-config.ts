@@ -1,6 +1,7 @@
 import { workspace, Memento } from 'vscode';
 import { getState } from '../store/store';
 import { BUTTON_ID_SIGN_IN, BUTTON_ID_SIGN_OUT } from '../consts/consts';
+import { isWebApiSpotifyClient } from '../spotify/spotify-client';
 
 export function getConfig() {
 	return workspace.getConfiguration('spotify');
@@ -24,7 +25,12 @@ export function getButtonPriority(buttonId: string): number {
 }
 
 export function getStatusCheckInterval(): number {
-	return getConfig().get('statusCheckInterval', 5000);
+	const isWebApiClient = isWebApiSpotifyClient();
+	let interval = getConfig().get('statusCheckInterval', 5000);
+	if (isWebApiClient) {
+		interval = Math.max(interval, 5000);
+	}
+	return interval;
 }
 
 export function getLyricsServerUrl(): string {
@@ -43,12 +49,16 @@ export function openPanelLyrics(): number {
 	return getConfig().get<number>('openPanelLyrics', 1);
 }
 
-export function getShowInitializationError(): boolean {
-	return getConfig().get<boolean>('showInitializationError', false);
-}
-
 export function getTrackInfoFormat(): string {
 	return getConfig().get<string>('trackInfoFormat', '');
+}
+
+export function getForceWebApiImplementation(): boolean {
+	return getConfig().get<boolean>('forceWebApiImplementation', false);
+}
+
+export function getEnableLogs(): boolean {
+	return getConfig().get<boolean>('enableLogs', false);
 }
 
 let globalState: Memento;

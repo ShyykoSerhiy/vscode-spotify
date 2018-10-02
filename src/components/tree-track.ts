@@ -1,28 +1,18 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { getStore, getState } from '../store/store';
-import { Track } from '../state/state';
+import { Track, Playlist } from '../state/state';
 import { actionsCreator } from '../actions/actions';
 
-const createTrackTreeItem = (p: Track) => {
-	return new TrackTreeItem(p, vscode.TreeItemCollapsibleState.None);
+const createTrackTreeItem = (t: Track, playlist: Playlist, trackIndex: number) => {
+	return new TrackTreeItem(t, vscode.TreeItemCollapsibleState.None, { command: 'spotify.playTrack', title: "Play track", arguments: [trackIndex, playlist] });
 }
 
 export const connectTrackTreeView = (view: vscode.TreeView<Track>) => {
 	return vscode.Disposable.from(
 		view.onDidChangeSelection((e) => {
 			const track = e.selection[0];
-			actionsCreator.selectTrackAction(e.selection[0]);
-			const state = getState();
-			const { tracks, selectedPlaylist } = state;
-			if (!selectedPlaylist || !track) {
-				return;
-			}
-			const index = (tracks.get(selectedPlaylist.id) || []).findIndex((t)=>{
-				return t.track.id === track.track.id;
-			});
-
-			~index && actionsCreator.playTrack(index, getState().selectedPlaylist!);
+			actionsCreator.selectTrackAction(track);
 		}),
 		view.onDidChangeVisibility((e) => {
 			if (e.visible) {
@@ -43,12 +33,14 @@ export class TreeTrackProvider implements vscode.TreeDataProvider<Track> {
 	readonly onDidChangeTreeData: vscode.Event<Track | undefined> = this._onDidChangeTreeData.event;
 
 	private tracks: Track[];
+	private selectedPlaylist?: Playlist;
 
 	constructor() {
 		getStore().subscribe(() => {
 			const { tracks, selectedPlaylist } = getState();
 			const newTracks = tracks.get((selectedPlaylist || { id: '' }).id);
 			if (this.tracks !== newTracks) {
+				this.selectedPlaylist = selectedPlaylist!;
 				this.tracks = newTracks || [];
 				this.refresh();
 			}
@@ -63,8 +55,12 @@ export class TreeTrackProvider implements vscode.TreeDataProvider<Track> {
 		this._onDidChangeTreeData.fire();
 	}
 
-	getTreeItem(p: Track): TrackTreeItem {
-		return createTrackTreeItem(p);
+	getTreeItem(t: Track): TrackTreeItem {
+		const { selectedPlaylist, tracks } = this;
+		const index = tracks.findIndex((track) => {
+			return t.track.id === track.track.id;
+		});
+		return createTrackTreeItem(t, selectedPlaylist!, index);
 	}
 
 	getChildren(element?: Track): Thenable<Track[]> {

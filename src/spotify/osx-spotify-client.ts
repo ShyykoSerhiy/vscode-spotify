@@ -1,52 +1,57 @@
-import { SpotifyClient, createCancelablePromise } from './spotify-client';
+import { SpotifyClient, createCancelablePromise, QueryStatusFunction } from './spotify-client';
 import * as spotify from 'spotify-node-applescript';
 import { ISpotifyStatusStatePartial } from '../state/state';
 import { isMuted } from '../store/store';
 
 export class OsxSpotifyClient implements SpotifyClient {
+    private _queryStatusFunc: QueryStatusFunction
 
-    constructor() {
-        this._queryStatus = this._queryStatus.bind(this);
+    constructor(queryStatusFunc: QueryStatusFunction) {
+        this._queryStatusFunc = queryStatusFunc;        
     }
+    get queryStatusFunc() {
+        return this._queryStatusFunc;
+    }
+
     next() {
-        spotify.next(this._queryStatus);
+        spotify.next(this._queryStatusFunc);
     }
     previous() {
-        spotify.previous(this._queryStatus);
+        spotify.previous(this._queryStatusFunc);
     }
     play() {
-        spotify.play(this._queryStatus);
+        spotify.play(this._queryStatusFunc);
     }
     pause() {
-        spotify.pause(this._queryStatus);
+        spotify.pause(this._queryStatusFunc);
     }
     playPause() {
-        spotify.playPause(this._queryStatus);
+        spotify.playPause(this._queryStatusFunc);
     }
     muteVolume() {
-        spotify.muteVolume(this._queryStatus);
+        spotify.muteVolume(this._queryStatusFunc);
     }
     unmuteVolume() {
-        spotify.unmuteVolume(this._queryStatus);
+        spotify.unmuteVolume(this._queryStatusFunc);
     }
     muteUnmuteVolume() {
         if (isMuted()) {
-            spotify.unmuteVolume(this._queryStatus)
+            spotify.unmuteVolume(this._queryStatusFunc)
         } else {
-            spotify.muteVolume(this._queryStatus)
+            spotify.muteVolume(this._queryStatusFunc)
         };
     }
     volumeUp() {
-        spotify.volumeUp(this._queryStatus);
+        spotify.volumeUp(this._queryStatusFunc);
     }
     volumeDown() {
-        spotify.volumeDown(this._queryStatus);
+        spotify.volumeDown(this._queryStatusFunc);
     }
     toggleRepeating() {
-        spotify.toggleRepeating(this._queryStatus);
+        spotify.toggleRepeating(this._queryStatusFunc);
     }
     toggleShuffling() {
-        spotify.toggleShuffling(this._queryStatus);
+        spotify.toggleShuffling(this._queryStatusFunc);
     }
     private getStatus(): Promise<ISpotifyStatusStatePartial> {
         return this._promiseIsRunning().then((isRunning) => {
@@ -91,12 +96,6 @@ export class OsxSpotifyClient implements SpotifyClient {
             throw err;
         });
         return p;
-    }
-    private _queryStatus() {
-        //this.spotifyStatusController.queryStatus(); 
-        // fixme
-        console.error('NOT IMPLEMENTED');
-        throw new Error('NOT IMPLEMENTED')
     }
     private _promiseIsRunning() {
         return new Promise<boolean>((resolve, reject) => {

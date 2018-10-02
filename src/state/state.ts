@@ -1,4 +1,4 @@
-import { Playlist, Track } from 'spotify-common/lib/spotify/consts';
+import { Playlist as Playlist, Track } from 'spotify-common/lib/spotify/consts';
 import { Map } from 'immutable';
 
 export interface ITrack {
@@ -44,13 +44,26 @@ export interface ISpotifyStatusStatePartial {
     /**
      * current track
      */
-    track: ITrack
+    track: ITrack,
+    /**
+     * current context 
+     */
+    context?: {
+        /**
+         * uri for the current track
+         */
+        uri?: string,
+        /**
+         * Track number in current context
+         */
+        trackNumber?: number
+    }
 }
 
 export interface ISpotifyStatusState extends ISpotifyStatusStatePartial {
     loginState: ILoginState | null,
     playlists: Playlist[],
-    selectedPlaylist: Playlist | null,
+    selectedPlaylist?: Playlist,
     /**
      * Map<Playlist.id>
      */
@@ -108,8 +121,9 @@ export const getDefaultState = ():ISpotifyStatusState=>{
         },
         isRunning: false,
         loginState: null,
+        context: void 0,
         playlists: [],
-        selectedPlaylist: null,
+        selectedPlaylist: void 0,
         tracks: Map(),
         selectedTrack: null
     };

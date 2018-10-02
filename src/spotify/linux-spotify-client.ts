@@ -1,7 +1,8 @@
-import { SpotifyClient, createCancelablePromise } from './spotify-client';
+import { SpotifyClient, createCancelablePromise, QueryStatusFunction } from './spotify-client';
 import { exec } from 'child_process';
 import { OsAgnosticSpotifyClient } from './os-agnostic-spotify-client';
 import { ISpotifyStatusStatePartial } from '../state/state';
+import { log } from '../info/info';
 
 const SP_DEST = "org.mpris.MediaPlayer2.spotify"
 const SP_PATH = "/org/mpris/MediaPlayer2"
@@ -72,9 +73,19 @@ interface ICurrentVol { sinkNum: string | null, volume: number }
 
 export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements SpotifyClient {
     private currentOnVolume: number;
+    private _queryStatusFunc: QueryStatusFunction
 
-    constructor() {
+    constructor(_queryStatusFunc: QueryStatusFunction) {
         super()
+        this._queryStatusFunc = () => {
+            // spotify with dbfus doesn't return correct state right after next/prev/pause/play
+            // command executtion. we need to wait
+            setTimeout(_queryStatusFunc, /*magic number*/600);
+        };
+    }
+
+    get queryStatusFunc() {
+        return this._queryStatusFunc;
     }
 
     private async getStatus(): Promise<ISpotifyStatusStatePartial> {
@@ -137,17 +148,17 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
 
     async playPause() {
         await terminalCommand(PlayPauseDebianCmd)
-        this._queryStatus()
+        this._queryStatusFunc()
     }
 
     async next() {
         await terminalCommand(PlayNextTrackDebianCmd)
-        this._queryStatus()
+        this._queryStatusFunc()
     }
 
     async previous() {
         await terminalCommand(PlayPreviousTrackDebianCmd)
-        this._queryStatus()
+        this._queryStatusFunc()
     }
 
     findSpotify(s: string) {
@@ -225,7 +236,7 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
                     }
                 }
             })
-            .catch(e => console.log(e))
+            .catch(e => log(e))
     }
 
     volumeDown() {
@@ -242,23 +253,10 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
                     }
                 }
             })
-            .catch(e => console.log(e))
+            .catch(e => log(e))
     }
 
     private _setVolume(sinkNum: string, volume: number) {
         terminalCommand(`pactl set-sink-input-volume ${sinkNum} ${volume}%`);
-    }
-
-    private _queryStatus = () => {
-        // spotify with dbfus doesn't return correct state right after next/prev/pause/play
-        // command executtion. we need to wait
-        //setTimeout(() => {
-        //    this.spotifyStatusController.queryStatus();
-        //}, /*magic number*/600);
-
-        // fixme
-        console.error('NOT IMPLEMENTED');
-        throw new Error('NOT IMPLEMENTED')
-        
     }
 }

@@ -53,6 +53,7 @@ export class SpotifyStatus {
                 this._spotifyControls.showVisible();
             }
         } else {
+            this._statusBarItem.text = '';
             this._statusBarItem.hide();
             this._spotifyControls.hideAll();
         }

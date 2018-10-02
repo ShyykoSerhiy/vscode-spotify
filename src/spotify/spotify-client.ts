@@ -3,41 +3,55 @@ import { OsxSpotifyClient } from './osx-spotify-client';
 import { ISpotifyStatusStatePartial } from '../state/state';
 import * as os from 'os';
 import { WebApiSpotifyClient } from './web-api-spotify-client';
+import { getForceWebApiImplementation } from '../config/spotify-config';
+
+export function isWebApiSpotifyClient() {
+    const platform = os.platform();
+    return (platform !== 'darwin' && platform !== 'linux') || getForceWebApiImplementation();
+}
 
 export class SpoifyClientSingleton {
-    private static spotifyClient: SpotifyClient;
-    public static getSpotifyClient() {
+    public static spotifyClient: SpotifyClient;
+    public static getSpotifyClient(queryStatus: QueryStatusFunction) {
         if (this.spotifyClient) {
             return this.spotifyClient;
         }
 
         const platform = os.platform();
+        if (isWebApiSpotifyClient()) {
+            this.spotifyClient = new WebApiSpotifyClient(queryStatus);
+            return this.spotifyClient;
+        }
+
         if (platform === 'darwin') {
-            //this.spotifyClient = new OsxSpotifyClient();
+            this.spotifyClient = new OsxSpotifyClient(queryStatus);
         }
         if (platform === 'linux') {
-            this.spotifyClient = new LinuxSpotifyClient();
-        }
-        if (!this.spotifyClient) {
-            this.spotifyClient = new WebApiSpotifyClient();
+            this.spotifyClient = new LinuxSpotifyClient(queryStatus);
         }
 
         return this.spotifyClient;
     }
 }
 
+export const CANCELED_REASON = 'canceled' as 'canceled';
+export const NOT_RUNNING_REASON = 'not_running' as 'not_running';
+
 export function createCancelablePromise<T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) {
     let cancel: () => void = null as any;
     const promise = new Promise<T>((resolve, reject) => {
         cancel = () => {
-            reject('canceled');
+            reject(CANCELED_REASON);
         }
         executor(resolve, reject);
     })
     return { promise, cancel }
 }
 
+export type QueryStatusFunction = () => void;
+
 export interface SpotifyClient {
+    queryStatusFunc: QueryStatusFunction;
     next(): void;
     previous(): void;
     play(): void;

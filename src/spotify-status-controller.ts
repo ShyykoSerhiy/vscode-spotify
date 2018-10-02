@@ -1,9 +1,9 @@
-import { SpoifyClientSingleton } from './spotify/spotify-client';
+import { SpoifyClientSingleton, CANCELED_REASON, NOT_RUNNING_REASON } from './spotify/spotify-client';
 import { getStatusCheckInterval } from './config/spotify-config';
 import { actionsCreator } from './actions/actions';
+import autobind from 'autobind-decorator';
 
 export class SpotifyStatusController {
-    private _timeoutId?: NodeJS.Timer;
     private _retryCount: number;
     private _cancelCb?: () => void;
     /**
@@ -17,21 +17,23 @@ export class SpotifyStatusController {
         this.queryStatus();
     }
 
-    scheduleQueryStatus() {
-        this._cancelPreviousPoll();
-        this._clearQueryTimeout();
-        this._timeoutId = setTimeout(() => {
-            this.queryStatus();
-        }, getStatusCheckInterval());
-    }
-
     /**
      * Retrieves status of spotify and passes it to spotifyStatus;
      */
-    queryStatus() {
+    @autobind
+    public queryStatus() {
         this._cancelPreviousPoll();
-        this._clearQueryTimeout();
-        var clearState = (() => {
+        const { promise, cancel } = SpoifyClientSingleton.getSpotifyClient(this.queryStatus).pollStatus(status => {
+            actionsCreator.updateStateAction(status);
+            this._retryCount = 0;
+        }, getStatusCheckInterval);
+        this._cancelCb = cancel;
+        promise.catch(this.clearState);
+    }
+
+    private clearState = (reason: any) => {
+        // canceling of the promise only happens when method queryStatus is triggered. 
+        if (reason !== CANCELED_REASON) {
             this._retryCount++;
             if (this._retryCount >= this._maxRetryCount) {
                 actionsCreator.updateStateAction({
@@ -44,28 +46,12 @@ export class SpotifyStatusController {
                 });
                 this._retryCount = 0;
             }
-            this.scheduleQueryStatus();
-        });
-
-        const { promise, cancel } = SpoifyClientSingleton.getSpotifyClient().pollStatus(status => {
-            actionsCreator.updateStateAction(status);
-            this._retryCount = 0;
-        }, getStatusCheckInterval);
-        this._cancelCb = cancel;
-        promise.catch(clearState);
-    }
+            setTimeout(this.queryStatus, getStatusCheckInterval());            
+        }
+    };
 
     dispose() {
-        if (this._timeoutId) {
-            clearTimeout(this._timeoutId);
-        }
-    }
-
-    private _clearQueryTimeout() {
-        if (this._timeoutId) {
-            clearTimeout(this._timeoutId);
-            this._timeoutId = void 0;
-        }
+        this._cancelPreviousPoll();
     }
 
     private _cancelPreviousPoll() {

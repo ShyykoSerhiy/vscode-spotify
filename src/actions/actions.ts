@@ -1,25 +1,12 @@
-import { commands, Uri } from 'vscode';
+import { commands, Uri, window } from 'vscode';
 import { ISpotifyStatusState, ILoginState, DUMMY_PLAYLIST } from '../state/state';
 import { getStore, getState } from '../store/store';
 import { getAuthServerUrl } from '../config/spotify-config'
 import { createDisposableAuthSever } from '../auth/server/local';
-import { showInformationMessage, showWarningMessage } from '../info/info';
+import { showInformationMessage, showWarningMessage, log } from '../info/info';
 import { getApi, Api } from 'spotify-common/lib/spotify/api';
 import { Playlist, Track } from 'spotify-common/lib/spotify/consts';
-
-function bind() {
-    return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
-        var originalMethod = descriptor.value;
-
-        //editing the descriptor/value parameter
-        descriptor.value = function (...args: any[]) {
-            return originalMethod.apply(_target, args);
-        }.bind(_target);
-
-        // return edited descriptor as opposed to overwriting the descriptor
-        return descriptor;
-    }
-}
+import autobind from 'autobind-decorator';
 
 export function withApi() {
     return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
@@ -28,11 +15,11 @@ export function withApi() {
         descriptor.value = function (...args: any[]) {
             const api = getSpotifyWebApi();
             if (api) {
-                return originalMethod.apply(_target, [...args, api]);
+                return originalMethod.apply(this, [...args, api]);
             } else {
                 showWarningMessage('You should be logged in order to use this feature.');
             }
-        }.bind(_target);
+        };
 
         return descriptor;
     }
@@ -44,11 +31,11 @@ export function withErrorAsync() {
 
         descriptor.value = async function (...args: any[]) {
             try {
-                return await originalMethod.apply(_target, args);
+                return await originalMethod.apply(this, args);
             } catch (e) {
                 showWarningMessage('Failed to perform operation ' + e.message || e);
             }
-        }.bind(_target);
+        };
 
         return descriptor;
     }
@@ -59,7 +46,7 @@ function actionCreator() {
         const originalMethod = descriptor.value;
 
         descriptor.value = function (...args: any[]) {
-            const action = originalMethod.apply(null, args);
+            const action = originalMethod.apply(this, args);
             if (!action) {
                 return;
             }
@@ -77,7 +64,7 @@ function asyncActionCreator() {
         descriptor.value = async function (...args: any[]) {
             let action;
             try {
-                action = await originalMethod.apply(null, args);
+                action = await originalMethod.apply(this, args);
                 if (!action) {
                     return;
                 }
@@ -95,6 +82,11 @@ const apiMap = new WeakMap<ILoginState, Api>();
 export const getSpotifyWebApi = () => {
     const { loginState } = getState();
     if (!loginState) {
+        log('getSpotifyWebApi', 'NOT LOGGED IN');
+        return null;
+    }
+    if (!window.state.focused) {
+        log('getSpotifyWebApi', 'NOT FOCUSED');
         return null;
     }
     let api = apiMap.get(loginState);
@@ -152,8 +144,8 @@ export interface SelectTrackAction {
 }
 
 class ActionCreator {
-    @actionCreator()
-    @bind()
+    @autobind
+    @actionCreator()    
     updateStateAction(state: Partial<ISpotifyStatusState>): UpdateStateAction {
         return {
             type: UPDATE_STATE_ACTION,
@@ -161,9 +153,9 @@ class ActionCreator {
         };
     }
 
+    @autobind
     @asyncActionCreator()
-    @withApi()
-    @bind()
+    @withApi()    
     async loadPlaylists(api?: Api): Promise<PlaylistsLoadAction> {
         const playlists = await api!.playlists.get();
         return {
@@ -172,8 +164,8 @@ class ActionCreator {
         };
     }
 
-    @actionCreator()
-    @bind()
+    @autobind
+    @actionCreator()    
     selectPlaylistAction(p: Playlist): SelectPlaylistAction {
         return {
             type: SELECT_PLAYLIST_ACTION,
@@ -181,8 +173,8 @@ class ActionCreator {
         };
     }
 
-    @actionCreator()
-    @bind()
+    @autobind
+    @actionCreator()    
     selectTrackAction(track: Track): SelectTrackAction {
         return {
             type: SELECT_TRACK_ACTION,
@@ -190,12 +182,12 @@ class ActionCreator {
         };
     }
 
-    @bind()
+    @autobind
     loadTracksForSelectedPlaylist(): void {
         this.loadTracks(getState().selectedPlaylist);
     }
 
-    @bind()
+    @autobind
     loadTracksIfNotLoaded(playlist: Playlist): void {
         if (!playlist) {
             return void 0;
@@ -206,10 +198,10 @@ class ActionCreator {
         }
     }
 
+    @autobind
     @asyncActionCreator()
-    @withApi()
-    @bind()
-    async loadTracks(playlist: Playlist | null, api?: Api): Promise<TracksLoadAction | undefined> {
+    @withApi()    
+    async loadTracks(playlist?: Playlist, api?: Api): Promise<TracksLoadAction | undefined> {
         if (!playlist || playlist.id === DUMMY_PLAYLIST.id) {
             return void 0;
         }
@@ -221,9 +213,9 @@ class ActionCreator {
         };
     }
 
-    @asyncActionCreator()
-    @withApi()
-    @bind()
+    @autobind
+    @withErrorAsync()
+    @withApi()    
     async playTrack(offset: number, playlist: Playlist, api?: Api): Promise<undefined> {
         await api!.player.play.put({
             offset: offset,
@@ -232,7 +224,7 @@ class ActionCreator {
         return;
     }
 
-    @bind()
+    @autobind    
     actionSignIn() {
         commands.executeCommand('vscode.open', Uri.parse(`${getAuthServerUrl()}/login`)).then(() => {
             const { createServerPromise, dispose } = createDisposableAuthSever();
@@ -246,8 +238,8 @@ class ActionCreator {
         });
     }
 
-    @actionCreator()
-    @bind()
+    @autobind
+    @actionCreator()    
     _actionSignIn(accessToken: string, refreshToken: string): SignInAction {
         return {
             accessToken,
@@ -256,8 +248,8 @@ class ActionCreator {
         };
     }
 
+    @autobind
     @actionCreator()
-    @bind()
     actionSignOut(): SignOutAction {
         return {
             type: SIGN_OUT_ACTION

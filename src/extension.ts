@@ -6,6 +6,7 @@ import { registerGlobalState } from './config/spotify-config';
 import { getStore } from './store/store';
 import { TreePlaylistProvider, connectPlaylistTreeView } from './components/tree-playlists';
 import { TreeTrackProvider, connectTrackTreeView } from './components/tree-track';
+import { SpoifyClientSingleton } from './spotify/spotify-client';
 
 // This method is called when your extension is activated. Activation is
 // controlled by the activation events defined in package.json.
@@ -23,5 +24,5 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(controller);
     context.subscriptions.push(spotifyStatus);
     context.subscriptions.push(playlistTreeView);
-    context.subscriptions.push(createCommands());
+    context.subscriptions.push(createCommands(SpoifyClientSingleton.spotifyClient));
 }

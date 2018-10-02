@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { Server } from 'http';
 import { getAuthServerUrl } from '../../config/spotify-config';
+import { log } from '../../info/info';
 
 export interface CreateDisposableAuthSeverPromiseResult {
     access_token: string,
@@ -36,7 +37,7 @@ export const createDisposableAuthSever = () => {
     return {
         createServerPromise, dispose: () => {
             server && server.close(() => {
-                console.log('server closed');
+                log('server closed');
             });
         }
     }

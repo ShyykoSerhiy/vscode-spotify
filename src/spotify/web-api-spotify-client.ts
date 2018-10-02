@@ -1,37 +1,51 @@
-import { SpotifyClient, createCancelablePromise } from './spotify-client';
+import { SpotifyClient, createCancelablePromise, QueryStatusFunction, NOT_RUNNING_REASON } from './spotify-client';
 import { ISpotifyStatusStatePartial } from '../state/state';
 import { getState } from '../store/store';
 import { withApi, getSpotifyWebApi, withErrorAsync } from '../actions/actions';
 import { Api } from 'spotify-common/lib/spotify/api';
+import { log } from '../info/info';
 
 export class WebApiSpotifyClient implements SpotifyClient {
     private prevVolume: number;
+    private _queryStatusFunc: QueryStatusFunction;
 
-    constructor() {
+    constructor(_queryStatusFunc: QueryStatusFunction) {
+        this._queryStatusFunc = () => {
+            log('SCHEDULED QUERY STATUS');
+            setTimeout(_queryStatusFunc, /*magic number for 'rapid' update. 1 second should? be enough*/1000);
+        };
+    }
+
+    get queryStatusFunc(){
+        return this._queryStatusFunc;
     }
 
     @withErrorAsync()
     @withApi()
     async next(api?: Api) {
         await api!.player.next.post();
+        this._queryStatusFunc();
     }
 
     @withErrorAsync()
     @withApi()
     async previous(api?: Api) {
         await api!.player.previous.post();
+        this._queryStatusFunc();
     }
 
     @withErrorAsync()
     @withApi()
     async play(api?: Api) {
         await api!.player.play.put({});
+        this._queryStatusFunc();
     }
 
     @withErrorAsync()
     @withApi()
     async pause(api?: Api) {
         await api!.player.pause.put();
+        this._queryStatusFunc();
     }
 
     playPause(api?: Api) {
@@ -53,8 +67,14 @@ export class WebApiSpotifyClient implements SpotifyClient {
                 const api = getSpotifyWebApi();
                 try {
                     if (api) {
+                        log('GETTING STATUS')
                         const player = await api.player.get();
-                        _cb({
+                        if (!player) {
+                            reject(NOT_RUNNING_REASON);
+                            return;
+                        }
+                        log('GOT STATUS', JSON.stringify(player));
+                        !canceled && _cb({
                             isRunning: player.device.is_active,
                             playerState: {
                                 //fixme more than two states
@@ -68,15 +88,22 @@ export class WebApiSpotifyClient implements SpotifyClient {
                                 album: player.item.album.name,
                                 artist: player.item.artists.map((a => a.name)).join(', '),
                                 name: player.item.name
-                            }
+                            },
+                            context: player.context ? {
+                                uri: player.context.uri,
+                                trackNumber: player.item.track_number
+                            } : void 0
                         });
                     }
-                } catch (_e) { }
+                } catch (_e) {
+                    reject(_e);
+                    return;
+                }
                 setTimeout(_poll, getInterval());
             };
             _poll();
         });
-        p.promise = p.promise.catch((err) => {
+        p.promise = p.promise.catch((err) => {            
             canceled = true;
             throw err;
         });
@@ -89,13 +116,17 @@ export class WebApiSpotifyClient implements SpotifyClient {
         this.prevVolume = getState().playerState.volume;
         if (this.prevVolume !== 0) {
             await api!.player.volume.put(0);
+            this._queryStatusFunc();
         }
     }
 
     @withErrorAsync()
     @withApi()
     async unmuteVolume(api?: Api) {
-        this.prevVolume && await api!.player.volume.put(this.prevVolume);
+        if (this.prevVolume) {
+            await api!.player.volume.put(this.prevVolume);
+            this._queryStatusFunc();
+        }
     }
 
     muteUnmuteVolume() {
@@ -111,15 +142,16 @@ export class WebApiSpotifyClient implements SpotifyClient {
     @withApi()
     async volumeUp(api?: Api) {
         const volume = getState().playerState.volume || 0;
-        await api!.player.volume.put(Math.min(volume + 20, 100))
-
+        await api!.player.volume.put(Math.min(volume + 20, 100));
+        this._queryStatusFunc();
     }
 
     @withErrorAsync()
     @withApi()
     async volumeDown(api?: Api) {
         const volume = getState().playerState.volume || 0;
-        await api!.player.volume.put(Math.max(volume - 20, 0))
+        await api!.player.volume.put(Math.max(volume - 20, 0));
+        this._queryStatusFunc();
     }
 
     @withErrorAsync()
@@ -128,6 +160,7 @@ export class WebApiSpotifyClient implements SpotifyClient {
         const { playerState } = getState();
         //fixme more than two states
         await api!.player.repeat.put((!playerState.isRepeating) ? 'context' : 'off');
+        this._queryStatusFunc();
     }
 
     @withErrorAsync()
@@ -135,5 +168,6 @@ export class WebApiSpotifyClient implements SpotifyClient {
     async toggleShuffling(api?: Api) {
         const { playerState } = getState();
         await api!.player.shuffle.put(!playerState.isShuffling);
+        this._queryStatusFunc();
     }
 }

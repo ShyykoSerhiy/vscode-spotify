@@ -1,12 +1,14 @@
 import { ISpotifyStatusState, getDefaultState, DUMMY_PLAYLIST } from '../state/state';
 import { Action, UPDATE_STATE_ACTION, SIGN_IN_ACTION, PLAYLISTS_LOAD_ACTION, SELECT_PLAYLIST_ACTION, TRACKS_LOAD_ACTION, SIGN_OUT_ACTION, SELECT_TRACK_ACTION } from '../actions/actions';
+import { log } from '../info/info';
 
 export function update<T>(obj: T, update: Partial<T>): T {
     return Object.assign({}, obj, update);
 }
 
 export default function (state: ISpotifyStatusState, action: Action): ISpotifyStatusState {
-    if (action.type === UPDATE_STATE_ACTION) {
+    log('root-reducer', action.type, JSON.stringify(action));
+    if (action.type === UPDATE_STATE_ACTION) {        
         return update(state, action.state);
     }
     if (action.type === SIGN_IN_ACTION) {

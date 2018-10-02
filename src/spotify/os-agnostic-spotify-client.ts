@@ -22,6 +22,10 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
     constructor() {
     }
 
+    get queryStatusFunc() {
+        return this.next;
+    }
+
     @notSupported
     next() {
     }
