@@ -68,9 +68,9 @@
   dependencies:
     "@types/node" "*"
 
-"@vscodespotify/spotify-common@1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@vscodespotify/spotify-common/-/spotify-common-1.1.2.tgz#680be26ae0733b260b6775bdeb8b1211c490a0b0"
+"@vscodespotify/spotify-common@1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@vscodespotify/spotify-common/-/spotify-common-1.2.2.tgz#0f424f4a0d443da72707b2621071b3608198cb1a"
   dependencies:
     node-fetch "^2.2.0"
 

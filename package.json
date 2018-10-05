@@ -109,17 +109,17 @@
         "command": "spotify.loadPlaylists",
         "title": "Spotify Load Playlists",
         "icon": {
-					"light": "resources/light/refresh.svg",
-					"dark": "resources/dark/refresh.svg"
-				}
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
       },
       {
         "command": "spotify.loadTracks",
         "title": "Spotify Load Tracks",
         "icon": {
-					"light": "resources/light/refresh.svg",
-					"dark": "resources/dark/refresh.svg"
-				}
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
       }
     ],
     "keybindings": [
@@ -381,7 +381,7 @@
     "vscode": "^1.0.0"
   },
   "dependencies": {
-    "@vscodespotify/spotify-common": "1.1.2",
+    "@vscodespotify/spotify-common": "1.2.2",
     "autobind-decorator": "^2.1.0",
     "child_process": "^1.0.2",
     "express": "^4.16.2",

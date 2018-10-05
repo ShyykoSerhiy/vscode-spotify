@@ -157,10 +157,10 @@ class ActionCreator {
     @asyncActionCreator()
     @withApi()    
     async loadPlaylists(api?: Api): Promise<PlaylistsLoadAction> {
-        const playlists = await api!.playlists.get();
+        const playlists = await api!.playlists.getAll();
         return {
             type: PLAYLISTS_LOAD_ACTION,
-            playlists: playlists.items
+            playlists: playlists
         };
     }
 
