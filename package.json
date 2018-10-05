@@ -107,11 +107,19 @@
       },
       {
         "command": "spotify.loadPlaylists",
-        "title": "Spotify Load Playlists"
+        "title": "Spotify Load Playlists",
+        "icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
       },
       {
         "command": "spotify.loadTracks",
-        "title": "Spotify Load Tracks"
+        "title": "Spotify Load Tracks",
+        "icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
       }
     ],
     "keybindings": [
@@ -136,6 +144,20 @@
         "mac": "cmd+shift+;"
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "spotify.loadPlaylists",
+          "when": "view == vscode-spotify-playlists",
+          "group": "navigation"
+        },
+        {
+          "command": "spotify.loadTracks",
+          "when": "view == vscode-spotify-tracks",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": {
       "type": "object",
       "title": "vscode-spotify configuration",
