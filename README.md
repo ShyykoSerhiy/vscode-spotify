@@ -1,3 +1,8 @@
+[![Latest Release](https://vsmarketplacebadge.apphb.com/version-short/shyykoserhiy.vscode-spotify.svg)](https://marketplace.visualstudio.com/items?itemName=shyykoserhiy.vscode-spotify)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs/shyykoserhiy.vscode-spotify.svg)](https://marketplace.visualstudio.com/items?itemName=shyykoserhiy.vscode-spotify)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating-short/shyykoserhiy.vscode-spotify.svg)](https://marketplace.visualstudio.com/items?itemName=shyykoserhiy.vscode-spotify#review-details)
+
+
 # vscode-spotify
 [![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat)](#contributors)
 
@@ -10,11 +15,16 @@ Note that some of functionality only available on macOS (see [How it works secti
 On macOS this extension uses https://github.com/andrehaveman/spotify-node-applescript (basically a wrapper for https://developer.spotify.com/applescript-api/)
 to communicate with Spotify. 
 
-On Windows, it uses https://github.com/ShyykoSerhiy/spotilocal to communicate with Spotify's local web server. 
+On Windows it uses Spotify Web Api. 
 
-On Linux, it uses a combination of https://github.com/ShyykoSerhiy/spotilocal, dbus, and pactl to communicate with Spotify's local web server, along with command line based commands.
+On Linux it uses a combination of dbus and pactl.
 
-It's undocumented approach and sadly it doesn't provide all the functionality that is available on macOS.
+Spotify Web Api implementation can be used on any platform but it has some drawbacks:
+* it doesn't work without internet connection (Linux and OsX implementations do).
+* full functionality is only available to Spotify Premium users. 
+* api calls are rate limited.
+
+At the same time it provides tighter integration and it's more or less future proofed.
 
 ## Features
 * Shows the currently playing song in status bar of vscode.
@@ -25,22 +35,26 @@ It's undocumented approach and sadly it doesn't provide all the functionality th
 
 ## Compatibility table
 
-| Feature                      | macOS         | Linux                        | Windows                      |
-| ---------------------------- |:-------------:| :--------------------------- | :--------------------------- |
-| Show current song            | ✅            | ✅                            | ✅                            |
-| Play Next Song               | ✅            | ✅                            | ❌                            |
-| Play Previous Song           | ✅            | ✅                            | ❌                            |
-| Play                         | ✅            | ✅                            | ✅                            |
-| Pause                        | ✅            | ✅                            | ✅                            |
-| Play Pause                   | ✅            | ✅                            | ✅                            |
-| Mute Volume                  | ✅            | ✅                            | (shows muted state) ⭕        |
-| Unmute Volume                | ✅            | ✅                            | (shows unmuted state)  ⭕     |
-| Mute Unmute Volume           | ✅            | ✅                            | (shows muted unmuted state)⭕ |
-| Volume Up                    | ✅            | ✅                            | ❌                             |
-| Volume Down                  | ✅            | ✅                            | ❌                             |
-| Toggle Repeating             | ✅            | (shows repeating state)  ⭕   | (shows repeating state)  ⭕   |
-| Toggle Shuffling             | ✅            | (shows shuffling state)  ⭕   | (shows shuffling state)  ⭕   |
-| Lyrics                       | ✅            | ✅                            | ✅                             |
+| Feature                      | macOS         | Linux                        | Any Platform (only option on Windows) Web Api |
+| ---------------------------- |:-------------:| :--------------------------- | :-------------------------------------------- |
+| Works offline                | ✅            | ✅                            | ❌                                            |
+| Show current song            | ✅            | ✅                            | ✅                                            |
+| Play Next Song               | ✅            | ✅                            | ✅                                            |
+| Play Previous Song           | ✅            | ✅                            | ✅                                            |
+| Play                         | ✅            | ✅                            | ✅                                            |
+| Pause                        | ✅            | ✅                            | ✅                                            |
+| Play Pause                   | ✅            | ✅                            | ✅                                            |
+| Mute Volume                  | ✅            | ✅                            | ✅                                            |
+| Unmute Volume                | ✅            | ✅                            | ✅                                            |
+| Mute Unmute Volume           | ✅            | ✅                            | ✅                                            |
+| Volume Up                    | ✅            | ✅                            | ✅                                            |
+| Volume Down                  | ✅            | ✅                            | ✅                                            |
+| Toggle Repeating             | ✅            | (shows repeating state)  ⭕   | ✅             					      	    |
+| Toggle Shuffling             | ✅            | (shows shuffling state)  ⭕   | ✅                                            |
+| Lyrics                       | ✅            | ✅                            | ✅                                            |
+
+Additional Web Api features:
+* Playlists/tracks selection.
 
 ## Contributing 
 This project follows the
@@ -56,88 +70,6 @@ A list of contributors to this project
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | [<img src="https://avatars1.githubusercontent.com/u/25567148?v=4" width="100px;"/><br /><sub><b>realbizkit</b></sub>](https://github.com/realbizkit)<br />[💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=realbizkit "Code") | [<img src="https://avatars1.githubusercontent.com/u/662916?v=4" width="100px;"/><br /><sub><b>Jesús Roldán</b></sub>](http://jesusroldan.com)<br />[💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=xeBuz "Code") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
-## Commands
-List of commands:
-```json
-"commands": [
-	{
-		"command": "spotify.next",
-		"title": "Spotify Play Next Song"
-	},
-	{
-		"command": "spotify.previous",
-		"title": "Spotify Play Previous Song"
-	},
-	{
-		"command": "spotify.play",
-		"title": "Spotify Play"
-	},
-	{
-		"command": "spotify.pause",
-		"title": "Spotify Pause"
-	},
-	{
-		"command": "spotify.playPause",
-		"title": "Spotify Play|Pause"
-	},            
-	{
-		"command": "spotify.muteVolume",
-		"title": "Spotify Mute Volume"
-	},
-	{
-		"command": "spotify.unmuteVolume",
-		"title": "Spotify Unmute Volume"
-	},
-	{
-		"command": "spotify.muteUnmuteVolume",
-		"title": "Spotify Mute|Unmute Volume"
-	},
-	{
-		"command": "spotify.volumeUp",
-		"title": "Spotify Volume Up"
-	},
-	{
-		"command": "spotify.volumeDown",
-		"title": "Spotify Volume Down"
-	},
-	{
-		"command": "spotify.toggleRepeating",
-		"title": "Spotify Toggle Repeating"
-	},
-	{
-		"command": "spotify.toggleShuffling",
-		"title": "Spotify Toggle Shuffling"
-	}
-]
-```
-
-## Hotkeys
-```json
-"keybindings": [
-	{
-		"command": "spotify.next",
-		"key": "ctrl+shift+]",
-		"mac": "cmd+shift+]"
-	},
-	{
-		"command": "spotify.previous",
-		"key": "ctrl+shift+[",
-		"mac": "cmd+shift+["
-	},
-	{
-		"command": "spotify.volumeUp",
-		"key": "ctrl+shift+'",
-		"mac": "cmd+shift+'"
-	},
-	{
-		"command": "spotify.volumeDown",
-		"key": "ctrl+shift+;",
-		"mac": "cmd+shift+;"
-	}
-]
-```
-Note that out of the box hotkeys are only provided for those four commands. If you want to assign hotkeys to  other commands(or change existing) look at
-[Adding or changing hotkeys](#adding-or-changing-hotkeys) section below.
 
 ## Adding or changing hotkeys:
 All keyboard shortcuts in VS Code can be customized via the User/keybindings.json file.

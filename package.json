@@ -1,11 +1,11 @@
 {
   "name": "vscode-spotify",
   "description": "Use Spotify inside vscode.",
-  "version": "2.6.1",
+  "version": "3.0.0-beta-2",
   "publisher": "shyykoserhiy",
   "license": "MIT",
   "engines": {
-    "vscode": "^1.12.0"
+    "vscode": "^1.27.1"
   },
   "icon": "media/icon.png",
   "galleryBanner": {
@@ -23,6 +23,27 @@
     "*"
   ],
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "vscode-spotify",
+          "title": "vscode-spotify",
+          "icon": "resources/dark/logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "vscode-spotify": [
+        {
+          "id": "vscode-spotify-playlists",
+          "name": "Playlists"
+        },
+        {
+          "id": "vscode-spotify-tracks",
+          "name": "Tracks"
+        }
+      ]
+    },
     "commands": [
       {
         "command": "spotify.next",
@@ -75,6 +96,30 @@
       {
         "command": "spotify.lyrics",
         "title": "Spotify Lyrics"
+      },
+      {
+        "command": "spotify.signIn",
+        "title": "Spotify Sign In"
+      },
+      {
+        "command": "spotify.signOut",
+        "title": "Spotify Sign Out"
+      },
+      {
+        "command": "spotify.loadPlaylists",
+        "title": "Spotify Load Playlists",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
+      },
+      {
+        "command": "spotify.loadTracks",
+        "title": "Spotify Load Tracks",
+        "icon": {
+          "light": "resources/light/refresh.svg",
+          "dark": "resources/dark/refresh.svg"
+        }
       }
     ],
     "keybindings": [
@@ -99,6 +144,20 @@
         "mac": "cmd+shift+;"
       }
     ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "spotify.loadPlaylists",
+          "when": "view == vscode-spotify-playlists",
+          "group": "navigation"
+        },
+        {
+          "command": "spotify.loadTracks",
+          "when": "view == vscode-spotify-tracks",
+          "group": "navigation"
+        }
+      ]
+    },
     "configuration": {
       "type": "object",
       "title": "vscode-spotify configuration",
@@ -258,25 +317,45 @@
           "default": 0,
           "description": "Priority of lyrics button."
         },
+        "spotify.signInButtonPriority": {
+          "type": "number",
+          "default": 15,
+          "description": "Priority of sign in button."
+        },
+        "spotify.signOutButtonPriority": {
+          "type": "number",
+          "default": 15,
+          "description": "Priority of sign out button."
+        },
         "spotify.statusCheckInterval": {
           "type": "number",
           "default": 5000,
-          "description": "Interval of spotify status checks. Frequent status checks may result in faster battery drain and high CPU load (especially on MacOs)."
+          "description": "Interval of spotify status checks. Frequent status checks may result in faster battery drain and high CPU load (especially on MacOs). Note that with web api implementation 5000 is mimimal possible value."
         },
         "spotify.lyricsServerUrl": {
           "type": "string",
           "default": "https://vscode-spotify-lyrics.azurewebsites.net/lyrics",
           "description": "Url for lyrics server. @see https://github.com/ShyykoSerhiy/vscode-spotify-lyrics ."
         },
-        "spotify.useCombinedApproachOnMacOS": {
-          "type": "boolean",
-          "default": false,
-          "description": "Whether to use experimental applescript + http implementation of spotify client to reduce CPU usage on MacOs. MacOs only."
+        "spotify.authServerUrl": {
+          "type": "string",
+          "default": "https://vscode-spotify-auth.azurewebsites.net",
+          "description": "Url to auth server. @see https://github.com/ShyykoSerhiy/vscode-spotify-auth"
         },
-        "spotify.showInitializationError": {
+        "spotify.spotifyApiUrl": {
+          "type": "string",
+          "default": "https://api.spotify.com/v1",
+          "description": "Url to spotify api server. @see https://beta.developer.spotify.com/documentation/web-api/reference/playlists/"
+        },
+        "spotify.forceWebApiImplementation": {
           "type": "boolean",
           "default": false,
-          "description": "Whether to show initialization error."
+          "description": "Whether to force web api implementation on Linux or MacOs. If you you want this enabled, please, consider using your own spotify.authServerUrl ."
+        },
+        "spotify.enableLogs": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether to enable logs."
         }
       }
     }
@@ -284,7 +363,8 @@
   "main": "./out/src/extension",
   "scripts": {
     "vscode:prepublish": "tsc -p ./",
-    "compile": "tsc -watch -p ./",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
     "postinstall": "node ./node_modules/vscode/bin/install",
     "test": "node ./node_modules/vscode/bin/test",
     "contributors:add": "all-contributors add",
@@ -292,14 +372,23 @@
     "contributors:check": "all-contributors check"
   },
   "devDependencies": {
+    "@types/express": "^4.11.1",
     "@types/mocha": "^2.2.32",
     "@types/node": "^6.0.40",
+    "@types/superagent": "^2.0.36",
     "all-contributors-cli": "^5.0.0",
     "typescript": "^2.2.0",
     "vscode": "^1.0.0"
   },
   "dependencies": {
+    "@vscodespotify/spotify-common": "1.2.2",
+    "autobind-decorator": "^2.1.0",
     "child_process": "^1.0.2",
+    "express": "^4.16.2",
+    "immutable": "^3.8.2",
+    "moment": "^2.22.2",
+    "redux": "^3.7.2",
+    "redux-persist": "^5.10.0",
     "request-light": "^0.2.1",
     "spotify-node-applescript": "1.1.1"
   }
