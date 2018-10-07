@@ -91,7 +91,7 @@ class TrackTreeItem extends vscode.TreeItem {
 
 
 	get tooltip(): string {
-		return `${getArtists(this.track)} - ${this.track.track.album} - ${this.track.track.name}`
+		return `${getArtists(this.track)} - ${this.track.track.album.name} - ${this.track.track.name}`
 	}
 
 	iconPath = {
