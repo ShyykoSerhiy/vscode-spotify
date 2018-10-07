@@ -8,15 +8,16 @@ export function getConfig() {
 }
 
 export function isButtonToBeShown(buttonId: string): boolean {
+	const shouldShow = getConfig().get('show' + buttonId[0].toUpperCase() + buttonId.slice(1), false);
 	const { loginState } = getState();
+
 	if (buttonId === `${BUTTON_ID_SIGN_IN}Button`) {
-		return !loginState;
-	}
-	if (buttonId === `${BUTTON_ID_SIGN_OUT}Button`) {
-		return !!loginState;
+		return shouldShow ? !loginState : false;
+	} else if (buttonId === `${BUTTON_ID_SIGN_OUT}Button`) {
+		return shouldShow ? !!loginState : false;
 	}
 
-	return getConfig().get('show' + buttonId[0].toUpperCase() + buttonId.slice(1), false);
+	return shouldShow;
 }
 
 export function getButtonPriority(buttonId: string): number {
