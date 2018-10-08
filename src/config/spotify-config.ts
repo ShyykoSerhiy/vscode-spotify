@@ -12,9 +12,9 @@ export function isButtonToBeShown(buttonId: string): boolean {
 	const { loginState } = getState();
 
 	if (buttonId === `${BUTTON_ID_SIGN_IN}Button`) {
-		return shouldShow ? !loginState : false;
+		return shouldShow && !loginState;
 	} else if (buttonId === `${BUTTON_ID_SIGN_OUT}Button`) {
-		return shouldShow ? !!loginState : false;
+		return shouldShow && !!loginState;
 	}
 
 	return shouldShow;
