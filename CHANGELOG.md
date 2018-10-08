@@ -4,9 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.0.2] - 2018-10-07
+### Fixed
+- Missing option for show signIn and signOut button #54 (kudos to negebauer(Nicolás Gebauer))
+
 ## [3.0.1] - 2018-10-07
 ### Fixed
-- Tooltip Missing Album Name in Tree Track. #52
+- Tooltip Missing Album Name in Tree Track. #52 (kudos to mikqi(Muhammad Rivki))
 
 ## [3.0.0] - 2018-10-05
 ### Added
