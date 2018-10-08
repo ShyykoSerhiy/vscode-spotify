@@ -232,6 +232,16 @@
           "default": true,
           "description": "Whether to show lyrics button."
         },
+        "spotify.showLyricsButtonSignInButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show sign in button."
+        },
+        "spotify.showLyricsButtonSignOutButton": {
+          "type": "boolean",
+          "default": true,
+          "description": "Whether to show sign out button."
+        },
         "spotify.openPanelLyrics": {
           "type": "number",
           "default": 1,
