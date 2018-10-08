@@ -95,6 +95,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "negebauer",
+      "name": "Nicolás Gebauer",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/11860880?v=4",
+      "profile": "https://negebauer.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoType": "github"
