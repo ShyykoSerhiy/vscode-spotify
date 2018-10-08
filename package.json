@@ -232,12 +232,12 @@
           "default": true,
           "description": "Whether to show lyrics button."
         },
-        "spotify.showLyricsButtonSignInButton": {
+        "spotify.showSignInButton": {
           "type": "boolean",
           "default": true,
           "description": "Whether to show sign in button."
         },
-        "spotify.showLyricsButtonSignOutButton": {
+        "spotify.showSignOutButton": {
           "type": "boolean",
           "default": true,
           "description": "Whether to show sign out button."
