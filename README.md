@@ -2,8 +2,8 @@
 [![Installs](https://vsmarketplacebadge.apphb.com/installs/shyykoserhiy.vscode-spotify.svg)](https://marketplace.visualstudio.com/items?itemName=shyykoserhiy.vscode-spotify)
 [![Rating](https://vsmarketplacebadge.apphb.com/rating-short/shyykoserhiy.vscode-spotify.svg)](https://marketplace.visualstudio.com/items?itemName=shyykoserhiy.vscode-spotify#review-details)
 
-
 # vscode-spotify
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat)](#contributors)
 
 Use Spotify inside vscode.
@@ -12,8 +12,9 @@ Provides integration with Spotify Desktop client.
 Note that some of functionality only available on macOS (see [How it works section](#how-it-works) )
 
 ## How it works
+
 On macOS this extension uses https://github.com/andrehaveman/spotify-node-applescript (basically a wrapper for https://developer.spotify.com/applescript-api/)
-to communicate with Spotify. 
+to communicate with Spotify.
 
 On Windows it uses Spotify Web Api. 
 
@@ -30,7 +31,7 @@ At the same time it provides tighter integration and it's more or less future pr
 * Shows the currently playing song in status bar of vscode.
 ![status bar](media/screenshot.png)
 * Provides [commands](#commands) for controlling Spotify from vscode. 
-* Provides [hotkeys](#hotkeys) of commands.
+* Provides [hotkeys](#Adding%20or%20changing%20hotkeys) of commands.
 * Provides [buttons](#buttons) for controlling Spotify from vscode.
 
 ## Compatibility table
@@ -71,7 +72,14 @@ A list of contributors to this project
 | [<img src="https://avatars1.githubusercontent.com/u/25567148?v=4" width="100px;"/><br /><sub><b>realbizkit</b></sub>](https://github.com/realbizkit)<br />[💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=realbizkit "Code") | [<img src="https://avatars1.githubusercontent.com/u/662916?v=4" width="100px;"/><br /><sub><b>Jesús Roldán</b></sub>](http://jesusroldan.com)<br />[💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=xeBuz "Code") | [<img src="https://avatars3.githubusercontent.com/u/11860880?v=4" width="100px;"/><br /><sub><b>Nicolás Gebauer</b></sub>](https://negebauer.com)<br />[💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=negebauer "Code") | [<img src="https://avatars0.githubusercontent.com/u/4416419?v=4" width="100px;"/><br /><sub><b>Muhammad Rivki</b></sub>](http://this.rivki.id/)<br />[💻](https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=mikqi "Code") |
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-## Adding or changing hotkeys:
+## Commands
+
+There are a number of commands available for the extension, and accessible via the command
+pallette.  Find them by searching for "Spotify" in the command pallette:
+
+![Commands](media/screenshot2.png)
+
+## Adding or changing hotkeys
 All keyboard shortcuts in VS Code can be customized via the User/keybindings.json file.
 
 To configure keyboard shortcuts the way you want, go to the menu under File , Preferences , Keyboard Shortcuts.
@@ -158,10 +166,11 @@ You can change what buttons to show by changing parameters([go here to find out 
 }
 ```
 
-Note that due to limitations of Spotify's applesctipt API toggleRepeatingButton toggles only
+Note that due to limitations of Spotify's applesctipt API ```toggleRepeatingButton``` toggles only
 'repeat all' property of spotify. There is no way to set 'repeat one' via vscode-spotify.  
 
 You can also change position of buttons by changing of this parameters:
+
 ```json
 "spotify.priorityBase": {
 	"type": "number",
