@@ -166,6 +166,8 @@ You can change what buttons to show by changing parameters([go here to find out 
 }
 ```
 
+For the full configuration options go [here](https://github.com/ShyykoSerhiy/vscode-spotify/blob/master/package.json#L161).
+
 Note that due to limitations of Spotify's applesctipt API ```toggleRepeatingButton``` toggles only
 'repeat all' property of spotify. There is no way to set 'repeat one' via vscode-spotify.  
 
