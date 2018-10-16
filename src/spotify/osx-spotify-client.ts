@@ -2,6 +2,7 @@ import { SpotifyClient, createCancelablePromise, QueryStatusFunction } from './s
 import * as spotify from 'spotify-node-applescript';
 import { ISpotifyStatusStatePartial } from '../state/state';
 import { isMuted } from '../store/store';
+import { window } from 'vscode';
 
 export class OsxSpotifyClient implements SpotifyClient {
     private _queryStatusFunc: QueryStatusFunction
@@ -82,6 +83,10 @@ export class OsxSpotifyClient implements SpotifyClient {
         const p = createCancelablePromise<void>((_, reject) => {
             const _poll = () => {
                 if (canceled) {
+                    return;
+                }
+                if (!window.state.focused) {
+                    setTimeout(() => _poll(), getInterval());
                     return;
                 }
                 this.getStatus().then(status => {
