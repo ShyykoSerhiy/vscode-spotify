@@ -62,6 +62,12 @@ export function getEnableLogs(): boolean {
 	return getConfig().get<boolean>('enableLogs', false);
 }
 
+export type TrackInfoClickBehaviour = 'none' | 'focus_song' | 'play_pause';
+
+export function getTrackInfoClickBehaviour(): TrackInfoClickBehaviour {
+	return getConfig().get<TrackInfoClickBehaviour>('trackInfoClickBehaviour', 'focus_song');
+}
+
 let globalState: Memento;
 
 export function registerGlobalState(memento: Memento) {

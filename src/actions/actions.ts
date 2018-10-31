@@ -7,6 +7,7 @@ import { showInformationMessage, showWarningMessage, log } from '../info/info';
 import { getApi, Api } from '@vscodespotify/spotify-common/lib/spotify/api';
 import { Playlist, Track } from '@vscodespotify/spotify-common/lib/spotify/consts';
 import autobind from 'autobind-decorator';
+import { artistsToArtist } from '../utils/utils';
 
 export function withApi() {
     return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
@@ -180,6 +181,34 @@ class ActionCreator {
             type: SELECT_TRACK_ACTION,
             track
         };
+    }
+
+    @autobind
+    selectCurrentTrack() {
+        const state = getState();
+        if (state.playerState && state.track) {
+            const currentTrack = state.track;
+            let track: Track;
+            const playlist = state.playlists.find((p) => {
+                const tracks = state.tracks.get(p.id);
+                if (tracks) {
+                    const foundTrack = tracks.find((t) => {
+                        return t.track.name === currentTrack.name &&
+                            t.track.album.name === currentTrack.album &&
+                            artistsToArtist(t.track.artists) === currentTrack.artist
+                    });
+                    if (foundTrack) {
+                        track = foundTrack;
+                        return true;
+                    }                    
+                }
+                return false;
+            });
+            if (playlist) {
+                this.selectPlaylistAction(playlist);
+                this.selectTrackAction(track!);
+            }
+        }
     }
 
     @autobind

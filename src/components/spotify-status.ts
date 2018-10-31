@@ -1,6 +1,6 @@
 import { window, StatusBarItem, StatusBarAlignment } from 'vscode';
 import { SpotifyControls } from './spotify-controls';
-import { getTrackInfoFormat, getButtonPriority } from '../config/spotify-config';
+import { getTrackInfoFormat, getButtonPriority, getTrackInfoClickBehaviour } from '../config/spotify-config';
 import { getState, getStore } from '../store/store';
 import { ITrack, ILoginState } from '../state/state';
 
@@ -51,6 +51,12 @@ export class SpotifyStatus {
             if (toRedraw) {
                 this._statusBarItem.show();
                 this._spotifyControls.showVisible();
+            }
+            const trackInfoClickBehaviour = getTrackInfoClickBehaviour();
+            if (trackInfoClickBehaviour === 'none') {
+                this._statusBarItem.command = undefined;
+            } else {
+                this._statusBarItem.command = 'spotify.trackInfoClick';
             }
         } else {
             this._statusBarItem.text = '';

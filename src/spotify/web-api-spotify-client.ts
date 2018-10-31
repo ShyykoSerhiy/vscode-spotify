@@ -4,6 +4,7 @@ import { getState } from '../store/store';
 import { withApi, getSpotifyWebApi, withErrorAsync } from '../actions/actions';
 import { Api } from '@vscodespotify/spotify-common/lib/spotify/api';
 import { log } from '../info/info';
+import { artistsToArtist } from '../utils/utils';
 
 export class WebApiSpotifyClient implements SpotifyClient {
     private prevVolume: number;
@@ -86,7 +87,7 @@ export class WebApiSpotifyClient implements SpotifyClient {
                             },
                             track: {
                                 album: player.item.album.name,
-                                artist: player.item.artists.map((a => a.name)).join(', '),
+                                artist: artistsToArtist(player.item.artists),
                                 name: player.item.name
                             },
                             context: player.context ? {
