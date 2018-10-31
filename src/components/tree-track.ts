@@ -28,23 +28,34 @@ export const connectTrackTreeView = (view: vscode.TreeView<Track>) => {
 	);
 }
 
-export class TreeTrackProvider implements vscode.TreeDataProvider<Track> {
+export class TreeTrackProvider implements vscode.TreeDataProvider<Track> {    
 	private _onDidChangeTreeData: vscode.EventEmitter<Track | undefined> = new vscode.EventEmitter<Track | undefined>();
 	readonly onDidChangeTreeData: vscode.Event<Track | undefined> = this._onDidChangeTreeData.event;
 
 	private tracks: Track[];
 	private selectedPlaylist?: Playlist;
+	private selectedTrack?: Track;
+	private view: vscode.TreeView<Track>;
 
 	constructor() {
 		getStore().subscribe(() => {
-			const { tracks, selectedPlaylist } = getState();
+			const { tracks, selectedPlaylist, selectedTrack } = getState();
 			const newTracks = tracks.get((selectedPlaylist || { id: '' }).id);
-			if (this.tracks !== newTracks) {
+			if (this.tracks !== newTracks || this.selectedTrack !== selectedTrack) {
+				if (this.selectedTrack !== selectedTrack) {
+					this.selectedTrack = selectedTrack!;
+					this.selectedTrack && this.view && this.view.reveal(this.selectedTrack, { focus: true, select: true });
+				}
 				this.selectedPlaylist = selectedPlaylist!;
+				this.selectedTrack = selectedTrack!;
 				this.tracks = newTracks || [];
 				this.refresh();
 			}
 		});
+	}
+
+	bindView(view: vscode.TreeView<Track>): void {
+		this.view = view;
 	}
 
 	getParent(_t: Track) {

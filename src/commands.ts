@@ -3,6 +3,7 @@ import { SpotifyClient } from './spotify/spotify-client';
 import { LyricsController, registration } from './lyrics/lyrics';
 import { actionsCreator } from './actions/actions';
 import { Playlist } from './state/state';
+import { getTrackInfoClickBehaviour } from './config/spotify-config';
 
 export function createCommands(sC: SpotifyClient): { dispose: () => void } {
 	const lC = new LyricsController();
@@ -23,6 +24,14 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
 	const signOut = commands.registerCommand('spotify.signOut', actionsCreator.actionSignOut);
 	const loadPlaylists = commands.registerCommand('spotify.loadPlaylists', actionsCreator.loadPlaylists);
 	const loadTracks = commands.registerCommand('spotify.loadTracks', actionsCreator.loadTracksForSelectedPlaylist);
+	const trackInfoClick = commands.registerCommand('spotify.trackInfoClick', () => {
+		const trackInfoClickBehaviour = getTrackInfoClickBehaviour();
+		if (trackInfoClickBehaviour === 'focus_song') {
+			actionsCreator.selectCurrentTrack();
+		} else if (trackInfoClickBehaviour === 'play_pause') {
+			sC.playPause();
+		}
+	});
 	/**
 	 * private
 	 */
@@ -48,6 +57,7 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
 		signOut,
 		loadPlaylists,
 		loadTracks,
-		playTrack
+		trackInfoClick,
+		playTrack,
 	);
 }

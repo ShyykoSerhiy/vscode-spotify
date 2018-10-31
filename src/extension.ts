@@ -17,7 +17,9 @@ export function activate(context: ExtensionContext) {
     const spotifyStatus = new SpotifyStatus();
     const controller = new SpotifyStatusController();
     const playlistTreeView = window.createTreeView('vscode-spotify-playlists', { treeDataProvider: new TreePlaylistProvider() });
-    const trackTreeView = window.createTreeView('vscode-spotify-tracks', { treeDataProvider: new TreeTrackProvider() });
+    const treeTrackProvider = new TreeTrackProvider();
+    const trackTreeView = window.createTreeView('vscode-spotify-tracks', { treeDataProvider: treeTrackProvider });
+    treeTrackProvider.bindView(trackTreeView);
     // Add to a list of disposables which are disposed when this extension is deactivated.
     context.subscriptions.push(connectPlaylistTreeView(playlistTreeView));
     context.subscriptions.push(connectTrackTreeView(trackTreeView));
