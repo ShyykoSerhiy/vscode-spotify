@@ -179,7 +179,7 @@
             "play_pause"
           ],
           "default": "focus_song",
-          "description": "What to do when trackInfo is clicked: 'none' - do nothing, 'focus_song' - current song will be selected Playlists/Tracks section if it exists there, 'play_pause' - trackInfo esentially becomes playPause button (great option for minimal ui). "
+          "description": "What to do when trackInfo is clicked: 'none' - do nothing, 'focus_song' - current song will be selected Playlists/Tracks section if it exists there, 'play_pause' - trackInfo essentially becomes playPause button (great option for minimal ui). "
         },
         "spotify.showNextButton": {
           "type": "boolean",
