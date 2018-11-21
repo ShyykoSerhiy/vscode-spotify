@@ -113,6 +113,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "moshfeu",
+      "name": "Mosh Feu",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3723951?v=4",
+      "profile": "https://il.linkedin.com/in/moshefeuchtwanger",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "repoType": "github"
