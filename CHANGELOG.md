@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.0] - 2018-11-20
+### Added
+- Focus on song #56
+### Fixed
+- Do not poll spotify if window is not focused on Mac OS (reducing CPU load).
+- Smaller icon size in Activity bar #58
+
 ## [3.0.4] - 2018-10-07
 ### Fixed
 - Invalid version in changelog.
