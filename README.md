@@ -9,23 +9,23 @@
 Use Spotify inside vscode.
 Provides integration with Spotify Desktop client. 
 
-Note that some of functionality only available on macOS (see [How it works section](#how-it-works) )
+Note that some of functionality is only available on macOS systems(see [How it works section](#how-it-works) )
 
 **This extension requires Spotify Premium to work on Windows**
 
 ## How it works
 
-On macOS this extension uses https://github.com/andrehaveman/spotify-node-applescript (basically a wrapper for https://developer.spotify.com/applescript-api/)
+On macOS, this extension uses https://github.com/andrehaveman/spotify-node-applescript (basically a wrapper for https://developer.spotify.com/applescript-api/)
 to communicate with Spotify.
 
-On Windows it uses Spotify Web Api. 
+On Windows, it extension uses the Spotify Web API. 
 
-On Linux it uses a combination of dbus and pactl.
+On Linux, it uses a combination of dbus and pactl.
 
-Spotify Web Api implementation can be used on any platform but it has some drawbacks:
+Spotify Web API implementation can be used on any platform, but it does have some drawbacks:
 * it doesn't work without internet connection (Linux and OsX implementations do).
-* full functionality is only available to Spotify Premium users. 
-* api calls are rate limited.
+* Full functionality is only available to Spotify Premium users. 
+* API calls are rate limited.
 
 At the same time it provides tighter integration and it's more or less future proofed.
 
@@ -38,7 +38,7 @@ At the same time it provides tighter integration and it's more or less future pr
 
 ## Compatibility table
 
-| Feature                      | macOS         | Linux                        | Any Platform (only option on Windows) Web Api |
+| Feature                      | macOS         | Linux                        | Any Platform (only option on Windows) Web API |
 | ---------------------------- |:-------------:| :--------------------------- | :-------------------------------------------- |
 | Works offline                | ✅            | ✅                            | ❌                                            |
 | Show current song            | ✅            | ✅                            | ✅                                            |
@@ -56,7 +56,7 @@ At the same time it provides tighter integration and it's more or less future pr
 | Toggle Shuffling             | ✅            | (shows shuffling state)  ⭕   | ✅                                            |
 | Lyrics                       | ✅            | ✅                            | ✅                                            |
 
-Additional Web Api features:
+Additional Web API features:
 * Playlists/tracks selection.
 
 ## Contributing 
@@ -170,7 +170,7 @@ You can change what buttons to show by changing parameters([go here to find out 
 
 For the full configuration options go [here](https://github.com/ShyykoSerhiy/vscode-spotify/blob/master/package.json#L161).
 
-Note that due to limitations of Spotify's applesctipt API ```toggleRepeatingButton``` toggles only
+Note that due to limitations of Spotify's Applescript API ```toggleRepeatingButton``` toggles only
 'repeat all' property of spotify. There is no way to set 'repeat one' via vscode-spotify.  
 
 You can also change position of buttons by changing of this parameters:
