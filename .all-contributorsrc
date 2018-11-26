@@ -140,6 +140,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "misterfoxy",
+      "name": "Michael Fox",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/21694891?v=4",
+      "profile": "https://www.michaelscottfox.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "repoType": "github"
