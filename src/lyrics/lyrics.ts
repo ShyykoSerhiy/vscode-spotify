@@ -49,9 +49,10 @@ export class LyricsController {
     private async _findLyrics() {
         const state = getState();
         const { artist, name } = state.track;
+        const filteredName = name.split(" - ")[0];
 
         try {
-            const result = await xhr({ url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(name)}` });
+            const result = await xhr({ url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(filteredName)}` });
             await previewLyrics(`${result.responseText}`)
         } catch (e) {
             if (e.status === 404) {
