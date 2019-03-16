@@ -57,7 +57,7 @@ At the same time it provides tighter integration and it's more or less future pr
 | Lyrics                       | ✅            | ✅                            | ✅                                            |
 
 Additional Web API features:
-* Playlists/tracks selection.
+* Playlists/tracks selection. *Make sure you have logged in with the command `>Spotify Sign In` to use these features. You can open the Virtual Studio Code command line with the hotkey `Ctrl+P` by default.*
 
 ## Contributing 
 This project follows the
