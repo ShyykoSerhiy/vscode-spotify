@@ -9,28 +9,25 @@
 Use Spotify inside vscode.
 Provides integration with Spotify Desktop client. 
 
-Note that some of functionality is only available on macOS systems(see [How it works section](#how-it-works) )
+Note that some of the functionalities are only available on macOS systems (see [How it works section](#how-it-works))
 
 **This extension requires Spotify Premium to work on Windows**
 
 ## How it works
 
-On macOS, this extension uses https://github.com/andrehaveman/spotify-node-applescript (basically a wrapper for https://developer.spotify.com/applescript-api/)
-to communicate with Spotify.
-
-On Windows, it extension uses the Spotify Web API. 
-
-On Linux, it uses a combination of dbus and pactl.
+* On macOS, this extension uses [spotify-node-applescript](https://github.com/andrehaveman/spotify-node-applescript) (basically a wrapper for the official Spotify AppleScript API) to communicate with Spotify.
+* On Windows, it extension uses the Spotify Web API. 
+* On Linux, it uses a combination of dbus and pactl.
 
 Spotify Web API implementation can be used on any platform, but it does have some drawbacks:
-* it doesn't work without internet connection (Linux and OsX implementations do).
+* It doesn't work without internet connection (Linux and OS X implementations do).
 * Full functionality is only available to Spotify Premium users. 
 * API calls are rate limited.
 
 At the same time it provides tighter integration and it's more or less future proofed.
 
 ## Features
-* Shows the currently playing song in status bar of vscode.
+* Shows the currently playing song in the vscode status bar.
 ![status bar](media/screenshot.png)
 * Provides [commands](#commands) for controlling Spotify from vscode. 
 * Provides [hotkeys](#Adding%20or%20changing%20hotkeys) of commands.
@@ -40,8 +37,8 @@ At the same time it provides tighter integration and it's more or less future pr
 
 | Feature                      | macOS         | Linux                        | Any Platform (only option on Windows) Web API |
 | ---------------------------- |:-------------:| :--------------------------- | :-------------------------------------------- |
-| Works offline                | ✅            | ✅                            | ❌                                            |
-| Show current song            | ✅            | ✅                            | ✅                                            |
+| Works Offline                | ✅            | ✅                            | ❌                                            |
+| Show Current Song            | ✅            | ✅                            | ✅                                            |
 | Play Next Song               | ✅            | ✅                            | ✅                                            |
 | Play Previous Song           | ✅            | ✅                            | ✅                                            |
 | Play                         | ✅            | ✅                            | ✅                                            |
@@ -52,17 +49,17 @@ At the same time it provides tighter integration and it's more or less future pr
 | Mute Unmute Volume           | ✅            | ✅                            | ✅                                            |
 | Volume Up                    | ✅            | ✅                            | ✅                                            |
 | Volume Down                  | ✅            | ✅                            | ✅                                            |
-| Toggle Repeating             | ✅            | (shows repeating state)  ⭕   | ✅             					      	    |
+| Toggle Repeating             | ✅            | (shows repeating state)  ⭕   | ✅             				    |
 | Toggle Shuffling             | ✅            | (shows shuffling state)  ⭕   | ✅                                            |
 | Lyrics                       | ✅            | ✅                            | ✅                                            |
 
-Additional Web API features:
-* Playlists/tracks selection.
+Additional Web API features
+* Playlists/tracks selection. *Make sure you have logged in with the command `>Spotify Sign In` to use these features. You can open the Virtual Studio Code command line with the hotkey `Ctrl+P` by default.*
 
 ## Contributing 
 This project follows the
 [all-contributors](https://github.com/kentcdodds/all-contributors)
-specification. Contributions of any kind are welcome, any contributions you make you will be recognised for in the README.
+specification. Contributions of any kind are welcome, any contributions made will be recognised in the README.
 
 A list of contributors to this project
 ([emoji key](https://github.com/kentcdodds/all-contributors#emoji-key)):
@@ -83,10 +80,10 @@ pallette.  Find them by searching for "Spotify" in the command pallette:
 ![Commands](media/screenshot2.png)
 
 ## Adding or changing hotkeys
-All keyboard shortcuts in VS Code can be customized via the User/keybindings.json file.
+All keyboard shortcuts in vscode can be customized via the `User/keybindings.json` file.
 
-To configure keyboard shortcuts the way you want, go to the menu under File , Preferences , Keyboard Shortcuts.
-This will open the Default Keyboard Shortcuts on the left and your User/keybindings.json file where you can overwrite the default bindings on the right.
+To configure keyboard shortcuts the way you want, go to the menu under File > Preferences > Keyboard Shortcuts.
+This will open the Default Keyboard Shortcuts on the left and your `User/keybindings.json` file where you can overwrite the default bindings on the right. You may also see an interface to modify the shortcuts on different versions of vscode.
 
 Example :
 ```json
@@ -99,13 +96,13 @@ Example :
 For more info on hotkeys please look at https://code.visualstudio.com/docs/customization/keybindings
 
 ## Buttons
-This extension provides variety of buttons to controll spotify from status bar. By default 4 buttons are enabled:
+This extension provides a variety of buttons to control Spotify from status bar. By default 4 buttons are enabled:
 1. Previous track
-2. Play|pause
+2. Play / Pause
 3. Next track
-4. Mute|unmute
+4. Mute / Unmute
 
-You can change what buttons to show by changing parameters([go here to find out how](https://code.visualstudio.com/docs/customization/userandworkspace)):
+You can modify the shown buttons by changing your parameters ([go here to find out how](https://code.visualstudio.com/docs/customization/userandworkspace)):
 ```json
 "spotify.showNextButton": {
 	"type": "boolean",
@@ -174,7 +171,7 @@ For the full configuration options go [here](https://github.com/ShyykoSerhiy/vsc
 Note that due to limitations of Spotify's Applescript API ```toggleRepeatingButton``` toggles only
 'repeat all' property of spotify. There is no way to set 'repeat one' via vscode-spotify.  
 
-You can also change position of buttons by changing of this parameters:
+You can also change the position of buttons by changing the parameters below:
 
 ```json
 "spotify.priorityBase": {
@@ -249,4 +246,4 @@ You can also change position of buttons by changing of this parameters:
 }
 ```
 
-[MIT](LICENSE)
+[MIT LICENSE](LICENSE)
