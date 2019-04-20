@@ -72,7 +72,7 @@ export class SpotifyStatus {
             this._statusBarItem.dispose();
         }
         if (this._spotifyControls) {
-            this._spotifyControls
+            this._spotifyControls.dispose();
         }
     }
 }
