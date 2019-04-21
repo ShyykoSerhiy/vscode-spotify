@@ -1,14 +1,15 @@
-import { workspace, Memento } from 'vscode';
-import { getState } from '../store/store';
+import { Memento, workspace } from 'vscode';
+
 import { BUTTON_ID_SIGN_IN, BUTTON_ID_SIGN_OUT } from '../consts/consts';
 import { isWebApiSpotifyClient } from '../spotify/spotify-client';
+import { getState } from '../store/store';
 
 export function getConfig() {
 	return workspace.getConfiguration('spotify');
 }
 
 export function isButtonToBeShown(buttonId: string): boolean {
-	const shouldShow = getConfig().get('show' + buttonId[0].toUpperCase() + buttonId.slice(1), false);
+	const shouldShow = getConfig().get(`show${buttonId[0].toUpperCase()}${buttonId.slice(1)}`, false);
 	const { loginState } = getState();
 
 	if (buttonId === `${BUTTON_ID_SIGN_IN}Button`) {
@@ -22,7 +23,7 @@ export function isButtonToBeShown(buttonId: string): boolean {
 
 export function getButtonPriority(buttonId: string): number {
 	const config = getConfig();
-	return config.get('priorityBase', 0) + config.get(buttonId + 'Priority', 0);
+	return config.get('priorityBase', 0) + config.get(`${buttonId}Priority`, 0);
 }
 
 export function getStatusCheckInterval(): number {

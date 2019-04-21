@@ -1,12 +1,14 @@
 import { commands, Disposable } from 'vscode';
-import { SpotifyClient } from './spotify/spotify-client';
-import { LyricsController, registration } from './lyrics/lyrics';
+
 import { actionsCreator } from './actions/actions';
-import { Playlist } from './state/state';
 import { getTrackInfoClickBehaviour } from './config/spotify-config';
+import { LyricsController } from './lyrics/lyrics';
+import { SpotifyClient } from './spotify/spotify-client';
+import { Playlist } from './state/state';
 
 export function createCommands(sC: SpotifyClient): { dispose: () => void } {
 	const lC = new LyricsController();
+
 	const lyrics = commands.registerCommand('spotify.lyrics', lC.findLyrics.bind(lC));
 	const next = commands.registerCommand('spotify.next', sC.next.bind(sC));
 	const previous = commands.registerCommand('spotify.previous', sC.previous.bind(sC));
@@ -32,13 +34,11 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
 			sC.playPause();
 		}
 	});
-	/**
-	 * private
-	 */
 	const playTrack = commands.registerCommand('spotify.playTrack', async (offset: number, playlist: Playlist) => {
 		await actionsCreator.playTrack(offset, playlist);
 		sC.queryStatusFunc();
 	});
+
 	return Disposable.from(lyrics,
 		next,
 		previous,
@@ -52,12 +52,12 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
 		volumeDown,
 		toggleRepeating,
 		toggleShuffling,
-		registration,
 		signIn,
 		signOut,
 		loadPlaylists,
 		loadTracks,
 		trackInfoClick,
 		playTrack,
+		lC.registration
 	);
 }

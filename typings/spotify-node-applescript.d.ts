@@ -41,13 +41,13 @@ declare module 'spotify-node-applescript' {
         position: number,
         state: string
 	}
-	
+
 	/**
 	 *  Open track
 	 */
 	export function open(uri: string, callback:()=>void):void;
 	/**
-	 * Play a track with Spotify URI uri. 
+	 * Play a track with Spotify URI uri.
 	 * spotify.playTrack('spotify:track:3AhXZa8sUQht0UEdBJgpGc', function(){// track is playing});
 	 */
 	export function playTrack(uri: string, callback:()=>void):void;
@@ -67,39 +67,39 @@ declare module 'spotify-node-applescript' {
 	/**
 	 * Jump to a specific second of the current song.
 	 */
-	export function jumpTo(second:number, callback:()=>void):void;	
+	export function jumpTo(second:number, callback:()=>void):void;
 	/**
 	 * Resume playing current track.
-	 */	
-	export function play(callback:()=>void):void;	
+	 */
+	export function play(callback:()=>void):void;
 	/**
 	 * Pause playing track.
-	 */	
+	 */
 	export function pause(callback:()=>void):void;
 	/**
 	 * Toggle play.
-	 */	
+	 */
 	export function playPause(callback:()=>void):void;
 	/**
 	 * Play next track.
-	 */	
+	 */
 	export function next(callback:()=>void):void;
 	/**
 	 * Play previous track.
-	 */	
+	 */
 	export function previous(callback:()=>void):void;
 	/**
 	 * Turn volume up.
-	 */	
+	 */
 	export function volumeUp(callback:()=>void):void;
 	/**
 	 * Turn volume down.
-	 */	
+	 */
 	export function volumeDown(callback:()=>void):void;
 	/**
 	 * Sets the volume.
 	 */
-	export function setVolume(volume:number, callback:()=>void):void;	
+	export function setVolume(volume:number, callback:()=>void):void;
 	/**
 	 * Reduces audio to 0, saving the previous volume.
 	 */
@@ -111,7 +111,7 @@ declare module 'spotify-node-applescript' {
 	/**
 	 * Check if Spotify is running.
 	 */
-	export function isRunning(callback:(err:any, isRunning: boolean)=>void):void;	
+	export function isRunning(callback:(err:any, isRunning: boolean)=>void):void;
 	/**
 	 * Is repeating on or off?
 	 */
