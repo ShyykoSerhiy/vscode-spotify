@@ -11,9 +11,16 @@
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
 		"experimentalDecorators": true,
-		"skipLibCheck": true
+		"skipLibCheck": true,
+		"alwaysStrict": true
 	},
+	"include": [
+        "src/**/*"
+    ],
 	"exclude": [
 		"node_modules"
-	]
+	],
+	"files": [
+        "typings/spotify-node-applescript.d.ts"
+    ]
 }

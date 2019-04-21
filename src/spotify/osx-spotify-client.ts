@@ -8,7 +8,7 @@ export class OsxSpotifyClient implements SpotifyClient {
     private _queryStatusFunc: QueryStatusFunction
 
     constructor(queryStatusFunc: QueryStatusFunction) {
-        this._queryStatusFunc = queryStatusFunc;        
+        this._queryStatusFunc = queryStatusFunc;
     }
     get queryStatusFunc() {
         return this._queryStatusFunc;
