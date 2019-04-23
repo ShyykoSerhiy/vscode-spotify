@@ -1,5 +1,5 @@
 {
-    "defaultSeverity": "error",
+	"defaultSeverity": "error",
     "rules": {
         "array-type": [
 			true,
@@ -55,7 +55,7 @@
 		"import-spacing": true,
 		"indent": [
 			true,
-			"tabs"
+			"spaces"
 		],
 		"interface-name": [
 			false,
@@ -214,5 +214,5 @@
 			"check-preblock"
 		]
     },
-    "rulesDirectory": []
+	"rulesDirectory": []
 }

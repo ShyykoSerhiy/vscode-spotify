@@ -6,63 +6,63 @@ import { xhr } from '../request/request';
 import { getState } from '../store/store';
 
 class TextContentProvider implements TextDocumentContentProvider {
-	htmlContent = '';
+    htmlContent = '';
 
-	private _onDidChange = new EventEmitter<Uri>();
+    private _onDidChange = new EventEmitter<Uri>();
 
-	get onDidChange(): Event<Uri> {
-		return this._onDidChange.event;
-	}
+    get onDidChange(): Event<Uri> {
+        return this._onDidChange.event;
+    }
 
-	provideTextDocumentContent(_uri: Uri): string {
-		return this.htmlContent;
-	}
+    provideTextDocumentContent(_uri: Uri): string {
+        return this.htmlContent;
+    }
 
-	update(uri: Uri) {
-		this._onDidChange.fire(uri);
-	}
+    update(uri: Uri) {
+        this._onDidChange.fire(uri);
+    }
 }
 
 export class LyricsController {
-	private static LYRICS_CONTENT_PROVIDER = new TextContentProvider();
+    private static LYRICS_CONTENT_PROVIDER = new TextContentProvider();
 
-	readonly registration = workspace.registerTextDocumentContentProvider('vscode-spotify', LyricsController.LYRICS_CONTENT_PROVIDER);
+    readonly registration = workspace.registerTextDocumentContentProvider('vscode-spotify', LyricsController.LYRICS_CONTENT_PROVIDER);
 
-	private readonly previewUri = Uri.parse('vscode-spotify://authority/vscode-spotify');
+    private readonly previewUri = Uri.parse('vscode-spotify://authority/vscode-spotify');
 
-	async findLyrics() {
-		window.withProgress({ location: ProgressLocation.Window, title: 'Searching for lyrics. This might take a while.' }, () =>
-		this._findLyrics());
-	}
+    async findLyrics() {
+        window.withProgress({ location: ProgressLocation.Window, title: 'Searching for lyrics. This might take a while.' }, () =>
+        this._findLyrics());
+    }
 
-	private async _findLyrics() {
-		const state = getState();
-		const { artist, name } = state.track;
+    private async _findLyrics() {
+        const state = getState();
+        const { artist, name } = state.track;
 
-		try {
-			const result = await xhr({
-				url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(name)}`
-			});
-			await this._previewLyrics(`${result.responseText}`);
-		} catch (e) {
-			if (e.status === 404) {
-				await this._previewLyrics(`Song lyrics for ${artist} - ${name} not found.\n You can add it on https://genius.com/ .`);
-			}
-			if (e.status === 500) {
-				await this._previewLyrics(`Error: ${e.responseText}`);
-			}
-		}
-	}
+        try {
+            const result = await xhr({
+                url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(name)}`
+            });
+            await this._previewLyrics(`${result.responseText}`);
+        } catch (e) {
+            if (e.status === 404) {
+                await this._previewLyrics(`Song lyrics for ${artist} - ${name} not found.\n You can add it on https://genius.com/ .`);
+            }
+            if (e.status === 500) {
+                await this._previewLyrics(`Error: ${e.responseText}`);
+            }
+        }
+    }
 
-	private async _previewLyrics(lyrics: string) {
-		LyricsController.LYRICS_CONTENT_PROVIDER.htmlContent = lyrics.trim();
-		LyricsController.LYRICS_CONTENT_PROVIDER.update(this.previewUri);
+    private async _previewLyrics(lyrics: string) {
+        LyricsController.LYRICS_CONTENT_PROVIDER.htmlContent = lyrics.trim();
+        LyricsController.LYRICS_CONTENT_PROVIDER.update(this.previewUri);
 
-		try {
-			const document = await workspace.openTextDocument(this.previewUri);
-			await window.showTextDocument(document, openPanelLyrics(), true);
-		} catch (_ignored) {
-			showInformationMessage('Failed to show lyrics' + _ignored);
-		}
-	}
+        try {
+            const document = await workspace.openTextDocument(this.previewUri);
+            await window.showTextDocument(document, openPanelLyrics(), true);
+        } catch (_ignored) {
+            showInformationMessage('Failed to show lyrics' + _ignored);
+        }
+    }
 }
