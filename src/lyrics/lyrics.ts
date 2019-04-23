@@ -1,49 +1,38 @@
-import { xhr } from '../request/request';
+import { Event, EventEmitter, ProgressLocation, TextDocumentContentProvider, Uri, window, workspace } from 'vscode';
+
 import { getLyricsServerUrl, openPanelLyrics } from '../config/spotify-config';
 import { showInformationMessage } from '../info/info';
+import { xhr } from '../request/request';
 import { getState } from '../store/store';
-import { Uri, TextDocumentContentProvider, EventEmitter, Event, window, workspace, ProgressLocation } from 'vscode';
-
-let previewUri = Uri.parse('vscode-spotify://authority/vscode-spotify');
-let html = '';
 
 class TextContentProvider implements TextDocumentContentProvider {
-    private _onDidChange = new EventEmitter<Uri>();
+    htmlContent = '';
 
-    public provideTextDocumentContent(_uri: Uri): string {
-        return html;
-    }
+    private _onDidChange = new EventEmitter<Uri>();
 
     get onDidChange(): Event<Uri> {
         return this._onDidChange.event;
     }
 
-    public update(uri: Uri) {
+    provideTextDocumentContent(_uri: Uri): string {
+        return this.htmlContent;
+    }
+
+    update(uri: Uri) {
         this._onDidChange.fire(uri);
     }
 }
 
-let provider = new TextContentProvider();
-
-async function previewLyrics(lyrics: string) {
-    html = lyrics.trim();
-    provider.update(previewUri);
-    try {
-        const document = await workspace.openTextDocument(previewUri);
-        await window.showTextDocument(document, openPanelLyrics(), true);
-    } catch (_ignored) {
-        showInformationMessage('Failed to show lyrics' + _ignored);
-    }
-}
-
 export class LyricsController {
-    public constructor() {
-    }
+    private static LYRICS_CONTENT_PROVIDER = new TextContentProvider();
 
-    public async findLyrics() {
-        window.withProgress({ location: ProgressLocation.Window, title: 'Searching for lyrics. This might take a while.' }, () => {
-            return this._findLyrics();
-        });
+    readonly registration = workspace.registerTextDocumentContentProvider('vscode-spotify', LyricsController.LYRICS_CONTENT_PROVIDER);
+
+    private readonly previewUri = Uri.parse('vscode-spotify://authority/vscode-spotify');
+
+    async findLyrics() {
+        window.withProgress({ location: ProgressLocation.Window, title: 'Searching for lyrics. This might take a while.' }, () =>
+        this._findLyrics());
     }
 
     private async _findLyrics() {
@@ -51,17 +40,29 @@ export class LyricsController {
         const { artist, name } = state.track;
 
         try {
-            const result = await xhr({ url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(name)}` });
-            await previewLyrics(`${result.responseText}`)
+            const result = await xhr({
+                url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(name)}`
+            });
+            await this._previewLyrics(`${result.responseText}`);
         } catch (e) {
             if (e.status === 404) {
-                await previewLyrics(`Song lyrics for ${artist} - ${name} not found.\n You can add it on https://genius.com/ .`);
+                await this._previewLyrics(`Song lyrics for ${artist} - ${name} not found.\n You can add it on https://genius.com/ .`);
             }
             if (e.status === 500) {
-                await previewLyrics(`Error: ${e.responseText}`);
+                await this._previewLyrics(`Error: ${e.responseText}`);
             }
         }
     }
-}
 
-export const registration = workspace.registerTextDocumentContentProvider('vscode-spotify', provider);
+    private async _previewLyrics(lyrics: string) {
+        LyricsController.LYRICS_CONTENT_PROVIDER.htmlContent = lyrics.trim();
+        LyricsController.LYRICS_CONTENT_PROVIDER.update(this.previewUri);
+
+        try {
+            const document = await workspace.openTextDocument(this.previewUri);
+            await window.showTextDocument(document, openPanelLyrics(), true);
+        } catch (_ignored) {
+            showInformationMessage('Failed to show lyrics' + _ignored);
+        }
+    }
+}

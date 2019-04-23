@@ -1,10 +1,12 @@
-import { SpotifyClient, createCancelablePromise, QueryStatusFunction, NOT_RUNNING_REASON } from './spotify-client';
+import { Api } from '@vscodespotify/spotify-common/lib/spotify/api';
+
+import { getSpotifyWebApi, withApi, withErrorAsync } from '../actions/actions';
+import { log } from '../info/info';
 import { ISpotifyStatusStatePartial } from '../state/state';
 import { getState } from '../store/store';
-import { withApi, getSpotifyWebApi, withErrorAsync } from '../actions/actions';
-import { Api } from '@vscodespotify/spotify-common/lib/spotify/api';
-import { log } from '../info/info';
 import { artistsToArtist } from '../utils/utils';
+
+import { createCancelablePromise, NOT_RUNNING_REASON, QueryStatusFunction, SpotifyClient } from './spotify-client';
 
 export class WebApiSpotifyClient implements SpotifyClient {
     private prevVolume: number;
@@ -17,7 +19,7 @@ export class WebApiSpotifyClient implements SpotifyClient {
         };
     }
 
-    get queryStatusFunc(){
+    get queryStatusFunc() {
         return this._queryStatusFunc;
     }
 
@@ -68,33 +70,38 @@ export class WebApiSpotifyClient implements SpotifyClient {
                 const api = getSpotifyWebApi();
                 try {
                     if (api) {
-                        log('GETTING STATUS')
+                        log('GETTING STATUS');
+
                         const player = await api.player.get();
                         if (!player) {
                             reject(NOT_RUNNING_REASON);
                             return;
                         }
+
                         log('GOT STATUS', JSON.stringify(player));
-                        !canceled && _cb({
-                            isRunning: player.device.is_active,
-                            playerState: {
-                                //fixme more than two states
-                                isRepeating: player.repeat_state !== "off",
-                                isShuffling: player.shuffle_state,
-                                position: player.progress_ms,
-                                state: player.is_playing ? 'playing' : 'paused',
-                                volume: player.device.volume_percent
-                            },
-                            track: {
-                                album: player.item.album.name,
-                                artist: artistsToArtist(player.item.artists),
-                                name: player.item.name
-                            },
-                            context: player.context ? {
-                                uri: player.context.uri,
-                                trackNumber: player.item.track_number
-                            } : void 0
-                        });
+
+                        if (!canceled) {
+                            _cb({
+                                isRunning: player.device.is_active,
+                                playerState: {
+                                    // fixme more than two states
+                                    isRepeating: player.repeat_state !== 'off',
+                                    isShuffling: player.shuffle_state,
+                                    position: player.progress_ms,
+                                    state: player.is_playing ? 'playing' : 'paused',
+                                    volume: player.device.volume_percent
+                                },
+                                track: {
+                                    album: player.item.album.name,
+                                    artist: artistsToArtist(player.item.artists),
+                                    name: player.item.name
+                                },
+                                context: player.context ? {
+                                    uri: player.context.uri,
+                                    trackNumber: player.item.track_number
+                                } : void 0
+                            });
+                        }
                     }
                 } catch (_e) {
                     reject(_e);
@@ -104,7 +111,7 @@ export class WebApiSpotifyClient implements SpotifyClient {
             };
             _poll();
         });
-        p.promise = p.promise.catch((err) => {            
+        p.promise = p.promise.catch(err => {
             canceled = true;
             throw err;
         });
@@ -159,7 +166,7 @@ export class WebApiSpotifyClient implements SpotifyClient {
     @withApi()
     async toggleRepeating(api?: Api) {
         const { playerState } = getState();
-        //fixme more than two states
+        // fixme more than two states
         await api!.player.repeat.put((!playerState.isRepeating) ? 'context' : 'off');
         this._queryStatusFunc();
     }

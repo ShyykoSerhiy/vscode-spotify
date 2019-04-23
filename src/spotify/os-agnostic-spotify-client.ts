@@ -1,27 +1,25 @@
-import { SpotifyClient, createCancelablePromise } from './spotify-client';
-import { ISpotifyStatusStatePartial } from '../state/state';
 import { showInformationMessage } from '../info/info';
+import { ISpotifyStatusStatePartial } from '../state/state';
+
+import { createCancelablePromise, SpotifyClient } from './spotify-client';
 
 function notSupported(_ignoredTarget: any, _ignoredPropertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
-    const fn = descriptor.value as Function;
+    const fn = descriptor.value;
 
     if (typeof fn !== 'function') {
-        throw new Error(`@notSupported can only be applied to method and not to ${typeof fn}`)
+        throw new Error(`@notSupported can only be applied to method and not to ${typeof fn}`);
     }
 
     return Object.assign({}, descriptor, {
-        value: function () {
+        value() {
             showInformationMessage('This functionality is not supported on this platform.');
             return;
         }
-    })
+    });
 }
 
+// tslint:disable:no-empty
 export class OsAgnosticSpotifyClient implements SpotifyClient {
-
-    constructor() {
-    }
-
     get queryStatusFunc() {
         return this.next;
     }

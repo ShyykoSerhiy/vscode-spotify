@@ -1,8 +1,10 @@
-import { window, StatusBarItem, StatusBarAlignment } from 'vscode';
-import { SpotifyControls } from './spotify-controls';
-import { getTrackInfoFormat, getButtonPriority, getTrackInfoClickBehaviour } from '../config/spotify-config';
+import { StatusBarAlignment, StatusBarItem, window } from 'vscode';
+
+import { getButtonPriority, getTrackInfoClickBehaviour, getTrackInfoFormat } from '../config/spotify-config';
+import { ILoginState, ITrack } from '../state/state';
 import { getState, getStore } from '../store/store';
-import { ITrack, ILoginState } from '../state/state';
+
+import { SpotifyControls } from './spotify-controls';
 
 export class SpotifyStatus {
     /**
@@ -14,14 +16,14 @@ export class SpotifyStatus {
 
     constructor() {
         getStore().subscribe(() => {
-            this.render()
+            this.render();
         });
     }
 
     /**
      * Updates spotify status bar inside vscode
      */
-    public render() {
+    render() {
         const state = getState();
         // Create as needed
         if (!this._statusBarItem) {
@@ -39,9 +41,9 @@ export class SpotifyStatus {
 
         if (state.isRunning) {
             const { state: playing, volume, isRepeating, isShuffling } = state.playerState;
-            var text = _formattedTrackInfo(state.track);
+            const text = this.formattedTrackInfo(state.track);
             let toRedraw = false;
-            if (text !== this._statusBarItem.text) {//we need this guard to prevent flickering
+            if (text !== this._statusBarItem.text) {// we need this guard to prevent flickering
                 this._statusBarItem.text = text;
                 toRedraw = true;
             }
@@ -64,6 +66,7 @@ export class SpotifyStatus {
             this._spotifyControls.hideAll();
         }
     }
+
     /**
      * Disposes status bar items(if exist)
      */
@@ -75,17 +78,15 @@ export class SpotifyStatus {
             this._spotifyControls.dispose();
         }
     }
-}
 
-function _formattedTrackInfo(track: ITrack): string {
-    const { album, artist, name } = track;
-    const keywordsMap: { [index: string]: string } = {
-        albumName: album,
-        artistName: artist,
-        trackName: name,
+    private formattedTrackInfo(track: ITrack): string {
+        const { album, artist, name } = track;
+        const keywordsMap: { [index: string]: string } = {
+            albumName: album,
+            artistName: artist,
+            trackName: name
+        };
+
+        return getTrackInfoFormat().replace(/albumName|artistName|trackName/gi, matched => keywordsMap[matched]);
     }
-    let a = getTrackInfoFormat().replace(/albumName|artistName|trackName/gi, matched => {
-        return keywordsMap[matched];
-    });
-    return a;
 }

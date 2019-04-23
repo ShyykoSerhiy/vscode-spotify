@@ -1,14 +1,23 @@
-import { ISpotifyStatusState, getDefaultState, DUMMY_PLAYLIST } from '../state/state';
-import { Action, UPDATE_STATE_ACTION, SIGN_IN_ACTION, PLAYLISTS_LOAD_ACTION, SELECT_PLAYLIST_ACTION, TRACKS_LOAD_ACTION, SIGN_OUT_ACTION, SELECT_TRACK_ACTION } from '../actions/actions';
+import {
+    Action,
+    PLAYLISTS_LOAD_ACTION,
+    SELECT_PLAYLIST_ACTION,
+    SELECT_TRACK_ACTION,
+    SIGN_IN_ACTION,
+    SIGN_OUT_ACTION,
+    TRACKS_LOAD_ACTION,
+    UPDATE_STATE_ACTION
+} from '../actions/actions';
 import { log } from '../info/info';
+import { DEFAULT_STATE, DUMMY_PLAYLIST, ISpotifyStatusState } from '../state/state';
 
-export function update<T>(obj: T, update: Partial<T>): T {
-    return Object.assign({}, obj, update);
+export function update<T>(obj: T, propertyUpdate: Partial<T>): T {
+    return Object.assign({}, obj, propertyUpdate);
 }
 
 export default function (state: ISpotifyStatusState, action: Action): ISpotifyStatusState {
     log('root-reducer', action.type, JSON.stringify(action));
-    if (action.type === UPDATE_STATE_ACTION) {        
+    if (action.type === UPDATE_STATE_ACTION) {
         return update(state, action.state);
     }
     if (action.type === SIGN_IN_ACTION) {
@@ -19,7 +28,7 @@ export default function (state: ISpotifyStatusState, action: Action): ISpotifySt
         });
     }
     if (action.type === SIGN_OUT_ACTION) {
-        return getDefaultState();
+        return DEFAULT_STATE;
     }
     if (action.type === PLAYLISTS_LOAD_ACTION) {
         return update(state, {

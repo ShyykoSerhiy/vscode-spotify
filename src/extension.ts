@@ -1,17 +1,18 @@
 import { ExtensionContext, window } from 'vscode';
+
 import { createCommands } from './commands';
 import { SpotifyStatus } from './components/spotify-status';
-import { SpotifyStatusController } from './spotify-status-controller';
+import { connectPlaylistTreeView, TreePlaylistProvider } from './components/tree-playlists';
+import { connectTrackTreeView, TreeTrackProvider } from './components/tree-track';
 import { registerGlobalState } from './config/spotify-config';
-import { getStore } from './store/store';
-import { TreePlaylistProvider, connectPlaylistTreeView } from './components/tree-playlists';
-import { TreeTrackProvider, connectTrackTreeView } from './components/tree-track';
+import { SpotifyStatusController } from './spotify-status-controller';
 import { SpoifyClientSingleton } from './spotify/spotify-client';
+import { getStore } from './store/store';
 
 // This method is called when your extension is activated. Activation is
 // controlled by the activation events defined in package.json.
 export function activate(context: ExtensionContext) {
-    // This line of code will only be executed once when your extension is activated.        
+    // This line of code will only be executed once when your extension is activated.
     registerGlobalState(context.globalState);
     getStore(context.globalState);
     const spotifyStatus = new SpotifyStatus();

@@ -1,9 +1,11 @@
+import * as os from 'os';
+
+import { getForceWebApiImplementation } from '../config/spotify-config';
+import { ISpotifyStatusStatePartial } from '../state/state';
+
 import { LinuxSpotifyClient } from './linux-spotify-client';
 import { OsxSpotifyClient } from './osx-spotify-client';
-import { ISpotifyStatusStatePartial } from '../state/state';
-import * as os from 'os';
 import { WebApiSpotifyClient } from './web-api-spotify-client';
-import { getForceWebApiImplementation } from '../config/spotify-config';
 
 export function isWebApiSpotifyClient() {
     const platform = os.platform();
@@ -11,8 +13,8 @@ export function isWebApiSpotifyClient() {
 }
 
 export class SpoifyClientSingleton {
-    public static spotifyClient: SpotifyClient;
-    public static getSpotifyClient(queryStatus: QueryStatusFunction) {
+    static spotifyClient: SpotifyClient;
+    static getSpotifyClient(queryStatus: QueryStatusFunction) {
         if (this.spotifyClient) {
             return this.spotifyClient;
         }
@@ -37,15 +39,18 @@ export class SpoifyClientSingleton {
 export const CANCELED_REASON = 'canceled' as 'canceled';
 export const NOT_RUNNING_REASON = 'not_running' as 'not_running';
 
-export function createCancelablePromise<T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void) {
+export function createCancelablePromise<T>(
+    executor: (resolve: (value?: T | PromiseLike<T>) => void,
+    reject: (reason?: any) => void) => void
+) {
     let cancel: () => void = null as any;
     const promise = new Promise<T>((resolve, reject) => {
         cancel = () => {
             reject(CANCELED_REASON);
-        }
+        };
         executor(resolve, reject);
-    })
-    return { promise, cancel }
+    });
+    return { promise, cancel };
 }
 
 export type QueryStatusFunction = () => void;

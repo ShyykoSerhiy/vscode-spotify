@@ -1,14 +1,15 @@
 import * as express from 'express';
 import { Server } from 'http';
+
 import { getAuthServerUrl } from '../../config/spotify-config';
 import { log } from '../../info/info';
 
 export interface CreateDisposableAuthSeverPromiseResult {
-    access_token: string,
-    refresh_token: string,
+    access_token: string;
+    refresh_token: string;
 }
 
-export const createDisposableAuthSever = () => {
+export function createDisposableAuthSever() {
     let server: Server;
     const createServerPromise = new Promise<CreateDisposableAuthSeverPromiseResult>((res, rej) => {
         setTimeout(() => {
@@ -17,7 +18,7 @@ export const createDisposableAuthSever = () => {
         try {
             const app = express();
 
-            app.get('/callback', function (request, response) {
+            app.get('/callback', (request, response) => {
                 const { access_token, refresh_token, error } = request.query;
                 if (!error) {
                     res({ access_token, refresh_token });
@@ -35,10 +36,9 @@ export const createDisposableAuthSever = () => {
     });
 
     return {
-        createServerPromise, dispose: () => {
-            server && server.close(() => {
-                log('server closed');
-            });
-        }
-    }
+        createServerPromise,
+        dispose: () => server && server.close(() => {
+            log('server closed');
+        })
+    };
 }

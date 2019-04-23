@@ -1,22 +1,23 @@
-import { SpotifyClient, createCancelablePromise, QueryStatusFunction } from './spotify-client';
 import { exec } from 'child_process';
-import { OsAgnosticSpotifyClient } from './os-agnostic-spotify-client';
-import { ISpotifyStatusStatePartial } from '../state/state';
-import { log } from '../info/info';
 
-const SP_DEST = "org.mpris.MediaPlayer2.spotify"
-const SP_PATH = "/org/mpris/MediaPlayer2"
-const SP_MEMB = "org.mpris.MediaPlayer2.Player"
-const DB_P_GET = "org.freedesktop.DBus.Properties.Get";
-const createCommandString = (command: string) => {
-    return `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.${command}`
-}
-const PlayPauseDebianCmd = createCommandString('PlayPause');
-const PauseDebianCmd = createCommandString('Pause')
-const PlayNextTrackDebianCmd = createCommandString('Next')
-const PlayPreviousTrackDebianCmd = createCommandString('Previous')
-const GetPlaybackStatus = `dbus-send --print-reply --dest=${SP_DEST} ${SP_PATH} ${DB_P_GET} string:${SP_MEMB} string:PlaybackStatus`
-//@see https://gist.github.com/wandernauta/6800547
+import { log } from '../info/info';
+import { ISpotifyStatusStatePartial } from '../state/state';
+
+import { OsAgnosticSpotifyClient } from './os-agnostic-spotify-client';
+import { createCancelablePromise, QueryStatusFunction, SpotifyClient } from './spotify-client';
+
+const SP_DEST = 'org.mpris.MediaPlayer2.spotify';
+const SP_PATH = '/org/mpris/MediaPlayer2';
+const SP_MEMB = 'org.mpris.MediaPlayer2.Player';
+const DB_P_GET = 'org.freedesktop.DBus.Properties.Get';
+const createCommandString = (command: string) =>
+    `dbus-send  --print-reply --dest=${SP_DEST} ${SP_PATH} ${SP_MEMB}.${command}`;
+const playPauseDebianCmd = createCommandString('PlayPause');
+const pauseDebianCmd = createCommandString('Pause');
+const playNextTrackDebianCmd = createCommandString('Next');
+const playPreviousTrackDebianCmd = createCommandString('Previous');
+const getPlaybackStatus = `dbus-send --print-reply --dest=${SP_DEST} ${SP_PATH} ${DB_P_GET} string:${SP_MEMB} string:PlaybackStatus`;
+// @see https://gist.github.com/wandernauta/6800547
 /**
  * Example response
 trackid|spotify:track:4SQ0ytpTP8v1Rx8FWR22cv
@@ -31,7 +32,7 @@ title|The War
 trackNumber|6
 url|https://open.spotify.com/track/4SQ0ytpTP8v1Rx8FWR22cv
  */
-const GetMetadataCommand = `dbus-send                                                                   \
+const getMetadataCommand = `dbus-send                                                                   \
 --print-reply                                                                 \\
 --dest=${SP_DEST}                                                             \\
 ${SP_PATH}                                                                    \\
@@ -46,37 +47,40 @@ string:"${SP_MEMB}" string:'Metadata'                                         \\
 | sed -E 's/^"//'                                                         \\
 | sed -E 's/"$//'                                                          \\
 | sed -E 's/"+/|/'                                                           \\
-| sed -E 's/ +/ /g'                            
+| sed -E 's/ +/ /g'
 `;
 
-const terminalCommand = (cmd: string) => {
+const terminalCommand = (cmd: string) =>
     /**
      * This is a wrapper for executing terminal commands
      * by using NodeJs' built in "child process" library.
      * This function initially returns a Promise.
-     * 
+     *
      * @param {string} cmd This is the command to execute
      * @return {string} the standard output of the executed command on successful execution
      * @return {boolean} returns false if the executed command is unsuccessful
-     * 
+     *
      */
-    return new Promise<string>((resolve, _reject) => {
+    new Promise<string>((resolve, _reject) => {
         exec(cmd, (e, stdout, stderr) => {
             if (e) { return resolve(''); }
             if (stderr) { return resolve(''); }
             resolve(stdout);
         });
     });
-};
 
-interface ICurrentVol { sinkNum: string | null, volume: number }
+interface ICurrentVol { sinkNum: string | null; volume: number; }
 
 export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements SpotifyClient {
+    get queryStatusFunc() {
+        return this._queryStatusFunc;
+    }
+
     private currentOnVolume: number;
-    private _queryStatusFunc: QueryStatusFunction
+    private _queryStatusFunc: QueryStatusFunction;
 
     constructor(_queryStatusFunc: QueryStatusFunction) {
-        super()
+        super();
         this._queryStatusFunc = () => {
             // spotify with dbfus doesn't return correct state right after next/prev/pause/play
             // command executtion. we need to wait
@@ -84,39 +88,6 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
         };
     }
 
-    get queryStatusFunc() {
-        return this._queryStatusFunc;
-    }
-
-    private async getStatus(): Promise<ISpotifyStatusStatePartial> {
-        try {
-            const playbackStatus = await terminalCommand(GetPlaybackStatus);
-            const metadata = await terminalCommand(GetMetadataCommand);
-            if (!playbackStatus || !metadata) {
-                throw new Error('Spotify isn\'t running');
-            }
-            const state = ~playbackStatus.indexOf('Playing') ? 'playing' : 'paused';
-
-            const result: ISpotifyStatusStatePartial = {
-                playerState: {
-                    state,
-                    volume: 100,//dbus doesn't return real value for this 
-                    position: 0,//dbus doesn't return real value for this,
-                    isRepeating: false,//dbus doesn't return real value for this
-                    isShuffling: false,//dbus doesn't return real value for this    
-                },
-                track: {
-                    album: (/album\|(.+)/g.exec(metadata) || [])[1],
-                    artist: (/artist\|(.+)/g.exec(metadata) || [])[1],
-                    name: (/title\|(.+)/g.exec(metadata) || [])[1]
-                },
-                isRunning: true
-            }
-            return result;
-        } catch (_ignored) {
-        }
-        return Promise.reject<ISpotifyStatusStatePartial>('Spotify isn\'t running');
-    }
     pollStatus(cb: (status: ISpotifyStatusStatePartial) => void, getInterval: () => number) {
         let canceled = false;
         const p = createCancelablePromise<void>((_, reject) => {
@@ -126,12 +97,12 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
                 }
                 this.getStatus().then(status => {
                     cb(status);
-                    setTimeout(() => _poll(), getInterval());
+                    setTimeout(_poll, getInterval());
                 }).catch(reject);
             };
             _poll();
         });
-        p.promise = p.promise.catch((err) => {
+        p.promise = p.promise.catch(err => {
             canceled = true;
             throw err;
         });
@@ -139,51 +110,51 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
     }
 
     play() {
-        terminalCommand(PlayPauseDebianCmd)
+        terminalCommand(playPauseDebianCmd);
     }
 
     pause() {
-        terminalCommand(PauseDebianCmd)
+        terminalCommand(pauseDebianCmd);
     }
 
     async playPause() {
-        await terminalCommand(PlayPauseDebianCmd)
-        this._queryStatusFunc()
+        await terminalCommand(playPauseDebianCmd);
+        this._queryStatusFunc();
     }
 
     async next() {
-        await terminalCommand(PlayNextTrackDebianCmd)
-        this._queryStatusFunc()
+        await terminalCommand(playNextTrackDebianCmd);
+        this._queryStatusFunc();
     }
 
     async previous() {
-        await terminalCommand(PlayPreviousTrackDebianCmd)
-        this._queryStatusFunc()
+        await terminalCommand(playPreviousTrackDebianCmd);
+        this._queryStatusFunc();
     }
 
+    /**
+     *  This function checks to see which "Sinked Input #"
+     *  is actually running spotify.
+     *
+     *  @param s The sting that might be contain the Sinked Input #
+     *  we are looking for.
+     *  @return This function was intended to be used with map in order
+     *  to remap an Array where there should only be one element after we "findSpotify"
+     */
     findSpotify(s: string) {
-        /**
-         *  This function checks to see which "Sinked Input #"
-         *  is actually running spotify.
-         * 
-         *  @param {string} s The sting that might be contain the Sinked Input #
-         *  we are looking for.
-         *  @return {boolean} This function was intended to be used with map in order
-         *  to remap an Array where there should only be one element after we "findSpotify"
-         */
-        let foundSpotifySink = s.match(/(Spotify)/i)
-        return (foundSpotifySink != null) ? ((foundSpotifySink.length > 1) ? true : false) : false
+        const foundSpotifySink = s.match(/(Spotify)/i);
+        return (foundSpotifySink != null) ? ((foundSpotifySink.length > 1) ? true : false) : false;
     }
 
     async getCurrentVolume(): Promise<ICurrentVol> {
         try {
             const d = await terminalCommand('pactl list sink-inputs');
-            const sinkedArr = d.split('Sinked Input #')
+            const sinkedArr = d.split('Sinked Input #');
             const a = sinkedArr ? sinkedArr.filter(this.findSpotify) : [];
             if (a.length > 0) {
-                let currentVol = a[0].match(/(\d{1,3})%/i);
+                const currentVol = a[0].match(/(\d{1,3})%/i);
                 if (currentVol != null) {
-                    let sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
+                    const sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
                     if (currentVol.length > 1) {
                         if (parseInt(currentVol[1]) >= 0 && sinkNum != null) {
                             return { sinkNum: sinkNum[1], volume: parseInt(currentVol[1]) };
@@ -191,9 +162,9 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
                     }
                 }
             }
-        } catch (_ignored) {
+        } finally {
+            return { sinkNum: null, volume: 0 };
         }
-        return { sinkNum: null, volume: 0 };
     }
 
     async muteVolume(currentVol?: ICurrentVol) {
@@ -225,35 +196,65 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
     volumeUp() {
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
-                let sinkedArr = d.split('Sinked Input #')
-                return (sinkedArr != null) ? sinkedArr.filter(this.findSpotify) : []
+                const sinkedArr = d.split('Sinked Input #');
+                return (sinkedArr != null) ? sinkedArr.filter(this.findSpotify) : [];
             })
             .then((a: string[]) => {
                 if (a.length > 0) {
-                    let sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
+                    const sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
                     if (sinkNum != null) {
-                        terminalCommand('pactl set-sink-input-volume ' + sinkNum[1] + ' +5%')
+                        terminalCommand(`pactl set-sink-input-volume ${sinkNum[1]} +5%)`);
                     }
                 }
             })
-            .catch(e => log(e))
+            .catch(log);
     }
 
     volumeDown() {
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
-                let sinkedArr = d.split('Sinked Input #')
-                return (sinkedArr != null) ? sinkedArr.filter(this.findSpotify) : []
+                const sinkedArr = d.split('Sinked Input #');
+                return (sinkedArr != null) ? sinkedArr.filter(this.findSpotify) : [];
             })
             .then((a: string[]) => {
                 if (a.length > 0) {
-                    let sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
+                    const sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
                     if (sinkNum != null) {
-                        terminalCommand('pactl set-sink-input-volume ' + sinkNum[1] + ' -5%')
+                        terminalCommand(`pactl set-sink-input-volume ${sinkNum[1]} -5%`);
                     }
                 }
             })
-            .catch(e => log(e))
+            .catch(log);
+    }
+
+    private async getStatus(): Promise<ISpotifyStatusStatePartial> {
+        try {
+            const playbackStatus = await terminalCommand(getPlaybackStatus);
+            const metadata = await terminalCommand(getMetadataCommand);
+            if (!playbackStatus || !metadata) {
+                throw new Error(`Spotify isn't running`);
+            }
+            const state = playbackStatus.indexOf('Playing') ? 'playing' : 'paused';
+
+            const result: ISpotifyStatusStatePartial = {
+                playerState: {
+                    state,
+                    volume: 100, // dbus doesn't return real value for this
+                    position: 0, // dbus doesn't return real value for this,
+                    isRepeating: false, // dbus doesn't return real value for this
+                    isShuffling: false// dbus doesn't return real value for this
+                },
+                track: {
+                    album: (/album\|(.+)/g.exec(metadata) || [])[1],
+                    artist: (/artist\|(.+)/g.exec(metadata) || [])[1],
+                    name: (/title\|(.+)/g.exec(metadata) || [])[1]
+                },
+                isRunning: true
+            };
+            return result;
+        } finally {
+            return Promise.reject<ISpotifyStatusStatePartial>(`Spotify isn't running`);
+        }
     }
 
     private _setVolume(sinkNum: string, volume: number) {

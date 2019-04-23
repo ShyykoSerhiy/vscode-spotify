@@ -1,7 +1,8 @@
-import { SpoifyClientSingleton, CANCELED_REASON } from './spotify/spotify-client';
-import { getStatusCheckInterval } from './config/spotify-config';
-import { actionsCreator } from './actions/actions';
 import autobind from 'autobind-decorator';
+
+import { actionsCreator } from './actions/actions';
+import { getStatusCheckInterval } from './config/spotify-config';
+import { CANCELED_REASON, SpoifyClientSingleton } from './spotify/spotify-client';
 
 export class SpotifyStatusController {
     private _retryCount: number;
@@ -21,7 +22,7 @@ export class SpotifyStatusController {
      * Retrieves status of spotify and passes it to spotifyStatus;
      */
     @autobind
-    public queryStatus() {
+    queryStatus() {
         this._cancelPreviousPoll();
         const { promise, cancel } = SpoifyClientSingleton.getSpotifyClient(this.queryStatus).pollStatus(status => {
             actionsCreator.updateStateAction(status);
@@ -31,8 +32,12 @@ export class SpotifyStatusController {
         promise.catch(this.clearState);
     }
 
+    dispose() {
+        this._cancelPreviousPoll();
+    }
+
     private clearState = (reason: any) => {
-        // canceling of the promise only happens when method queryStatus is triggered. 
+        // canceling of the promise only happens when method queryStatus is triggered.
         if (reason !== CANCELED_REASON) {
             this._retryCount++;
             if (this._retryCount >= this._maxRetryCount) {
@@ -46,15 +51,13 @@ export class SpotifyStatusController {
                 });
                 this._retryCount = 0;
             }
-            setTimeout(this.queryStatus, getStatusCheckInterval());            
+            setTimeout(this.queryStatus, getStatusCheckInterval());
         }
-    };
-
-    dispose() {
-        this._cancelPreviousPoll();
     }
 
     private _cancelPreviousPoll() {
-        this._cancelCb && this._cancelCb();
+        if (this._cancelCb) {
+            this._cancelCb();
+        }
     }
 }

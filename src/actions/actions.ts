@@ -1,19 +1,20 @@
-import { commands, Uri, window } from 'vscode';
-import { ISpotifyStatusState, ILoginState, DUMMY_PLAYLIST } from '../state/state';
-import { getStore, getState } from '../store/store';
-import { getAuthServerUrl } from '../config/spotify-config'
-import { createDisposableAuthSever } from '../auth/server/local';
-import { showInformationMessage, showWarningMessage, log } from '../info/info';
-import { getApi, Api } from '@vscodespotify/spotify-common/lib/spotify/api';
+import { Api, getApi } from '@vscodespotify/spotify-common/lib/spotify/api';
 import { Playlist, Track } from '@vscodespotify/spotify-common/lib/spotify/consts';
 import autobind from 'autobind-decorator';
+import { commands, Uri, window } from 'vscode';
+
+import { createDisposableAuthSever } from '../auth/server/local';
+import { getAuthServerUrl } from '../config/spotify-config';
+import { log, showInformationMessage, showWarningMessage } from '../info/info';
+import { DUMMY_PLAYLIST, ILoginState, ISpotifyStatusState } from '../state/state';
+import { getState, getStore } from '../store/store';
 import { artistsToArtist } from '../utils/utils';
 
 export function withApi() {
-    return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
+    return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = function (...args: any[]) {
+        descriptor.value = (...args: any[]) => {
             const api = getSpotifyWebApi();
             if (api) {
                 return originalMethod.apply(this, [...args, api]);
@@ -23,14 +24,14 @@ export function withApi() {
         };
 
         return descriptor;
-    }
+    };
 }
 
 export function withErrorAsync() {
-    return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
+    return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = async function (...args: any[]) {
+        descriptor.value = async (...args: any[]) => {
             try {
                 return await originalMethod.apply(this, args);
             } catch (e) {
@@ -39,14 +40,14 @@ export function withErrorAsync() {
         };
 
         return descriptor;
-    }
+    };
 }
 
 function actionCreator() {
-    return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
+    return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = function (...args: any[]) {
+        descriptor.value = (...args: any[]) => {
             const action = originalMethod.apply(this, args);
             if (!action) {
                 return;
@@ -55,14 +56,14 @@ function actionCreator() {
         };
 
         return descriptor;
-    }
+    };
 }
 
 function asyncActionCreator() {
-    return function (_target: any, _key: any, descriptor: PropertyDescriptor) {
+    return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = async function (...args: any[]) {
+        descriptor.value = async (...args: any[]) => {
             let action;
             try {
                 action = await originalMethod.apply(this, args);
@@ -76,7 +77,7 @@ function asyncActionCreator() {
         };
 
         return descriptor;
-    }
+    };
 }
 
 const apiMap = new WeakMap<ILoginState, Api>();
@@ -93,7 +94,7 @@ export const getSpotifyWebApi = () => {
     let api = apiMap.get(loginState);
     if (!api) {
         api = getApi(getAuthServerUrl(), loginState.accessToken, loginState.refreshToken, (token: string) => {
-            actionsCreator._actionSignIn(token, loginState.refreshToken)
+            actionsCreator._actionSignIn(token, loginState.refreshToken);
         });
         apiMap.set(loginState, api);
     }
@@ -109,44 +110,44 @@ export const TRACKS_LOAD_ACTION = 'TRACKS_LOAD_ACTION' as 'TRACKS_LOAD_ACTION';
 export const SELECT_TRACK_ACTION = 'SELECT_TRACK_ACTION' as 'SELECT_TRACK_ACTION';
 
 export interface UpdateStateAction {
-    type: typeof UPDATE_STATE_ACTION,
-    state: Partial<ISpotifyStatusState>
+    type: typeof UPDATE_STATE_ACTION;
+    state: Partial<ISpotifyStatusState>;
 }
 
 export interface SignInAction {
-    type: typeof SIGN_IN_ACTION
-    accessToken: string
-    refreshToken: string
+    type: typeof SIGN_IN_ACTION;
+    accessToken: string;
+    refreshToken: string;
 }
 
 export interface SignOutAction {
-    type: typeof SIGN_OUT_ACTION
+    type: typeof SIGN_OUT_ACTION;
 }
 
 export interface PlaylistsLoadAction {
-    type: typeof PLAYLISTS_LOAD_ACTION
-    playlists: Playlist[]
+    type: typeof PLAYLISTS_LOAD_ACTION;
+    playlists: Playlist[];
 }
 
 export interface TracksLoadAction {
-    type: typeof TRACKS_LOAD_ACTION
-    playlist: Playlist,
-    tracks: Track[]
+    type: typeof TRACKS_LOAD_ACTION;
+    playlist: Playlist;
+    tracks: Track[];
 }
 
 export interface SelectPlaylistAction {
-    type: typeof SELECT_PLAYLIST_ACTION
-    playlist: Playlist
+    type: typeof SELECT_PLAYLIST_ACTION;
+    playlist: Playlist;
 }
 
 export interface SelectTrackAction {
-    type: typeof SELECT_TRACK_ACTION
-    track: Track
+    type: typeof SELECT_TRACK_ACTION;
+    track: Track;
 }
 
 class ActionCreator {
     @autobind
-    @actionCreator()    
+    @actionCreator()
     updateStateAction(state: Partial<ISpotifyStatusState>): UpdateStateAction {
         return {
             type: UPDATE_STATE_ACTION,
@@ -156,17 +157,17 @@ class ActionCreator {
 
     @autobind
     @asyncActionCreator()
-    @withApi()    
+    @withApi()
     async loadPlaylists(api?: Api): Promise<PlaylistsLoadAction> {
         const playlists = await api!.playlists.getAll();
         return {
             type: PLAYLISTS_LOAD_ACTION,
-            playlists: playlists
+            playlists
         };
     }
 
     @autobind
-    @actionCreator()    
+    @actionCreator()
     selectPlaylistAction(p: Playlist): SelectPlaylistAction {
         return {
             type: SELECT_PLAYLIST_ACTION,
@@ -175,7 +176,7 @@ class ActionCreator {
     }
 
     @autobind
-    @actionCreator()    
+    @actionCreator()
     selectTrackAction(track: Track): SelectTrackAction {
         return {
             type: SELECT_TRACK_ACTION,
@@ -187,23 +188,23 @@ class ActionCreator {
     selectCurrentTrack() {
         const state = getState();
         if (state.playerState && state.track) {
-            const currentTrack = state.track;
             let track: Track;
-            const playlist = state.playlists.find((p) => {
+            const currentTrack = state.track;
+            const playlist = state.playlists.find(p => {
                 const tracks = state.tracks.get(p.id);
                 if (tracks) {
-                    const foundTrack = tracks.find((t) => {
-                        return t.track.name === currentTrack.name &&
-                            t.track.album.name === currentTrack.album &&
-                            artistsToArtist(t.track.artists) === currentTrack.artist
-                    });
+                    const foundTrack = tracks.find(t => t.track.name === currentTrack.name
+                        && t.track.album.name === currentTrack.album
+                        && artistsToArtist(t.track.artists) === currentTrack.artist);
+
                     if (foundTrack) {
                         track = foundTrack;
                         return true;
-                    }                    
+                    }
                 }
                 return false;
             });
+
             if (playlist) {
                 this.selectPlaylistAction(playlist);
                 this.selectTrackAction(track!);
@@ -223,13 +224,13 @@ class ActionCreator {
         }
         const { tracks } = getState();
         if (!tracks.has(playlist.id)) {
-            this.loadTracks(playlist)
+            this.loadTracks(playlist);
         }
     }
 
     @autobind
     @asyncActionCreator()
-    @withApi()    
+    @withApi()
     async loadTracks(playlist?: Playlist, api?: Api): Promise<TracksLoadAction | undefined> {
         if (!playlist || playlist.id === DUMMY_PLAYLIST.id) {
             return void 0;
@@ -237,29 +238,29 @@ class ActionCreator {
         const tracks = await api!.playlists.tracks.getAll(playlist);
         return {
             type: TRACKS_LOAD_ACTION,
-            playlist: playlist,
-            tracks: tracks
+            playlist,
+            tracks
         };
     }
 
     @autobind
     @withErrorAsync()
-    @withApi()    
+    @withApi()
     async playTrack(offset: number, playlist: Playlist, api?: Api): Promise<undefined> {
         await api!.player.play.put({
-            offset: offset,
+            offset,
             albumUri: playlist.uri
         });
         return;
     }
 
-    @autobind    
+    @autobind
     actionSignIn() {
         commands.executeCommand('vscode.open', Uri.parse(`${getAuthServerUrl()}/login`)).then(() => {
             const { createServerPromise, dispose } = createDisposableAuthSever();
             createServerPromise.then(({ access_token, refresh_token }) => {
                 this._actionSignIn(access_token, refresh_token);
-            }).catch((e) => {
+            }).catch(e => {
                 showInformationMessage(`Failed to retrieve access token : ${JSON.stringify(e)}`);
             }).then(() => {
                 dispose();
@@ -268,7 +269,7 @@ class ActionCreator {
     }
 
     @autobind
-    @actionCreator()    
+    @actionCreator()
     _actionSignIn(accessToken: string, refreshToken: string): SignInAction {
         return {
             accessToken,
