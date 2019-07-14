@@ -7,8 +7,8 @@ export function showInformationMessage(message: string) {
     window.showInformationMessage(`vscode-spotify: ${message}`);
 }
 
-export function showWarningMessage(message: string) {
-    window.showWarningMessage(`vscode-spotify: ${message}`);
+export function showWarningMessage(message: string, ...items: string[]) {
+    return window.showWarningMessage(`vscode-spotify: ${message}`, ...items);
 }
 
 export function log(...args: any[]) {
