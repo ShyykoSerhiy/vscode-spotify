@@ -76,7 +76,7 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
         return this._queryStatusFunc;
     }
 
-    private currentOnVolume: number;
+    private currentOnVolume?: number;
     private _queryStatusFunc: QueryStatusFunction;
 
     constructor(_queryStatusFunc: QueryStatusFunction) {

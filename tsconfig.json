@@ -3,24 +3,22 @@
 		"module": "commonjs",
 		"target": "ES6",
 		"outDir": "out",
+		"lib": [
+			"es6"
+		],
 		"sourceMap": true,
-		"noImplicitAny": true,
+		"strict": true,		
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUnusedLocals": true,
 		"noUnusedParameters": true,
-		"strictNullChecks": true,
 		"experimentalDecorators": true,
 		"skipLibCheck": true,
-		"alwaysStrict": true
 	},
 	"include": [
-		"src/**/*"
+		"src/**/*",
+		"typings/**/*"
     ],
 	"exclude": [
 		"node_modules"
-	],
-	"files": [
-        "typings/spotify-node-applescript.d.ts"
-    ]
+	]	
 }

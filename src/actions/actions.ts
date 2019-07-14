@@ -14,10 +14,10 @@ export function withApi() {
     return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = (...args: any[]) => {
+        descriptor.value = function (...args: any[]) {
             const api = getSpotifyWebApi();
             if (api) {
-                return originalMethod.apply(this, [...args, api]);
+                return originalMethod.apply(this as any, [...args, api]);
             } else {
                 showWarningMessage('You should be logged in order to use this feature.');
             }
@@ -31,7 +31,7 @@ export function withErrorAsync() {
     return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = async (...args: any[]) => {
+        descriptor.value = async function (...args: any[]) {
             try {
                 return await originalMethod.apply(this, args);
             } catch (e) {
@@ -47,7 +47,7 @@ function actionCreator() {
     return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = (...args: any[]) => {
+        descriptor.value = function (...args: any[]) {
             const action = originalMethod.apply(this, args);
             if (!action) {
                 return;
@@ -63,7 +63,7 @@ function asyncActionCreator() {
     return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = async (...args: any[]) => {
+        descriptor.value = async function (...args: any[]) {
             let action;
             try {
                 action = await originalMethod.apply(this, args);

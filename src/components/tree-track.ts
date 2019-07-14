@@ -39,10 +39,10 @@ export class TreeTrackProvider implements vscode.TreeDataProvider<Track> {
     readonly onDidChangeTreeDataEmitter: vscode.EventEmitter<Track | undefined> = new vscode.EventEmitter<Track | undefined>();
     readonly onDidChangeTreeData: vscode.Event<Track | undefined> = this.onDidChangeTreeDataEmitter.event;
 
-    private tracks: Track[];
+    private tracks: Track[] = [];
     private selectedPlaylist?: Playlist;
     private selectedTrack?: Track;
-    private view: vscode.TreeView<Track>;
+    private view?: vscode.TreeView<Track>;
 
     constructor() {
         getStore().subscribe(() => {

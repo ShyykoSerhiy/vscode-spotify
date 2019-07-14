@@ -9,7 +9,7 @@ import { artistsToArtist } from '../utils/utils';
 import { createCancelablePromise, NOT_RUNNING_REASON, QueryStatusFunction, SpotifyClient } from './spotify-client';
 
 export class WebApiSpotifyClient implements SpotifyClient {
-    private prevVolume: number;
+    private prevVolume?: number;
     private _queryStatusFunc: QueryStatusFunction;
 
     constructor(_queryStatusFunc: QueryStatusFunction) {

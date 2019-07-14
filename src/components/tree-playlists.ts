@@ -32,7 +32,7 @@ export class TreePlaylistProvider implements vscode.TreeDataProvider<Playlist> {
     readonly onDidChangeTreeDataEmitter: vscode.EventEmitter<Playlist | undefined> = new vscode.EventEmitter<Playlist | undefined>();
     readonly onDidChangeTreeData: vscode.Event<Playlist | undefined> = this.onDidChangeTreeDataEmitter.event;
 
-    private playlists: Playlist[];
+    private playlists: Playlist[] = [];
 
     constructor() {
         getStore().subscribe(() => {

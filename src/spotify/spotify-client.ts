@@ -1,16 +1,11 @@
 import * as os from 'os';
 
-import { getForceWebApiImplementation } from '../config/spotify-config';
 import { ISpotifyStatusStatePartial } from '../state/state';
 
 import { LinuxSpotifyClient } from './linux-spotify-client';
 import { OsxSpotifyClient } from './osx-spotify-client';
+import { isWebApiSpotifyClient } from './utils';
 import { WebApiSpotifyClient } from './web-api-spotify-client';
-
-export function isWebApiSpotifyClient() {
-    const platform = os.platform();
-    return (platform !== 'darwin' && platform !== 'linux') || getForceWebApiImplementation();
-}
 
 export class SpoifyClientSingleton {
     static spotifyClient: SpotifyClient;

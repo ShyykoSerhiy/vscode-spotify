@@ -1,7 +1,7 @@
 import { Memento, workspace } from 'vscode';
 
 import { BUTTON_ID_SIGN_IN, BUTTON_ID_SIGN_OUT } from '../consts/consts';
-import { isWebApiSpotifyClient } from '../spotify/spotify-client';
+import { isWebApiSpotifyClient } from '../spotify/utils';
 import { getState } from '../store/store';
 
 export function getConfig() {

@@ -2,6 +2,7 @@ import { extensions, StatusBarAlignment, StatusBarItem, window } from 'vscode';
 
 import { getButtonPriority, isButtonToBeShown } from '../config/spotify-config';
 import { BUTTON_ID_SIGN_IN, BUTTON_ID_SIGN_OUT } from '../consts/consts';
+import { log } from '../info/info';
 
 export interface Button {
     /**
@@ -65,12 +66,12 @@ export class SpotifyControls {
      * All buttons of vscode-spotify
      */
     private _buttons: Button[];
-    private _playPauseButton: ButtonWithDynamicText;
-    private _muteUnmuteVolumeButton: ButtonWithDynamicText;
-    private _toggleRepeatingButton: ButtonWithDynamicColor;
-    private _toggleShufflingButton: ButtonWithDynamicColor;
-    private _signInButton: Button;
-    private _signOutButton: Button;
+    private _playPauseButton?: ButtonWithDynamicText;
+    private _muteUnmuteVolumeButton?: ButtonWithDynamicText;
+    private _toggleRepeatingButton?: ButtonWithDynamicColor;
+    private _toggleShufflingButton?: ButtonWithDynamicColor;
+    private _signInButton?: Button;
+    private _signOutButton?: Button;
 
     constructor() {
         const buttonsInfo = [
@@ -182,12 +183,25 @@ export class SpotifyControls {
     dispose() {
         this.buttons.forEach(button => { button.statusBarItem.dispose(); });
     }
-    private _hideShowButton(button: Button) {
+    private _hideShowButton(button: Button | undefined) {
+        if (!button) {
+            return;
+        }
         button.visible = isButtonToBeShown(button.buttonName);
         button.visible ? button.statusBarItem.show() : button.statusBarItem.hide();
     }
 
-    private _updateText(button: ButtonWithDynamicText, condition: boolean): boolean {
+    /**
+     * Updates text based on passed condition.
+     * @param button button to change the text for.
+     * @param condition condition for this button. For example for pause/unpase button it can be 'paused' variable.
+     * @returns true if the text was changed and false otherwise
+     */
+    private _updateText(button: ButtonWithDynamicText | undefined, condition: boolean): boolean {
+        if (!button) {
+            return false;
+        }
+
         if (!isButtonToBeShown(button.buttonName)) {
             return false;
         }
@@ -199,7 +213,17 @@ export class SpotifyControls {
         return false;
     }
 
-    private _updateColor(button: ButtonWithDynamicColor, condition: boolean): boolean {
+    /**
+     * Updates color based on passed condition.
+     * @param button button to change the text for.
+     * @param condition condition for this button. For example for pause/unpase button it can be 'paused' variable.
+     * @returns true if the text was changed and false otherwise
+     */
+    private _updateColor(button: ButtonWithDynamicColor | undefined, condition: boolean): boolean {
+        if (!button) {
+            return false;
+        }
+
         if (!isButtonToBeShown(button.buttonName)) {
             return false;
         }
