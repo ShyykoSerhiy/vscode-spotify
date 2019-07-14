@@ -19,7 +19,9 @@ export function withApi() {
             if (api) {
                 return originalMethod.apply(this as any, [...args, api]);
             } else {
-                showWarningMessage('You should be logged in order to use this feature.');
+                showWarningMessage('You should be logged in order to use this feature. ' +
+                    'You can do this by executing `Spotify Sign In` command. Press Command(Ctrl)+P and print `>Spotify Sign In`. ' +
+                    'Note: this will work only for premium users and there is nothing I can to do about it.');
             }
         };
 
