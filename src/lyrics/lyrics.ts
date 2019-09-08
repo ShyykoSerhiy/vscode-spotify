@@ -46,7 +46,7 @@ export class LyricsController {
             await this._previewLyrics(`${result.responseText}`);
         } catch (e) {
             if (e.status === 404) {
-                await this._previewLyrics(`Song lyrics for ${artist} - ${name} not found.\n You can add it on https://genius.com/ .`);
+                await this._previewLyrics(`Song lyrics for ${artist} - ${name} not found.\nYou can add it on https://genius.com/ .`);
             }
             if (e.status === 500) {
                 await this._previewLyrics(`Error: ${e.responseText}`);
