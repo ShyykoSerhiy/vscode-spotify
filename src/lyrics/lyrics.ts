@@ -43,7 +43,7 @@ export class LyricsController {
             const result = await xhr({
                 url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(name)}`
             });
-            await this._previewLyrics(`${result.responseText}`);
+            await this._previewLyrics(`${artist} - ${name}\n\n${result.responseText.trim()}`);
         } catch (e) {
             if (e.status === 404) {
                 await this._previewLyrics(`Song lyrics for ${artist} - ${name} not found.\nYou can add it on https://genius.com/ .`);
@@ -55,7 +55,7 @@ export class LyricsController {
     }
 
     private async _previewLyrics(lyrics: string) {
-        LyricsController.LYRICS_CONTENT_PROVIDER.htmlContent = lyrics.trim();
+        LyricsController.LYRICS_CONTENT_PROVIDER.htmlContent = lyrics;
         LyricsController.LYRICS_CONTENT_PROVIDER.update(this.previewUri);
 
         try {
