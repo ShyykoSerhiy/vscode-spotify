@@ -40,8 +40,9 @@ export class LyricsController {
         const { artist, name } = state.track;
 
         try {
+            const cleanName = name.replace(/[\(\s\-]*[\d\s]*remastere?d?[\)\s]*$/i, '').trim();
             const result = await xhr({
-                url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(name)}`
+                url: `${getLyricsServerUrl()}?artist=${encodeURIComponent(artist)}&title=${encodeURIComponent(cleanName)}`
             });
             await this._previewLyrics(`${artist} - ${name}\n\n${result.responseText.trim()}`);
         } catch (e) {
