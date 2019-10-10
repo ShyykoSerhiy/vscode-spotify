@@ -427,5 +427,6 @@
     "request-light": "^0.2.1",
     "spotify-node-applescript": "1.1.1",
     "tslint": "^5.16.0"
-  }
+  },
+  "extensionKind": "ui"
 }
