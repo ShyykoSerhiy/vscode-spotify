@@ -158,7 +158,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "matijamrkaic",
+      "name": "Matija Mrkaic",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/2392130?v=4",
+      "profile": "http://korra.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "repoType": "github"
+  "repoType": "github",
+  "commitConvention": "none"
 }
