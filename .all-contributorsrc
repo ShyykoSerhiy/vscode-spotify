@@ -167,6 +167,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "marioortizmanero",
+      "name": "Mario",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/25647296?v=4",
+      "profile": "https://github.com/marioortizmanero",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "repoType": "github",
