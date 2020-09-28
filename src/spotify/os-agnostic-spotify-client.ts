@@ -1,7 +1,8 @@
 import { showInformationMessage } from '../info/info';
 import { ISpotifyStatusStatePartial } from '../state/state';
 
-import { createCancelablePromise, SpotifyClient } from './spotify-client';
+import { SpotifyClient } from './common';
+import { createCancelablePromise } from './utils';
 
 function notSupported(_ignoredTarget: any, _ignoredPropertyKey: string, descriptor: PropertyDescriptor): PropertyDescriptor {
     const fn = descriptor.value;

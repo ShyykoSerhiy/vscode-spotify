@@ -3,7 +3,7 @@ import { commands, Disposable } from 'vscode';
 import { actionsCreator } from './actions/actions';
 import { getTrackInfoClickBehaviour } from './config/spotify-config';
 import { LyricsController } from './lyrics/lyrics';
-import { SpotifyClient } from './spotify/spotify-client';
+import { SpotifyClient } from './spotify/common';
 import { Playlist } from './state/state';
 
 export function createCommands(sC: SpotifyClient): { dispose: () => void } {

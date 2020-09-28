@@ -9,12 +9,28 @@ import { log, showInformationMessage, showWarningMessage } from '../info/info';
 import { DUMMY_PLAYLIST, ILoginState, ISpotifyStatusState } from '../state/state';
 import { getState, getStore } from '../store/store';
 import { artistsToArtist } from '../utils/utils';
+import {
+    UpdateStateAction,
+    UPDATE_STATE_ACTION,
+    PlaylistsLoadAction,
+    PLAYLISTS_LOAD_ACTION,
+    SelectPlaylistAction,
+    SELECT_PLAYLIST_ACTION,
+    SelectTrackAction,
+    SELECT_TRACK_ACTION,
+    TracksLoadAction,
+    TRACKS_LOAD_ACTION,
+    SignInAction,
+    SIGN_IN_ACTION,
+    SignOutAction,
+    SIGN_OUT_ACTION
+} from './common';
 
 export function withApi() {
     return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = (...args: any[]) => {
+        descriptor.value = function(...args: any[]) {
             const api = getSpotifyWebApi();
             if (api) {
                 return originalMethod.apply(this, [...args, api]);
@@ -31,7 +47,7 @@ export function withErrorAsync() {
     return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = async (...args: any[]) => {
+        descriptor.value = async function (...args: any[]) {
             try {
                 return await originalMethod.apply(this, args);
             } catch (e) {
@@ -47,7 +63,7 @@ function actionCreator() {
     return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = (...args: any[]) => {
+        descriptor.value = function (...args: any[]) {
             const action = originalMethod.apply(this, args);
             if (!action) {
                 return;
@@ -63,7 +79,7 @@ function asyncActionCreator() {
     return (_target: any, _key: any, descriptor: PropertyDescriptor) => {
         const originalMethod = descriptor.value;
 
-        descriptor.value = async (...args: any[]) => {
+        descriptor.value = async function(...args: any[]) {
             let action;
             try {
                 action = await originalMethod.apply(this, args);
@@ -100,50 +116,6 @@ export const getSpotifyWebApi = () => {
     }
     return api;
 };
-
-export const UPDATE_STATE_ACTION = 'UPDATE_STATE_ACTION' as 'UPDATE_STATE_ACTION';
-export const SIGN_IN_ACTION = 'SIGN_IN_ACTION' as 'SIGN_IN_ACTION';
-export const SIGN_OUT_ACTION = 'SIGN_OUT_ACTION' as 'SIGN_OUT_ACTION';
-export const PLAYLISTS_LOAD_ACTION = 'PLAYLISTS_LOAD_ACTION' as 'PLAYLISTS_LOAD_ACTION';
-export const SELECT_PLAYLIST_ACTION = 'SELECT_PLAYLIST_ACTION' as 'SELECT_PLAYLIST_ACTION';
-export const TRACKS_LOAD_ACTION = 'TRACKS_LOAD_ACTION' as 'TRACKS_LOAD_ACTION';
-export const SELECT_TRACK_ACTION = 'SELECT_TRACK_ACTION' as 'SELECT_TRACK_ACTION';
-
-export interface UpdateStateAction {
-    type: typeof UPDATE_STATE_ACTION;
-    state: Partial<ISpotifyStatusState>;
-}
-
-export interface SignInAction {
-    type: typeof SIGN_IN_ACTION;
-    accessToken: string;
-    refreshToken: string;
-}
-
-export interface SignOutAction {
-    type: typeof SIGN_OUT_ACTION;
-}
-
-export interface PlaylistsLoadAction {
-    type: typeof PLAYLISTS_LOAD_ACTION;
-    playlists: Playlist[];
-}
-
-export interface TracksLoadAction {
-    type: typeof TRACKS_LOAD_ACTION;
-    playlist: Playlist;
-    tracks: Track[];
-}
-
-export interface SelectPlaylistAction {
-    type: typeof SELECT_PLAYLIST_ACTION;
-    playlist: Playlist;
-}
-
-export interface SelectTrackAction {
-    type: typeof SELECT_TRACK_ACTION;
-    track: Track;
-}
 
 class ActionCreator {
     @autobind
@@ -258,8 +230,8 @@ class ActionCreator {
     actionSignIn() {
         commands.executeCommand('vscode.open', Uri.parse(`${getAuthServerUrl()}/login`)).then(() => {
             const { createServerPromise, dispose } = createDisposableAuthSever();
-            createServerPromise.then(({ access_token, refresh_token }) => {
-                this._actionSignIn(access_token, refresh_token);
+            createServerPromise.then(({ accessToken, refreshToken }) => {
+                this._actionSignIn(accessToken, refreshToken);
             }).catch(e => {
                 showInformationMessage(`Failed to retrieve access token : ${JSON.stringify(e)}`);
             }).then(() => {
@@ -286,13 +258,5 @@ class ActionCreator {
         };
     }
 }
-
-export type Action = UpdateStateAction |
-    SignInAction |
-    SignOutAction |
-    PlaylistsLoadAction |
-    SelectPlaylistAction |
-    TracksLoadAction |
-    SelectTrackAction;
 
 export const actionsCreator = new ActionCreator();

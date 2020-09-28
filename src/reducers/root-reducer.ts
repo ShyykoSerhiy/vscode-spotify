@@ -7,7 +7,7 @@ import {
     SIGN_OUT_ACTION,
     TRACKS_LOAD_ACTION,
     UPDATE_STATE_ACTION
-} from '../actions/actions';
+} from '../actions/common';
 import { log } from '../info/info';
 import { DEFAULT_STATE, DUMMY_PLAYLIST, ISpotifyStatusState } from '../state/state';
 

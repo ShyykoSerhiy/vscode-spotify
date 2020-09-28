@@ -4,7 +4,8 @@ import { window } from 'vscode';
 import { ISpotifyStatusStatePartial } from '../state/state';
 import { isMuted } from '../store/store';
 
-import { createCancelablePromise, QueryStatusFunction, SpotifyClient } from './spotify-client';
+import { QueryStatusFunction, SpotifyClient } from './common';
+import { createCancelablePromise } from './utils';
 
 export class OsxSpotifyClient implements SpotifyClient {
     private _queryStatusFunc: QueryStatusFunction;

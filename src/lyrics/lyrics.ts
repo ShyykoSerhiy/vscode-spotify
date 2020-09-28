@@ -24,9 +24,9 @@ class TextContentProvider implements TextDocumentContentProvider {
 }
 
 export class LyricsController {
-    private static LYRICS_CONTENT_PROVIDER = new TextContentProvider();
+    private static lyricsContentProvider = new TextContentProvider();
 
-    readonly registration = workspace.registerTextDocumentContentProvider('vscode-spotify', LyricsController.LYRICS_CONTENT_PROVIDER);
+    readonly registration = workspace.registerTextDocumentContentProvider('vscode-spotify', LyricsController.lyricsContentProvider);
 
     private readonly previewUri = Uri.parse('vscode-spotify://authority/vscode-spotify');
 
@@ -55,8 +55,8 @@ export class LyricsController {
     }
 
     private async _previewLyrics(lyrics: string) {
-        LyricsController.LYRICS_CONTENT_PROVIDER.htmlContent = lyrics;
-        LyricsController.LYRICS_CONTENT_PROVIDER.update(this.previewUri);
+        LyricsController.lyricsContentProvider.htmlContent = lyrics;
+        LyricsController.lyricsContentProvider.update(this.previewUri);
 
         try {
             const document = await workspace.openTextDocument(this.previewUri);

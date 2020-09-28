@@ -5,8 +5,8 @@ import { getAuthServerUrl } from '../../config/spotify-config';
 import { log } from '../../info/info';
 
 export interface CreateDisposableAuthSeverPromiseResult {
-    access_token: string;
-    refresh_token: string;
+    accessToken: string;
+    refreshToken: string;
 }
 
 export function createDisposableAuthSever() {
@@ -19,9 +19,9 @@ export function createDisposableAuthSever() {
             const app = express();
 
             app.get('/callback', (request, response) => {
-                const { access_token, refresh_token, error } = request.query;
+                const { access_token: accessToken, refresh_token: refreshToken, error } = request.query;
                 if (!error) {
-                    res({ access_token, refresh_token });
+                    res({ accessToken, refreshToken });
                 } else {
                     rej(error);
                 }

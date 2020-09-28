@@ -2,7 +2,8 @@ import autobind from 'autobind-decorator';
 
 import { actionsCreator } from './actions/actions';
 import { getStatusCheckInterval } from './config/spotify-config';
-import { CANCELED_REASON, SpoifyClientSingleton } from './spotify/spotify-client';
+import { SpoifyClientSingleton } from './spotify/spotify-client';
+import { CANCELED_REASON } from './spotify/utils';
 
 export class SpotifyStatusController {
     private _retryCount: number;
@@ -53,7 +54,7 @@ export class SpotifyStatusController {
             }
             setTimeout(this.queryStatus, getStatusCheckInterval());
         }
-    }
+    };
 
     private _cancelPreviousPoll() {
         if (this._cancelCb) {

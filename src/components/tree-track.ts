@@ -39,10 +39,10 @@ export class TreeTrackProvider implements vscode.TreeDataProvider<Track> {
     readonly onDidChangeTreeDataEmitter: vscode.EventEmitter<Track | undefined> = new vscode.EventEmitter<Track | undefined>();
     readonly onDidChangeTreeData: vscode.Event<Track | undefined> = this.onDidChangeTreeDataEmitter.event;
 
-    private tracks: Track[];
+    private tracks: Track[] = [];
     private selectedPlaylist?: Playlist;
     private selectedTrack?: Track;
-    private view: vscode.TreeView<Track>;
+    private view!: vscode.TreeView<Track>;
 
     constructor() {
         getStore().subscribe(() => {
@@ -73,7 +73,7 @@ export class TreeTrackProvider implements vscode.TreeDataProvider<Track> {
     }
 
     refresh(): void {
-        this.onDidChangeTreeDataEmitter.fire();
+        this.onDidChangeTreeDataEmitter.fire(void 0);
     }
 
     getTreeItem(t: Track): TrackTreeItem {
@@ -100,7 +100,7 @@ export class TreeTrackProvider implements vscode.TreeDataProvider<Track> {
 const getArtists = (track: Track) =>
     track.track.artists.map(a => a.name).join(', ');
 class TrackTreeItem extends vscode.TreeItem {
-
+    // @ts-ignore
     get tooltip(): string {
         return `${getArtists(this.track)} - ${this.track.track.album.name} - ${this.track.track.name}`;
     }

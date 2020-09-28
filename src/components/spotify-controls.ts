@@ -65,12 +65,12 @@ export class SpotifyControls {
      * All buttons of vscode-spotify
      */
     private _buttons: Button[];
-    private _playPauseButton: ButtonWithDynamicText;
-    private _muteUnmuteVolumeButton: ButtonWithDynamicText;
-    private _toggleRepeatingButton: ButtonWithDynamicColor;
-    private _toggleShufflingButton: ButtonWithDynamicColor;
-    private _signInButton: Button;
-    private _signOutButton: Button;
+    private _playPauseButton!: ButtonWithDynamicText;
+    private _muteUnmuteVolumeButton!: ButtonWithDynamicText;
+    private _toggleRepeatingButton!: ButtonWithDynamicColor;
+    private _toggleShufflingButton!: ButtonWithDynamicColor;
+    private _signInButton!: Button;
+    private _signOutButton!: Button;
 
     constructor() {
         const buttonsInfo = [

@@ -5,11 +5,11 @@ import { log } from '../info/info';
 import { ISpotifyStatusStatePartial } from '../state/state';
 import { getState } from '../store/store';
 import { artistsToArtist } from '../utils/utils';
-
-import { createCancelablePromise, NOT_RUNNING_REASON, QueryStatusFunction, SpotifyClient } from './spotify-client';
+import { QueryStatusFunction, SpotifyClient } from './common';
+import { createCancelablePromise, NOT_RUNNING_REASON } from './utils';
 
 export class WebApiSpotifyClient implements SpotifyClient {
-    private prevVolume: number;
+    private prevVolume: number = 0;
     private _queryStatusFunc: QueryStatusFunction;
 
     constructor(_queryStatusFunc: QueryStatusFunction) {

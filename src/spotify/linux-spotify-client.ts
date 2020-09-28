@@ -4,7 +4,8 @@ import { log } from '../info/info';
 import { ISpotifyStatusStatePartial } from '../state/state';
 
 import { OsAgnosticSpotifyClient } from './os-agnostic-spotify-client';
-import { createCancelablePromise, QueryStatusFunction, SpotifyClient } from './spotify-client';
+import { QueryStatusFunction, SpotifyClient } from './common';
+import { createCancelablePromise } from './utils';
 
 const SP_DEST = 'org.mpris.MediaPlayer2.spotify';
 const SP_PATH = '/org/mpris/MediaPlayer2';
@@ -76,7 +77,7 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
         return this._queryStatusFunc;
     }
 
-    private currentOnVolume: number;
+    private currentOnVolume: number = 0;
     private _queryStatusFunc: QueryStatusFunction;
 
     constructor(_queryStatusFunc: QueryStatusFunction) {
@@ -143,7 +144,7 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
      */
     findSpotify(s: string) {
         const foundSpotifySink = s.match(/(Spotify)/i);
-        return (foundSpotifySink != null) ? ((foundSpotifySink.length > 1) ? true : false) : false;
+        return (foundSpotifySink !== null) ? ((foundSpotifySink.length > 1) ? true : false) : false;
     }
 
     async getCurrentVolume(): Promise<ICurrentVol> {
@@ -153,10 +154,10 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
             const a = sinkedArr ? sinkedArr.filter(this.findSpotify) : [];
             if (a.length > 0) {
                 const currentVol = a[0].match(/(\d{1,3})%/i);
-                if (currentVol != null) {
+                if (currentVol !== null) {
                     const sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
                     if (currentVol.length > 1) {
-                        if (parseInt(currentVol[1]) >= 0 && sinkNum != null) {
+                        if (parseInt(currentVol[1]) >= 0 && sinkNum !== null) {
                             return { sinkNum: sinkNum[1], volume: parseInt(currentVol[1]) };
                         }
                     }
@@ -197,12 +198,12 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
                 const sinkedArr = d.split('Sinked Input #');
-                return (sinkedArr != null) ? sinkedArr.filter(this.findSpotify) : [];
+                return (sinkedArr !== null) ? sinkedArr.filter(this.findSpotify) : [];
             })
             .then((a: string[]) => {
                 if (a.length > 0) {
                     const sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
-                    if (sinkNum != null) {
+                    if (sinkNum !== null) {
                         terminalCommand(`pactl set-sink-input-volume ${sinkNum[1]} +5%)`);
                     }
                 }
@@ -214,12 +215,12 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
         terminalCommand('pactl list sink-inputs')
             .then((d: string) => {
                 const sinkedArr = d.split('Sinked Input #');
-                return (sinkedArr != null) ? sinkedArr.filter(this.findSpotify) : [];
+                return (sinkedArr !== null) ? sinkedArr.filter(this.findSpotify) : [];
             })
             .then((a: string[]) => {
                 if (a.length > 0) {
                     const sinkNum = a[0].match(/Sink Input #(\d{1,3})/);
-                    if (sinkNum != null) {
+                    if (sinkNum !== null) {
                         terminalCommand(`pactl set-sink-input-volume ${sinkNum[1]} -5%`);
                     }
                 }

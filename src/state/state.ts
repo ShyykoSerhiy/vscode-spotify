@@ -1,5 +1,7 @@
-import { Playlist as Playlist, Track } from '@vscodespotify/spotify-common/lib/spotify/consts';
+import { Playlist, Track } from '@vscodespotify/spotify-common/lib/spotify/consts';
 import { Map } from 'immutable';
+
+export { Playlist, Track };
 
 export interface ITrack {
     album: string;
@@ -11,9 +13,6 @@ export interface ILoginState {
     accessToken: string;
     refreshToken: string;
 }
-
-export type Playlist = Playlist;
-export type Track = Track;
 
 export interface IPlayerState {
     /**
@@ -73,6 +72,7 @@ export interface ISpotifyStatusState extends ISpotifyStatusStatePartial {
 
 export const DUMMY_PLAYLIST: Playlist = {
     collaborative: false,
+    /* eslint-disable @typescript-eslint/naming-convention */
     external_urls: {
         spotify: ''
     },
@@ -85,7 +85,9 @@ export const DUMMY_PLAYLIST: Playlist = {
     }],
     name: 'It seems that you don\'t have any playlists. To refresh use spotify.loadPlaylists command.',
     owner: {
+        /* eslint-disable @typescript-eslint/naming-convention */
         display_name: '',
+        /* eslint-disable @typescript-eslint/naming-convention */
         external_urls: {
             spotify: ''
         },

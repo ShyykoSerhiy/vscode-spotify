@@ -32,7 +32,7 @@ export class TreePlaylistProvider implements vscode.TreeDataProvider<Playlist> {
     readonly onDidChangeTreeDataEmitter: vscode.EventEmitter<Playlist | undefined> = new vscode.EventEmitter<Playlist | undefined>();
     readonly onDidChangeTreeData: vscode.Event<Playlist | undefined> = this.onDidChangeTreeDataEmitter.event;
 
-    private playlists: Playlist[];
+    private playlists: Playlist[] = [];
 
     constructor() {
         getStore().subscribe(() => {
@@ -50,7 +50,7 @@ export class TreePlaylistProvider implements vscode.TreeDataProvider<Playlist> {
     }
 
     refresh(): void {
-        this.onDidChangeTreeDataEmitter.fire();
+        this.onDidChangeTreeDataEmitter.fire(void 0);
     }
 
     getTreeItem(p: Playlist): PlaylistTreeItem {
@@ -72,7 +72,7 @@ export class TreePlaylistProvider implements vscode.TreeDataProvider<Playlist> {
 }
 
 class PlaylistTreeItem extends vscode.TreeItem {
-
+    // @ts-ignore
     get tooltip(): string {
         return `${this.playlist.id}:${this.label}`;
     }

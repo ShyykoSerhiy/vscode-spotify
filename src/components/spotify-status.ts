@@ -10,8 +10,8 @@ export class SpotifyStatus {
     /**
      * Status bar with info from spotify
      */
-    private _statusBarItem: StatusBarItem;
-    private _spotifyControls: SpotifyControls;
+    private _statusBarItem: StatusBarItem | undefined;
+    private _spotifyControls: SpotifyControls | undefined;
     private loginState: ILoginState | null = null;
 
     constructor() {

@@ -1,11 +1,16 @@
+import * as os from 'os';
 import { Memento, workspace } from 'vscode';
 
 import { BUTTON_ID_SIGN_IN, BUTTON_ID_SIGN_OUT } from '../consts/consts';
-import { isWebApiSpotifyClient } from '../spotify/spotify-client';
 import { getState } from '../store/store';
 
 export function getConfig() {
     return workspace.getConfiguration('spotify');
+}
+
+export function isWebApiSpotifyClient() {
+    const platform = os.platform();
+    return (platform !== 'darwin' && platform !== 'linux') || getForceWebApiImplementation();
 }
 
 export function isButtonToBeShown(buttonId: string): boolean {
