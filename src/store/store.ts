@@ -14,17 +14,27 @@ let store: SpotifyStore;
 
 export function getStore(memento?: Memento) {
     if (!store) {
+        const notToPersistList = ['selectedTrack', 'selectedPlaylist'];
+
         const persistConfig: PersistConfig = {
             key: 'root',
             storage: memento ? createVscodeStorage(memento) : createDummyStorage(),
             transforms: [{
                 out: (val: any, key: string) => {
+                    if (~notToPersistList.indexOf(key)) {
+                        return null;
+                    }
                     if (key === 'tracks') {
                         return Map(val);
                     }
                     return val;
                 },
-                in: (val: any, _key: string) => val
+                in: (val: any, key: string) => {
+                    if (~notToPersistList.indexOf(key)) {
+                        return null;
+                    }
+                    return val;
+                }
             }]
         };
         const persistedReducer = persistReducer(persistConfig, rootReducer);
