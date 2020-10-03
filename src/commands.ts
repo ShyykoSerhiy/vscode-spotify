@@ -5,6 +5,7 @@ import { getTrackInfoClickBehaviour } from './config/spotify-config';
 import { LyricsController } from './lyrics/lyrics';
 import { SpotifyClient } from './spotify/common';
 import { Playlist } from './state/state';
+import { SIGN_IN_COMMAND } from './consts/consts';
 
 export function createCommands(sC: SpotifyClient): { dispose: () => void } {
     const lC = new LyricsController();
@@ -22,7 +23,7 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
     const volumeDown = commands.registerCommand('spotify.volumeDown', sC.volumeDown.bind(sC));
     const toggleRepeating = commands.registerCommand('spotify.toggleRepeating', sC.toggleRepeating.bind(sC));
     const toggleShuffling = commands.registerCommand('spotify.toggleShuffling', sC.toggleShuffling.bind(sC));
-    const signIn = commands.registerCommand('spotify.signIn', actionsCreator.actionSignIn);
+    const signIn = commands.registerCommand(SIGN_IN_COMMAND, actionsCreator.actionSignIn);
     const signOut = commands.registerCommand('spotify.signOut', actionsCreator.actionSignOut);
     const loadPlaylists = commands.registerCommand('spotify.loadPlaylists', actionsCreator.loadPlaylists);
     const loadTracks = commands.registerCommand('spotify.loadTracks', actionsCreator.loadTracksForSelectedPlaylist);

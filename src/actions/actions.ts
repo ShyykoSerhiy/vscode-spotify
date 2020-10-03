@@ -5,7 +5,8 @@ import { commands, Uri, window } from 'vscode';
 
 import { createDisposableAuthSever } from '../auth/server/local';
 import { getAuthServerUrl } from '../config/spotify-config';
-import { log, showInformationMessage, showWarningMessage } from '../info/info';
+import { SIGN_IN_COMMAND } from '../consts/consts';
+import { log, showInformationMessage, showWarningMessage, showErrorMessage } from '../info/info';
 import { DUMMY_PLAYLIST, ILoginState, ISpotifyStatusState } from '../state/state';
 import { getState, getStore } from '../store/store';
 import { artistsToArtist } from '../utils/utils';
@@ -35,7 +36,13 @@ export function withApi() {
             if (api) {
                 return originalMethod.apply(this, [...args, api]);
             } else {
-                showWarningMessage('You should be logged in order to use this feature.');
+                (async () => {
+                    const signIn = 'Sign in';
+                    const result = await showWarningMessage('You should be logged in order to use this feature.', signIn);
+                    if (result === signIn) {
+                        commands.executeCommand(SIGN_IN_COMMAND)
+                    }
+                })()                
             }
         };
 
@@ -237,7 +244,7 @@ class ActionCreator {
         const invalidTimeFormatError = 'Invalid time format. Should be in format mm:ss or ss';
         const timeA = timeS.split(':');
         if (timeA.length > 2) {
-            window.showErrorMessage(invalidTimeFormatError);
+            showErrorMessage(invalidTimeFormatError);
             return;
         }
         let minutes = 0;
@@ -250,7 +257,7 @@ class ActionCreator {
         }
 
         if (Number.isNaN(seconds) || Number.isNaN(minutes)){
-            window.showErrorMessage(invalidTimeFormatError);
+            showErrorMessage(invalidTimeFormatError);
             return;
         }
 
