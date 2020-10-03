@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.0] - 2020-10-02
+### Added
+- Seek to position in currently playing track #119
+- Include song title on lyrics sheet
+### Fixed
+- Spotify in sidebar expanding on start #78
+- Lyrics functionality doesn't work #133
+
 ## [3.1.0] - 2018-11-20
 ### Added
 - Focus on song #56
