@@ -270,4 +270,15 @@ You can also change the position of buttons by changing the parameters below:
 }
 ```
 
+## Seeking to a specific point in a song
+You can use `Spotify Seek To` command (`spotify.seekTo`) to seek to the specific point in a song. You can specify hotkey that will seek to a custom time in a song by adding keybinding in keybindings.json. For example:
+
+```json
+{
+    "command": "spotify.seekTo",
+    "key": "alt+d",
+    "args": "1:15"
+}
+```
+
 [MIT LICENSE](LICENSE)

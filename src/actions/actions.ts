@@ -227,6 +227,39 @@ class ActionCreator {
     }
 
     @autobind
+    @withErrorAsync()
+    @withApi()
+    async seekTo(time: string, api?: Api): Promise<void> {
+        const timeS = time || await window.showInputBox({ prompt: 'Select time to seek to in format mm:ss or ss' });
+        if (!timeS) {
+            return;
+        }
+        const invalidTimeFormatError = 'Invalid time format. Should be in format mm:ss or ss';
+        const timeA = timeS.split(':');
+        if (timeA.length > 2) {
+            window.showErrorMessage(invalidTimeFormatError);
+            return;
+        }
+        let minutes = 0;
+        let seconds = 0;
+        if (timeA[1]){
+            minutes = parseFloat(timeA[0]);
+            seconds = parseFloat(timeA[1]);
+        } else {
+            seconds = parseFloat(timeA[0]);
+        }
+
+        if (Number.isNaN(seconds) || Number.isNaN(minutes)){
+            window.showErrorMessage(invalidTimeFormatError);
+            return;
+        }
+
+        const seekTo = Math.round((minutes * 60 + seconds) * 1000)
+
+        await api!.player.seek.put(seekTo);
+    }
+
+    @autobind
     actionSignIn() {
         commands.executeCommand('vscode.open', Uri.parse(`${getAuthServerUrl()}/login`)).then(() => {
             const { createServerPromise, dispose } = createDisposableAuthSever();

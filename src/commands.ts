@@ -34,9 +34,12 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
             sC.playPause();
         }
     });
-    const playTrack = commands.registerCommand('spotify.playTrack', async (offset: number, playlist: Playlist) => {
+    const playTrack = commands.registerCommand('spotify.playTrack', async (/*arguments from TrackTreeItem event*/offset: number, playlist: Playlist) => {
         await actionsCreator.playTrack(offset, playlist);
         sC.queryStatusFunc();
+    });
+    const seekTo = commands.registerCommand('spotify.seekTo', (seekToMs: string) => {
+        actionsCreator.seekTo(seekToMs);
     });
 
     return Disposable.from(lyrics,
@@ -58,6 +61,7 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
         loadTracks,
         trackInfoClick,
         playTrack,
+        seekTo,
         lC.registration
     );
 }
