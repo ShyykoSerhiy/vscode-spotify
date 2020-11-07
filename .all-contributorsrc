@@ -176,6 +176,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "TheFern2",
+      "name": "Fernando B",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/10265682?v=4",
+      "profile": "http://www.kodaman.dev/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "repoType": "github",

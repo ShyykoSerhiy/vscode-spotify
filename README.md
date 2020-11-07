@@ -88,6 +88,7 @@ A list of contributors to this project ([emoji key](https://github.com/kentcdodd
     <td align="center"><a href="https://www.michaelscottfox.com"><img src="https://avatars2.githubusercontent.com/u/21694891?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Michael Fox</b></sub></a><br /><a href="https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=misterfoxy" title="Documentation">📖</a></td>
     <td align="center"><a href="http://korra.io/"><img src="https://avatars1.githubusercontent.com/u/2392130?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Matija Mrkaic</b></sub></a><br /><a href="https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=matijamrkaic" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/marioortizmanero"><img src="https://avatars2.githubusercontent.com/u/25647296?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mario</b></sub></a><br /><a href="https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=marioortizmanero" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://www.kodaman.dev/"><img src="https://avatars3.githubusercontent.com/u/10265682?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Fernando B</b></sub></a><br /><a href="https://github.com/ShyykoSerhiy/vscode-spotify/commits?author=TheFern2" title="Code">💻</a></td>
   </tr>
 </table>
 
