@@ -163,9 +163,8 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
                     }
                 }
             }
-        } finally {
-            return { sinkNum: null, volume: 0 };
-        }
+        } catch (ignored) { log(ignored); }
+        return { sinkNum: null, volume: 0 };
     }
 
     async muteVolume(currentVol?: ICurrentVol) {
@@ -233,7 +232,7 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
             const playbackStatus = await terminalCommand(getPlaybackStatus);
             const metadata = await terminalCommand(getMetadataCommand);
             if (!playbackStatus || !metadata) {
-                throw new Error(`Spotify isn't running`);
+                return Promise.reject<ISpotifyStatusStatePartial>(`Spotify isn't running`);
             }
             const state = playbackStatus.indexOf('Playing') ? 'playing' : 'paused';
 
@@ -253,9 +252,8 @@ export class LinuxSpotifyClient extends OsAgnosticSpotifyClient implements Spoti
                 isRunning: true
             };
             return result;
-        } finally {
-            return Promise.reject<ISpotifyStatusStatePartial>(`Spotify isn't running`);
-        }
+        } catch (ignored) { log(ignored) }
+        return Promise.reject<ISpotifyStatusStatePartial>(`Spotify isn't running`);
     }
 
     private _setVolume(sinkNum: string, volume: number) {
