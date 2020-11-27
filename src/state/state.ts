@@ -1,7 +1,7 @@
-import { Playlist, Track } from '@vscodespotify/spotify-common/lib/spotify/consts';
+import { Playlist, Track, Album } from '@vscodespotify/spotify-common/lib/spotify/consts';
 import { Map } from 'immutable';
 
-export { Playlist, Track };
+export { Playlist, Track, Album };
 
 export interface ITrack {
     album: string;
@@ -62,9 +62,10 @@ export interface ISpotifyStatusStatePartial {
 export interface ISpotifyStatusState extends ISpotifyStatusStatePartial {
     loginState: ILoginState | null;
     playlists: Playlist[];
-    selectedPlaylist?: Playlist;
+    albums: Album[];
+    selectedList?: Playlist | Album;
     /**
-     * Map<Playlist.id>
+     * Map<Playlist.id | Album.album.id>
      */
     tracks: Map<Playlist['id'], Track[]>;
     selectedTrack: Track | null;
@@ -124,7 +125,8 @@ export const DEFAULT_STATE: ISpotifyStatusState = {
     loginState: null,
     context: void 0,
     playlists: [],
-    selectedPlaylist: void 0,
+    albums: [],
+    selectedList: undefined,
     tracks: Map(),
     selectedTrack: null
 };

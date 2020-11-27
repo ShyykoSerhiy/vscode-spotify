@@ -4,7 +4,7 @@ import { actionsCreator } from './actions/actions';
 import { getTrackInfoClickBehaviour } from './config/spotify-config';
 import { LyricsController } from './lyrics/lyrics';
 import { SpotifyClient } from './spotify/common';
-import { Playlist } from './state/state';
+import { Album, Playlist } from './state/state';
 import { SIGN_IN_COMMAND } from './consts/consts';
 
 export function createCommands(sC: SpotifyClient): { dispose: () => void } {
@@ -26,6 +26,7 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
     const signIn = commands.registerCommand(SIGN_IN_COMMAND, actionsCreator.actionSignIn);
     const signOut = commands.registerCommand('spotify.signOut', actionsCreator.actionSignOut);
     const loadPlaylists = commands.registerCommand('spotify.loadPlaylists', actionsCreator.loadPlaylists);
+    const loadAlbums = commands.registerCommand('spotify.loadAlbums', actionsCreator.loadAlbums);
     const loadTracks = commands.registerCommand('spotify.loadTracks', actionsCreator.loadTracksForSelectedPlaylist);
     const trackInfoClick = commands.registerCommand('spotify.trackInfoClick', () => {
         const trackInfoClickBehaviour = getTrackInfoClickBehaviour();
@@ -35,8 +36,8 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
             sC.playPause();
         }
     });
-    const playTrack = commands.registerCommand('spotify.playTrack', async (/*arguments from TrackTreeItem event*/offset: number, playlist: Playlist) => {
-        await actionsCreator.playTrack(offset, playlist);
+    const playTrack = commands.registerCommand('spotify.playTrack', async (/*arguments from TrackTreeItem event*/offset: number, list: Playlist | Album) => {
+        await actionsCreator.playTrack(offset, list);
         sC.queryStatusFunc();
     });
     const seekTo = commands.registerCommand('spotify.seekTo', (seekToMs: string) => {
@@ -59,6 +60,7 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
         signIn,
         signOut,
         loadPlaylists,
+        loadAlbums,
         loadTracks,
         trackInfoClick,
         playTrack,

@@ -3,25 +3,25 @@ import * as vscode from 'vscode';
 
 import { actionsCreator } from '../actions/actions';
 import { isAlbum } from '../isAlbum';
-import { Playlist } from '../state/state';
+import { Album } from '../state/state';
 import { getState, getStore } from '../store/store';
 
-export const connectPlaylistTreeView = (view: vscode.TreeView<Playlist>) =>
+export const connectAlbumTreeView = (view: vscode.TreeView<Album>) =>
     vscode.Disposable.from(
         view.onDidChangeSelection(e => {
-            actionsCreator.selectPlaylistAction(e.selection[0]);
+            actionsCreator.selectAlbumAction(e.selection[0]);
             actionsCreator.loadTracksIfNotLoaded(e.selection[0]);
         }),
         view.onDidChangeVisibility(e => {
             if (e.visible) {
                 const state = getState();
-                if (!state.playlists.length) {
-                    actionsCreator.loadPlaylists();
+                if (!state.albums.length) {
+                    actionsCreator.loadAlbums();
                 }
 
                 const playlistOrAlbum = state.selectedList;
-                if (playlistOrAlbum && !isAlbum(playlistOrAlbum)) {
-                    const p = state.playlists.find(pl => pl.id === playlistOrAlbum.id);
+                if (playlistOrAlbum && isAlbum(playlistOrAlbum)) {
+                    const p = state.albums.find(({album}) => album.id === playlistOrAlbum.album.id);
                     if (p && !view.selection.indexOf(p)) {
                         view.reveal(p, { focus: true, select: true });
                     }
@@ -30,66 +30,66 @@ export const connectPlaylistTreeView = (view: vscode.TreeView<Playlist>) =>
         })
     );
 
-export class TreePlaylistProvider implements vscode.TreeDataProvider<Playlist> {
-    readonly onDidChangeTreeDataEmitter: vscode.EventEmitter<Playlist | undefined> = new vscode.EventEmitter<Playlist | undefined>();
-    readonly onDidChangeTreeData: vscode.Event<Playlist | undefined> = this.onDidChangeTreeDataEmitter.event;
+export class TreeAlbumProvider implements vscode.TreeDataProvider<Album> {
+    readonly onDidChangeTreeDataEmitter: vscode.EventEmitter<Album | undefined> = new vscode.EventEmitter<Album | undefined>();
+    readonly onDidChangeTreeData: vscode.Event<Album | undefined> = this.onDidChangeTreeDataEmitter.event;
 
-    private playlists: Playlist[] = [];
+    private albums: Album[] = [];
 
     constructor() {
         getStore().subscribe(() => {
-            const { playlists } = getState();
+            const { albums } = getState();
 
-            if (this.playlists !== playlists) {
-                this.playlists = playlists;
+            if (this.albums !== albums) {
+                this.albums = albums;
                 this.refresh();
             }
         });
     }
 
-    getParent(_p: Playlist) {
-        return void 0; // all playlists are in root
+    getParent(_p: Album) {
+        return void 0; // all albums are in root
     }
 
     refresh(): void {
         this.onDidChangeTreeDataEmitter.fire(void 0);
     }
 
-    getTreeItem(p: Playlist): PlaylistTreeItem {
-        return new PlaylistTreeItem(p, vscode.TreeItemCollapsibleState.None);
+    getTreeItem(p: Album): AlbumTreeItem {
+        return new AlbumTreeItem(p, vscode.TreeItemCollapsibleState.None);
     }
 
-    getChildren(element?: Playlist): Thenable<Playlist[]> {
+    getChildren(element?: Album): Thenable<Album[]> {
         if (element) {
             return Promise.resolve([]);
         }
-        if (!this.playlists) {
+        if (!this.albums) {
             return Promise.resolve([]);
         }
 
         return new Promise(resolve => {
-            resolve(this.playlists);
+            resolve(this.albums);
         });
     }
 }
 
-class PlaylistTreeItem extends vscode.TreeItem {
+class AlbumTreeItem extends vscode.TreeItem {
     // @ts-expect-error
     get tooltip(): string {
-        return `${this.playlist.name} by ${this.playlist.owner.display_name}`;
+        return `${this.album.album.name} - ${this.album.album.artists.map(a => a.name).join(", ")}`;
     }
 
     iconPath = {
         light: path.join(__filename, '..', '..', '..', 'resources', 'light', 'playlist.svg'),
         dark: path.join(__filename, '..', '..', '..', 'resources', 'dark', 'playlist.svg')
     };
-    contextValue = 'playlist';
+    contextValue = 'album';
 
     constructor(
-        private readonly playlist: Playlist,
+        private readonly album: Album,
         readonly collapsibleState: vscode.TreeItemCollapsibleState,
         readonly command?: vscode.Command
     ) {
-        super(playlist.name, collapsibleState);
+        super(album.album.name, collapsibleState);
     }
 }
