@@ -29,14 +29,14 @@ interface Song {
     title: string,
     geniusPath?: string,
     /**
-     * String similarity score for the song. 
+     * String similarity score for the song.
      */
     similarity?: number
 }
 
 type V3SongsResponse = {
-    songs?: Song[]
-}
+    songs?: Song[];
+};
 
 export class LyricsController {
     private static lyricsContentProvider = new TextContentProvider();

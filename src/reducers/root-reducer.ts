@@ -1,6 +1,8 @@
 import {
     Action,
+    ALBUM_LOAD_ACTION,
     PLAYLISTS_LOAD_ACTION,
+    SELECT_ALBUM_ACTION,
     SELECT_PLAYLIST_ACTION,
     SELECT_TRACK_ACTION,
     SIGN_IN_ACTION,
@@ -9,6 +11,7 @@ import {
     UPDATE_STATE_ACTION
 } from '../actions/common';
 import { log } from '../info/info';
+import { isAlbum } from '../isAlbum';
 import { DEFAULT_STATE, DUMMY_PLAYLIST, ISpotifyStatusState } from '../state/state';
 
 export function update<T>(obj: T, propertyUpdate: Partial<T>): T {
@@ -35,9 +38,19 @@ export default function (state: ISpotifyStatusState, action: Action): ISpotifySt
             playlists: (action.playlists && action.playlists.length) ? action.playlists : [DUMMY_PLAYLIST]
         });
     }
+    if (action.type === ALBUM_LOAD_ACTION) {
+        return update(state, {
+            albums: action.albums
+        });
+    }
+    if (action.type === SELECT_ALBUM_ACTION) {
+        return update(state, {
+            selectedList: action.album
+        });
+    }
     if (action.type === SELECT_PLAYLIST_ACTION) {
         return update(state, {
-            selectedPlaylist: action.playlist
+            selectedList: action.playlist
         });
     }
     if (action.type === SELECT_TRACK_ACTION) {
@@ -47,7 +60,10 @@ export default function (state: ISpotifyStatusState, action: Action): ISpotifySt
     }
     if (action.type === TRACKS_LOAD_ACTION) {
         return update(state, {
-            tracks: state.tracks.set(action.playlist.id, action.tracks)
+            tracks: state.tracks.set(
+                isAlbum(action.list) ? action.list.album.id : action.list.id,
+                action.tracks
+            )
         });
     }
     return state;

@@ -1,5 +1,5 @@
 import { Api, getApi } from '@vscodespotify/spotify-common/lib/spotify/api';
-import { Playlist, Track } from '@vscodespotify/spotify-common/lib/spotify/consts';
+import { Album, Playlist, Track } from '@vscodespotify/spotify-common/lib/spotify/consts';
 import autobind from 'autobind-decorator';
 import { commands, Uri, window } from 'vscode';
 
@@ -7,6 +7,7 @@ import { createDisposableAuthSever } from '../auth/server/local';
 import { getAuthServerUrl } from '../config/spotify-config';
 import { SIGN_IN_COMMAND } from '../consts/consts';
 import { log, showInformationMessage, showWarningMessage, showErrorMessage } from '../info/info';
+import { isAlbum } from '../isAlbum';
 import { DUMMY_PLAYLIST, ILoginState, ISpotifyStatusState } from '../state/state';
 import { getState, getStore } from '../store/store';
 import { artistsToArtist } from '../utils/utils';
@@ -15,8 +16,12 @@ import {
     UPDATE_STATE_ACTION,
     PlaylistsLoadAction,
     PLAYLISTS_LOAD_ACTION,
+    AlbumLoadAction,
+    ALBUM_LOAD_ACTION,
     SelectPlaylistAction,
     SELECT_PLAYLIST_ACTION,
+    SelectAlbumAction,
+    SELECT_ALBUM_ACTION,
     SelectTrackAction,
     SELECT_TRACK_ACTION,
     TracksLoadAction,
@@ -40,9 +45,9 @@ export function withApi() {
                     const signIn = 'Sign in';
                     const result = await showWarningMessage('You should be logged in order to use this feature.', signIn);
                     if (result === signIn) {
-                        commands.executeCommand(SIGN_IN_COMMAND)
+                        commands.executeCommand(SIGN_IN_COMMAND);
                     }
-                })()                
+                })();
             }
         };
 
@@ -146,11 +151,33 @@ class ActionCreator {
     }
 
     @autobind
+    @asyncActionCreator()
+    @withApi()
+    async loadAlbums(api?: Api): Promise<AlbumLoadAction> {
+        const albums = await api!.albums.getAll();
+        return {
+            type: ALBUM_LOAD_ACTION,
+            albums
+        };
+    }
+
+
+
+    @autobind
     @actionCreator()
     selectPlaylistAction(p: Playlist): SelectPlaylistAction {
         return {
             type: SELECT_PLAYLIST_ACTION,
             playlist: p
+        };
+    }
+
+    @autobind
+    @actionCreator()
+    selectAlbumAction(album: Album): SelectAlbumAction {
+        return {
+            type: SELECT_ALBUM_ACTION,
+            album
         };
     }
 
@@ -193,31 +220,41 @@ class ActionCreator {
 
     @autobind
     loadTracksForSelectedPlaylist(): void {
-        this.loadTracks(getState().selectedPlaylist);
+        this.loadTracks(getState().selectedList);
     }
 
     @autobind
-    loadTracksIfNotLoaded(playlist: Playlist): void {
-        if (!playlist) {
+    loadTracksIfNotLoaded(list: Playlist | Album): void {
+        if (!list) {
             return void 0;
         }
         const { tracks } = getState();
-        if (!tracks.has(playlist.id)) {
-            this.loadTracks(playlist);
+        if (!tracks.has(isAlbum(list) ? list.album.id : list.id)) {
+            this.loadTracks(list);
         }
     }
 
     @autobind
     @asyncActionCreator()
     @withApi()
-    async loadTracks(playlist?: Playlist, api?: Api): Promise<TracksLoadAction | undefined> {
-        if (!playlist || playlist.id === DUMMY_PLAYLIST.id) {
+    async loadTracks(list?: Playlist | Album, api?: Api): Promise<TracksLoadAction | undefined> {
+        if (isAlbum(list)) {
+            const tracks = await api!.albums.tracks.getAll(list);
+            return {
+                type: TRACKS_LOAD_ACTION,
+                list,
+                tracks
+            };
+
+        }
+
+        if (!list || list.id === DUMMY_PLAYLIST.id) {
             return void 0;
         }
-        const tracks = await api!.playlists.tracks.getAll(playlist);
+        const tracks = await api!.playlists.tracks.getAll(list);
         return {
             type: TRACKS_LOAD_ACTION,
-            playlist,
+            list,
             tracks
         };
     }
@@ -225,10 +262,10 @@ class ActionCreator {
     @autobind
     @withErrorAsync()
     @withApi()
-    async playTrack(offset: number, playlist: Playlist, api?: Api): Promise<undefined> {
+    async playTrack(offset: number, list: Playlist | Album, api?: Api): Promise<undefined> {
         await api!.player.play.put({
             offset,
-            albumUri: playlist.uri
+            albumUri: isAlbum(list) ? list.album.uri : list.uri
         });
         return;
     }
@@ -261,7 +298,7 @@ class ActionCreator {
             return;
         }
 
-        const seekTo = Math.round((minutes * 60 + seconds) * 1000)
+        const seekTo = Math.round((minutes * 60 + seconds) * 1000);
 
         await api!.player.seek.put(seekTo);
     }
