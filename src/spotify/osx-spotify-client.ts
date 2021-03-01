@@ -58,6 +58,9 @@ export class OsxSpotifyClient implements SpotifyClient {
     toggleShuffling() {
         spotify.toggleShuffling(this._queryStatusFunc);
     }
+    toggleLiked() {
+        console.log('Unavailable on macOS');
+    }
     pollStatus(cb: (status: ISpotifyStatusStatePartial) => void, getInterval: () => number) {
         let canceled = false;
         const p = createCancelablePromise<void>((_, reject) => {

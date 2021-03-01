@@ -65,4 +65,7 @@ export class OsAgnosticSpotifyClient implements SpotifyClient {
     @notSupported
     toggleShuffling() {
     }
+    @notSupported
+    toggleLiked() {
+    }
 }

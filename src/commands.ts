@@ -23,6 +23,7 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
     const volumeDown = commands.registerCommand('spotify.volumeDown', sC.volumeDown.bind(sC));
     const toggleRepeating = commands.registerCommand('spotify.toggleRepeating', sC.toggleRepeating.bind(sC));
     const toggleShuffling = commands.registerCommand('spotify.toggleShuffling', sC.toggleShuffling.bind(sC));
+    const toggleLiked = commands.registerCommand('spotify.toggleLiked', sC.toggleLiked.bind(sC));
     const signIn = commands.registerCommand(SIGN_IN_COMMAND, actionsCreator.actionSignIn);
     const signOut = commands.registerCommand('spotify.signOut', actionsCreator.actionSignOut);
     const loadPlaylists = commands.registerCommand('spotify.loadPlaylists', actionsCreator.loadPlaylists);
@@ -44,7 +45,8 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
         actionsCreator.seekTo(seekToMs);
     });
 
-    return Disposable.from(lyrics,
+    return Disposable.from(
+        lyrics,
         next,
         previous,
         play,
@@ -57,6 +59,7 @@ export function createCommands(sC: SpotifyClient): { dispose: () => void } {
         volumeDown,
         toggleRepeating,
         toggleShuffling,
+        toggleLiked,
         signIn,
         signOut,
         loadPlaylists,
