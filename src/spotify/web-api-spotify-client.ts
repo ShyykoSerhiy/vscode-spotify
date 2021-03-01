@@ -178,4 +178,10 @@ export class WebApiSpotifyClient implements SpotifyClient {
         await api!.player.shuffle.put(!playerState.isShuffling);
         this._queryStatusFunc();
     }
+
+    @withErrorAsync()
+    @withApi()
+    async toggleLiked(api?: Api) {
+        console.log("Liked Song");
+    }
 }

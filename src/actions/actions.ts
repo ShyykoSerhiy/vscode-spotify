@@ -153,7 +153,7 @@ class ActionCreator {
     @autobind
     @asyncActionCreator()
     @withApi()
-    async loadAlbums(api?: Api): Promise<AlbumLoadAction> {
+    async loadAlbums(api?: any): Promise<AlbumLoadAction> {
         const albums = await api!.albums.getAll();
         return {
             type: ALBUM_LOAD_ACTION,
@@ -237,7 +237,7 @@ class ActionCreator {
     @autobind
     @asyncActionCreator()
     @withApi()
-    async loadTracks(list?: Playlist | Album, api?: Api): Promise<TracksLoadAction | undefined> {
+    async loadTracks(list?: Playlist | Album, api?: any): Promise<TracksLoadAction | undefined> {
         if (isAlbum(list)) {
             const tracks = await api!.albums.tracks.getAll(list);
             return {

@@ -16,5 +16,6 @@ export interface SpotifyClient {
     volumeDown(): void;
     toggleRepeating(): void;
     toggleShuffling(): void;
+    toggleLiked(): void;
     pollStatus(cb: (status: ISpotifyStatusStatePartial) => void, getInterval: () => number): { promise: Promise<void>, cancel: () => void };
 }
