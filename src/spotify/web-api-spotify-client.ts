@@ -184,6 +184,11 @@ export class WebApiSpotifyClient implements SpotifyClient {
     @withApi()
     async toggleLiked(api?: Api) {
 
+<<<<<<< HEAD
+=======
+        // Requires user-read-currently-playing and/or 
+        //      user-read-playback-state
+>>>>>>> a9175580cbde827a0959404d7dff12b9ef4bdb70
         const uri = (await api!.player.currentlyPlaying.get()).item.uri.split(":")[2];
         const liked = (await api!.me.tracks.contains.get(uri))[0];
 
