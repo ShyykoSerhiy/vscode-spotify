@@ -16,7 +16,7 @@ Note that some of the functionalities are only available on macOS systems (see [
 ## How it works
 
 * On macOS, this extension uses [spotify-node-applescript](https://github.com/andrehaveman/spotify-node-applescript) (basically a wrapper for the official Spotify AppleScript API) to communicate with Spotify.
-* On Windows, it extension uses the Spotify Web API. 
+* On Windows, the extension uses the Spotify Web API. 
 * On Linux, it uses a combination of dbus and pactl.
 
 Spotify Web API implementation can be used on any platform, but it does have some drawbacks:
