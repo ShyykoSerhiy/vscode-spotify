@@ -1,4 +1,5 @@
 import { Api } from '@vscodespotify/spotify-common/lib/spotify/api';
+import { report } from 'superagent';
 
 import { getSpotifyWebApi, withApi, withErrorAsync } from '../actions/actions';
 import { log } from '../info/info';
@@ -177,5 +178,19 @@ export class WebApiSpotifyClient implements SpotifyClient {
         const { playerState } = getState();
         await api!.player.shuffle.put(!playerState.isShuffling);
         this._queryStatusFunc();
+    }
+
+    @withErrorAsync()
+    @withApi()
+    async toggleLiked(api?: Api) {
+
+        const uri = (await api!.player.currentlyPlaying.get()).item.uri.split(":")[2];
+        const liked = (await api!.me.tracks.contains.get(uri))[0];
+
+        if (!liked) {
+            await api!.me.tracks.put(uri);
+        } else {
+            await api!.me.tracks.delete(uri);
+        }
     }
 }

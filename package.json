@@ -98,6 +98,10 @@
         "title": "Spotify Toggle Shuffling"
       },
       {
+        "command": "spotify.toggleLiked",
+        "title": "Spotify Toggle Liked"
+      },
+      {
         "command": "spotify.lyrics",
         "title": "Spotify Lyrics"
       },
@@ -432,7 +436,7 @@
     "vscode-test": "^1.4.0"
   },
   "dependencies": {
-    "@vscodespotify/spotify-common": "1.4.1",
+    "@vscodespotify/spotify-common": "1.4.2",
     "autobind-decorator": "^2.1.0",
     "cheerio": "^1.0.0-rc.3",
     "child_process": "^1.0.2",

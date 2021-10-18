@@ -76,7 +76,7 @@ export class TreeAlbumProvider implements vscode.TreeDataProvider<Album> {
 class AlbumTreeItem extends vscode.TreeItem {
     // @ts-expect-error
     get tooltip(): string {
-        return `${this.album.album.name} - ${this.album.album.artists.map(a => a.name).join(", ")}`;
+        return `${this.album.album.name} - ${this.album.album.artists.map((a: { name: any; }) => a.name).join(", ")}`;
     }
 
     iconPath = {
