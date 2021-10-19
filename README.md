@@ -11,7 +11,7 @@ Provides integration with Spotify Desktop client.
 
 Note that some of the functionalities are only available on macOS systems (see [How it works section](#how-it-works))
 
-**This extension requires Spotify Premium to work on Windows**
+**This extension requires Spotify Premium to work**
 
 ## How it works
 
