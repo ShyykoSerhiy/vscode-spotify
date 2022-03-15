@@ -21,7 +21,7 @@ import { SpoifyClientSingleton } from "./spotify/spotify-client";
 import { getStore } from "./store/store";
 import type { Client } from "tangle";
 import { SpotifyWebview } from "./components/webview-tracks";
-import { ITrack } from "./state/state";
+import { IPlayerState, ITrack } from "./state/state";
 import { getState } from "./store/store";
 // 3// const ch = new Channel<{ track: ITrack }>("shyykoserhiy.vscode-spotify", {
 //   track: {} as null,
@@ -77,11 +77,12 @@ export function activate(context: ExtensionContext) {
   // });
   return {
     marquee: {
-      setup: (tangle: Client<{ track: ITrack }>) => {
+      setup: (tangle: Client<{ track: ITrack; playerState: IPlayerState }>) => {
         getStore().subscribe(() => {
-          const { track } = getState();
-          // console.log("track3", track);
+          const { track, playerState } = getState();
+          // console.log("playerState", playerState);
           tangle.emit("track", track);
+          tangle.emit("playerState", playerState);
         });
       },
     },

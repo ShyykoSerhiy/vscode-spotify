@@ -172,7 +172,7 @@ export class SpotifyWebview {
     if (!this._spotifyControls) {
       this._spotifyControls = new SpotifyControls();
     }
-    console.log("btns,", this._spotifyControls.buttons);
+    // console.log("btns,", this._spotifyControls.buttons);
     // Set the webview's initial html content
 
     this._panel.title = "Spotify Controller";
