@@ -4,7 +4,6 @@ import { createCommands } from "./commands";
 import { SpotifyStatus } from "./components/spotify-status";
 import {
   connectPlaylistTreeView,
-  PlaylistTreeItem,
   TreePlaylistProvider,
 } from "./components/tree-playlists";
 import {
@@ -21,13 +20,8 @@ import { SpoifyClientSingleton } from "./spotify/spotify-client";
 import { getStore } from "./store/store";
 import type { Client } from "tangle";
 import { SpotifyWebview } from "./components/webview-tracks";
-import { IPlayerState, ITrack } from "./state/state";
+import { ILoginState, IPlayerState, ITrack } from "./state/state";
 import { getState } from "./store/store";
-// 3// const ch = new Channel<{ track: ITrack }>("shyykoserhiy.vscode-spotify", {
-//   track: {} as null,
-// });
-
-// import { getState } from "spotify-node-applescript";
 
 // This method is called when your extension is activated. Activation is
 // controlled by the activation events defined in package.json.
@@ -65,37 +59,23 @@ export function activate(context: ExtensionContext) {
   context.subscriptions.push(
     createCommands(SpoifyClientSingleton.spotifyClient)
   );
-  // console.log("track", track);
-  // getStore().subscribe(() => {
-  //   const { track } = getState();
-  //   // console.log("track1", track);
-  // });
 
-  // getStore().subscribe(() => {
-  //   const { track } = getState();
-  //   console.log("track1", track);
-  // });
   return {
     marquee: {
-      setup: (tangle: Client<{ track: ITrack; playerState: IPlayerState }>) => {
+      setup: (
+        tangle: Client<{
+          track: ITrack;
+          playerState: IPlayerState;
+          loginState: ILoginState;
+        }>
+      ) => {
         getStore().subscribe(() => {
-          const { track, playerState } = getState();
-          // console.log("playerState", playerState);
+          const { track, playerState, loginState } = getState();
+          tangle.emit("loginState", loginState);
           tangle.emit("track", track);
           tangle.emit("playerState", playerState);
         });
       },
     },
   };
-  //initializing state
-  // return {
-  //   marquee: {
-  //     setup: (tangle: Client<{ track: ITrack }>) => {
-  //       setInterval(() => {
-  //         tangle.emit("track", trackState);
-  //       }, 1000);
-  //       //   console.log("track", track);
-  //     },
-  //   },
-  // };
 }
