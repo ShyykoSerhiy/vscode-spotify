@@ -1,7 +1,18 @@
 import Channel from "tangle/webviews";
 import { ILoginState, IPlayerState, ITrack } from "./state/state";
 import { faMusic } from "@fortawesome/free-solid-svg-icons/faMusic";
-
+//@ts-ignore
+import NextImg from "../media/next.png";
+//@ts-ignore
+import PauseBtn from "../media/pause-button.png";
+//@ts-ignore
+import PlayBtn from "../media/play-buttton.png";
+//@ts-ignore
+import PreviousBtn from "../media/previous.png";
+//@ts-ignore
+import RepeatBtn from "../media/repeat.png";
+//@ts-ignore
+import ShuffleBtn from "../media/shuffle-arrows.png";
 declare const window: any;
 
 const ch = new Channel<{
@@ -18,15 +29,19 @@ template.innerHTML = /*html*/ `
     margin: 10px;
     display: block;
   }
-  img{
-    height: 150px;
-    width: 150px;
+  :host([layout = "large"]) p { 
+   font-size:32px;
+
+  }
+  #trackArtwork{
+    height: 100%;
+    width: 100%;
     margin-right: 15px;
     border-radius:10px;
+    transition: all 0.5s ease-in-out;
   }
-  h1{
-    font-size: 16px;
-  }
+
+  
   #flex{
     padding: 10px;
     display:flex;
@@ -44,12 +59,36 @@ template.innerHTML = /*html*/ `
     font-size:20px;
   }
   section{
-    width:100%;
+    position: absolute;
+    width:90%;
+    padding: 10px;
     display: flex;
-    justify-content:center;
+    justify-content:space-between;
     align-items:center;
-    margin-top:10px;
+    transition: all 0.5s ease-in-out;
     height:35px;
+    bottom: 0;
+    visibility: hidden;
+    opacity:0;
+  }
+  #name-wrapper{
+    position: absolute;
+    width:100%;
+    padding: 10px;
+    display: flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    visibility: hidden;
+    opacity:0;
+    transition: all 0.5s ease-in-out;
+    bottom: 40px;
+  }
+  #name-wrapper p{
+    font-size:18px;
+    color:white;
+  }
+  p{
+    margin:0;
   }
   #shuffle-repeat-btn{
     display:flex;
@@ -82,32 +121,58 @@ template.innerHTML = /*html*/ `
     right:0;
     font-size:12px;
   }
+  #img-wrapper{
+    position: relative;
+    width: 100%;
+    height:100%;
+  }
 
-
+  .icons{
+    width:20px;
+    height:20px;
+    color:white;
+    filter: brightness(0) invert(1);
+  }
   </style>
 
   <div id='flex'>
   
-  <h1>
-  VSCode Spotify 
-  </h1>
-  <img src='' alt='Spotify Album Art'/>
-  <div>
-  <section>
+  <div id='img-wrapper'>
+  <img src='' id='trackArtwork' alt='Spotify Album Art'/>
+  
+  <div id='name-wrapper'>
+  <p id='trackName'>
+  
+  </p>
+  <p id='artistName'></p>
+  </div>
+  
+  <section id='controller'>
   <div id='shuffle-repeat-btn'>
-    <button id='shuffle'>🔀</button>
+    <button id='shuffle'>
+      <img src="${ShuffleBtn}" class='icons' />
+    </button>
     <div id='shuffleActive'>.</div>
 
   </div>
-  <button id='prevBtn'>⏮️</button>
-  <button id='pausePlay'>Pause</button>
-  <button id='nextBtn'>⏭️</button>
+  <button id='prevBtn'>
+    <img src="${PreviousBtn}" class='icons' />
+  </button>
+  <button id='pausePlay'>
+   <img src="${PauseBtn}" id='pausePlayIcon' class='icons' />
+  </button>
+  <button id='nextBtn'>
+  <img src="${NextImg}" class='icons' /></button>
   <div id='shuffle-repeat-btn'>
-    <button id='repeat'>🔁</button>
+    <button id='repeat'>
+     <img src="${RepeatBtn}" class='icons' />
+    </button>
     <div id='repeatActive'>.</div>
  
   </div>
+  
   </section>
+
   </div>
  </div>
 `;
@@ -119,7 +184,7 @@ template.innerHTML = /*html*/ `
 //   console.log(a);
 // });
 // access to artwork_url
-
+console.log("window.vscode", window.vscode.setState());
 export class StatefulMarqueeWidget extends HTMLElement {
   static get is() {
     return "spotify-element";
@@ -127,7 +192,6 @@ export class StatefulMarqueeWidget extends HTMLElement {
   isLoggedIn: boolean;
   constructor() {
     super();
-
     this.attachShadow({ mode: "open" });
 
     // hard to run dev on login state but this is how it would be:
@@ -172,17 +236,18 @@ export class StatefulMarqueeWidget extends HTMLElement {
     // });
 
     client.on("track", (tck) => {
-      this.shadowRoot!.querySelector("h1")!.textContent =
-        tck.name + " - " + tck.artist;
+      this.shadowRoot!.getElementById("trackName")!.textContent = tck.name;
+      this.shadowRoot!.getElementById("artistName")!.textContent = tck.artist;
       //@ts-ignore
-      this.shadowRoot!.querySelector("img")!.src = tck.artwork_url;
+      this.shadowRoot!.querySelector("#trackArtwork")!.src = tck.artwork_url;
     });
 
     client.on("playerState", (state) => {
       if (state.state === "paused") {
-        this.shadowRoot!.getElementById("pausePlay")!.innerText = "▶️";
+        this.shadowRoot!.getElementById("pausePlayIcon")!.src = PlayBtn;
       } else if (state.state === "playing") {
-        this.shadowRoot!.getElementById("pausePlay")!.innerText = "⏸";
+        this.shadowRoot!.getElementById("pausePlayIcon")!.src = PauseBtn;
+        // this.shadowRoot!.getElementById("pausePlay")!.innerText = "⏸";
       }
       if (state.isShuffling) {
         this.shadowRoot!.getElementById("shuffleActive")!.style.display =
@@ -201,8 +266,6 @@ export class StatefulMarqueeWidget extends HTMLElement {
   }
 
   connectedCallback() {
-    console.log(this.isLoggedIn);
-
     this.shadowRoot?.appendChild(template.content.cloneNode(true));
 
     this.shadowRoot!.getElementById("nextBtn")!.addEventListener(
@@ -273,6 +336,32 @@ export class StatefulMarqueeWidget extends HTMLElement {
         },
       });
     });
+    //enable butons to show
+    this.shadowRoot!.getElementById("img-wrapper")!.addEventListener(
+      "mouseenter",
+      () => {
+        this.shadowRoot!.getElementById("trackArtwork").style.opacity = "0.35";
+        this.shadowRoot!.getElementById("controller").style.visibility =
+          "visible";
+        this.shadowRoot!.getElementById("controller").style.opacity = "1";
+        this.shadowRoot!.getElementById("name-wrapper").style.visibility =
+          "visible";
+        this.shadowRoot!.getElementById("name-wrapper").style.opacity = "1";
+      }
+    );
+    //reset view
+    this.shadowRoot!.getElementById("img-wrapper")!.addEventListener(
+      "mouseleave",
+      () => {
+        //can just add a class that has these elements but it works for now...
+        this.shadowRoot!.getElementById("trackArtwork").style.opacity = "1";
+        this.shadowRoot!.getElementById("controller").style.display = "hidden";
+        this.shadowRoot!.getElementById("controller").style.opacity = "0";
+        this.shadowRoot!.getElementById("name-wrapper").style.display =
+          "hidden";
+        this.shadowRoot!.getElementById("name-wrapper").style.opacity = "0";
+      }
+    );
   }
 }
 
