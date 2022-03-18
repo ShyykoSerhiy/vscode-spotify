@@ -39,6 +39,8 @@ template.innerHTML = /*html*/ `
     margin-right: 15px;
     border-radius:10px;
     transition: all 0.5s ease-in-out;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5),
+                       rgba(0, 0, 0, 0.5)), url("url_of_image"))
   }
 
   
@@ -364,7 +366,7 @@ export class StatefulMarqueeWidget extends HTMLElement {
     );
   }
 }
-
+console.log("StatefulMarqueeWidget", StatefulMarqueeWidget);
 window.marqueeExtension.defineWidget(
   {
     name: StatefulMarqueeWidget.is,
