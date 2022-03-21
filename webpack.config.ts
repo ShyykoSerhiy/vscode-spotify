@@ -1,10 +1,10 @@
 import * as path from "path";
 import { Configuration } from "webpack";
 const exampleWidget: Configuration = {
-  entry: path.resolve(__dirname, "src", "widget2.ts"),
+  entry: path.resolve(__dirname, "src", "widget.ts"),
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "widget2.js",
+    filename: "widget.js",
   },
   devtool: "source-map",
   module: {

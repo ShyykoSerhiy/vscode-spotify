@@ -1,6 +1,8 @@
 import Channel from "tangle/webviews";
-import { ILoginState, IPlayerState, ITrack } from "./state/state";
 import { faMusic } from "@fortawesome/free-solid-svg-icons/faMusic";
+import { ILoginState, IPlayerState, ITrack } from "./state/state";
+import { LitElement, html, css, PropertyValueMap } from "lit";
+import { property } from "lit/decorators.js";
 //@ts-ignore
 import NextImg from "../media/next.png";
 //@ts-ignore
@@ -21,235 +23,129 @@ const ch = new Channel<{
   loginState: ILoginState;
 }>("shyykoserhiy.vscode-spotify");
 const client = ch.attach(window.vscode as any);
-// if needing login state - <button id='login-logout-btn'> <i class='fa fa-sign-out'></i>Login</button>
-const template = document.createElement("template");
-template.innerHTML = /*html*/ `
-  <style>
-  :host {
-    margin: 10px;
-    display: block;
-  }
-  :host([layout = "large"]) p { 
-   font-size:32px;
 
-  }
-  #trackArtwork{
-    height: 100%;
-    width: 100%;
-    margin-right: 15px;
-    border-radius:10px;
-    transition: all 0.5s ease-in-out;
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5),
-                       rgba(0, 0, 0, 0.5)), url("url_of_image"))
-  }
+// you dont need to define element as the element below on name will define it for you there
+class StatefulMarqueeWidget2 extends LitElement {
+  static styles = css`
+    .img-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+    .name-wrapper {
+      position: absolute;
 
-  
-  #flex{
-    padding: 10px;
-    display:flex;
-    flex-direction: column;
-    align-items:center;
-    justify-content: center;
-    position: relative;
-  }
-  button{
-    background: none;
-    cursor:pointer;
-    outline:none;
-    border:none;
-    color:white;
-    font-size:20px;
-  }
-  section{
-    position: absolute;
-    width:90%;
-    padding: 10px;
-    display: flex;
-    justify-content:space-between;
-    align-items:center;
-    transition: all 0.5s ease-in-out;
-    height:35px;
-    bottom: 0;
-    visibility: hidden;
-    opacity:0;
-  }
-  #name-wrapper{
-    position: absolute;
-    width:100%;
-    padding: 10px;
-    display: flex;
-    flex-direction:column;
-    justify-content:flex-start;
-    visibility: hidden;
-    opacity:0;
-    transition: all 0.5s ease-in-out;
-    bottom: 40px;
-  }
-  #name-wrapper p{
-    font-size:18px;
-    color:white;
-  }
-  p{
-    margin:0;
-  }
-  #shuffle-repeat-btn{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    position: relative;
-    cursor:pointer;
-    justify-content:center;
-    height:45px;
-  }
-  #shuffleActive{
-    position: absolute;
-    bottom: 0;
-    left: 45%;
-    right: 50%;
-    font-size:25px;
-    color:green
-  }
-  #repeatActive{
-    position: absolute;
-    bottom: 0;
-    left: 45%;
-    font-size:25px;
-    color:green
-  }
- 
-  #login-logout-btn{
-    position: absolute;
-    top:0;
-    right:0;
-    font-size:12px;
-  }
-  #img-wrapper{
-    position: relative;
-    width: 100%;
-    height:100%;
-  }
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
 
-  .icons{
-    width:20px;
-    height:20px;
-    color:white;
-    filter: brightness(0) invert(1);
-  }
-  </style>
+      transition: all 0.5s ease-in-out;
+      bottom: 40px;
+    }
+    .name-wrapper p {
+      font-size: 18px;
+      color: white;
+      margin: 0;
+    }
+    .trackArtwork {
+      width: 100%;
+      height: 100%;
+      margin-right: 15px;
+      transition: all 0.5s ease-in-out;
+      object-fit: cover;
 
-  <div id='flex'>
-  
-  <div id='img-wrapper'>
-  <img src='' id='trackArtwork' alt='Spotify Album Art'/>
-  
-  <div id='name-wrapper'>
-  <p id='trackName'>
-  
-  </p>
-  <p id='artistName'></p>
-  </div>
-  
-  <section id='controller'>
-  <div id='shuffle-repeat-btn'>
-    <button id='shuffle'>
-      <img src="${ShuffleBtn}" class='icons' />
-    </button>
-    <div id='shuffleActive'>.</div>
+      /* filter: brightness(0.5); */
+    }
+    .trackArtwork-darkened {
+      height: 100%;
+      width: 100%;
+      margin-right: 15px;
+      border-radius: 10px;
+      transition: all 0.5s ease-in-out;
+    }
 
-  </div>
-  <button id='prevBtn'>
-    <img src="${PreviousBtn}" class='icons' />
-  </button>
-  <button id='pausePlay'>
-   <img src="${PauseBtn}" id='pausePlayIcon' class='icons' />
-  </button>
-  <button id='nextBtn'>
-  <img src="${NextImg}" class='icons' /></button>
-  <div id='shuffle-repeat-btn'>
-    <button id='repeat'>
-     <img src="${RepeatBtn}" class='icons' />
-    </button>
-    <div id='repeatActive'>.</div>
- 
-  </div>
-  
-  </section>
+    .icons {
+      width: 16px;
+      height: 16px;
+      color: white;
+      filter: brightness(0) invert(1);
+    }
+    body.vscode-light .icons {
+      filter: brightness(0);
+    }
 
-  </div>
- </div>
-`;
-// console.log("hello world");
-// window.onDidReceiveMessage = (a: any) => {
-//   console.log(a);
-// };
-// window.addEventListener("message", (a: any) => {
-//   console.log(a);
-// });
-// access to artwork_url
-console.log("window.vscode", window.vscode.setState());
-export class StatefulMarqueeWidget extends HTMLElement {
-  static get is() {
-    return "spotify-element";
-  }
-  isLoggedIn: boolean;
+    .shuffle-repeat-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      cursor: pointer;
+      justify-content: center;
+      height: 45px;
+    }
+    #shuffleActive {
+      position: absolute;
+      bottom: 0;
+      left: 45%;
+      right: 50%;
+      font-size: 25px;
+      color: green;
+    }
+    #repeatActive {
+      position: absolute;
+      bottom: 0;
+      left: 45%;
+      font-size: 25px;
+      color: green;
+    }
+    section {
+      position: absolute;
+      width: 90%;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.5s ease-in-out;
+      height: 35px;
+      bottom: 0;
+    }
+    button {
+      background: none;
+      cursor: pointer;
+      outline: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+    }
+    @media screen and (max-width: 200px) {
+      .icons {
+        width: 10px;
+        height: 10px;
+      }
+    }
+  `;
+  @property()
+  track: ITrack;
+  prevTrack = window.vscode.getState().track;
+
+  //run our updates
   constructor() {
     super();
-    this.attachShadow({ mode: "open" });
-
-    // hard to run dev on login state but this is how it would be:
-    // client.on("loginState", (l) => {
-    //   if (l === null) {
-    //     this.isLoggedIn = false;
-    //     this.shadowRoot!.getElementById("login-logout-btn")!.innerText =
-    //       "Login";
-    //     this.shadowRoot!.getElementById("login-logout-btn")!.addEventListener(
-    //       "click",
-    //       () => {
-    //         window.vscode.postMessage({
-    //           west: {
-    //             execCommands: [
-    //               {
-    //                 command: "spotify.signIn",
-    //               },
-    //             ],
-    //           },
-    //         });
-    //       }
-    //     );
-    //   } else {
-    //     this.isLoggedIn = true;
-    //     this.shadowRoot!.getElementById("login-logout-btn")!.innerText =
-    //       "Logout";
-    //     this.shadowRoot!.getElementById("login-logout-btn")!.addEventListener(
-    //       "click",
-    //       () => {
-    //         window.vscode.postMessage({
-    //           west: {
-    //             execCommands: [
-    //               {
-    //                 command: "spotify.signOut",
-    //               },
-    //             ],
-    //           },
-    //         });
-    //       }
-    //     );
-    //   }
-    // });
-
+    console.log("prevTrack", this.prevTrack);
     client.on("track", (tck) => {
-      this.shadowRoot!.getElementById("trackName")!.textContent = tck.name;
-      this.shadowRoot!.getElementById("artistName")!.textContent = tck.artist;
-      //@ts-ignore
-      this.shadowRoot!.querySelector("#trackArtwork")!.src = tck.artwork_url;
+      this.track = tck;
+      window.vscode.setState({ track: tck });
     });
 
     client.on("playerState", (state) => {
       if (state.state === "paused") {
+        //@ts-ignore
         this.shadowRoot!.getElementById("pausePlayIcon")!.src = PlayBtn;
       } else if (state.state === "playing") {
+        //@ts-ignore
         this.shadowRoot!.getElementById("pausePlayIcon")!.src = PauseBtn;
-        // this.shadowRoot!.getElementById("pausePlay")!.innerText = "⏸";
       }
       if (state.isShuffling) {
         this.shadowRoot!.getElementById("shuffleActive")!.style.display =
@@ -267,114 +163,105 @@ export class StatefulMarqueeWidget extends HTMLElement {
     });
   }
 
-  connectedCallback() {
-    this.shadowRoot?.appendChild(template.content.cloneNode(true));
-
-    this.shadowRoot!.getElementById("nextBtn")!.addEventListener(
-      "click",
-      () => {
-        window.vscode.postMessage({
-          west: {
-            execCommands: [
-              {
-                command: "spotify.next",
-              },
-            ],
-          },
-        });
-      }
-    );
-    this.shadowRoot!.getElementById("prevBtn")!.addEventListener(
-      "click",
-      () => {
-        // window.vscode.commands.executeCommand("spotify.previous");
-        window.vscode.postMessage({
-          west: {
-            execCommands: [
-              {
-                command: "spotify.previous",
-              },
-            ],
-          },
-        });
-      }
-    );
-    this.shadowRoot!.getElementById("pausePlay")!.addEventListener(
-      "click",
-      () => {
-        window.vscode.postMessage({
-          west: {
-            execCommands: [
-              {
-                command: "spotify.playPause",
-              },
-            ],
-          },
-        });
-      }
-    );
-    this.shadowRoot!.getElementById("shuffle")!.addEventListener(
-      "click",
-      () => {
-        window.vscode.postMessage({
-          west: {
-            execCommands: [
-              {
-                command: "spotify.toggleShuffling",
-              },
-            ],
-          },
-        });
-      }
-    );
-    this.shadowRoot!.getElementById("repeat")!.addEventListener("click", () => {
-      window.vscode.postMessage({
-        west: {
-          execCommands: [
-            {
-              command: "spotify.toggleRepeating",
-            },
-          ],
-        },
+  protected firstUpdated(
+    _changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>
+  ): void {
+    this.shadowRoot
+      .querySelector(".name-controller-wrapper")
+      .addEventListener("mouseenter", () => {
+        this.shadowRoot.getElementById("trackArtwork")!.style.filter =
+          "brightness(0.3)";
       });
+    this.shadowRoot
+      .querySelector(".name-controller-wrapper")
+      .addEventListener("mouseleave", () => {
+        this.shadowRoot.getElementById("trackArtwork")!.style.filter =
+          "brightness(1)";
+      });
+  }
+  // connectedCallback(): void {
+  //   super.connectedCallback();
+  //   console.log("prev track", window.vscode.getState());
+  //   this.track = window.vscode.getState().track;
+  // }
+
+  render() {
+    return html`
+      <div class="img-wrapper">
+        <img
+          id="trackArtwork"
+          class="trackArtwork"
+          src="${this.track.artwork_url}"
+        />
+        <div class="name-controller-wrapper">
+          <div class="name-wrapper">
+            <p>${this.track.name}</p>
+            <p>${this.track.artist}</p>
+          </div>
+          <section class="controller">
+            <div class="shuffle-repeat-btn">
+              <button
+                class="shuffle"
+                @click="${() =>
+                  this._triggerSpotifyCommand("spotify.toggleShuffling")}"
+              >
+                <img src="${ShuffleBtn}" class="icons" />
+              </button>
+              <div id="shuffleActive">.</div>
+            </div>
+            <button
+              class="prevBtn"
+              @click="${() => this._triggerSpotifyCommand("spotify.previous")}"
+            >
+              <img src="${PreviousBtn}" class="icons" />
+            </button>
+            <button
+              class="pausePlay"
+              @click="${() => this._triggerSpotifyCommand("spotify.playPause")}"
+            >
+              <img src="${PauseBtn}" id="pausePlayIcon" class="icons" />
+            </button>
+            <button
+              class="nextBtn"
+              @click="${() => this._triggerSpotifyCommand("spotify.next")}"
+            >
+              <img src="${NextImg}" class="icons" />
+            </button>
+            <div
+              class="shuffle-repeat-btn"
+              @click="${() =>
+                this._triggerSpotifyCommand("spotify.toggleRepeating")}"
+            >
+              <button class="repeat">
+                <img src="${RepeatBtn}" class="icons" />
+              </button>
+              <div id="repeatActive">.</div>
+            </div>
+          </section>
+        </div>
+      </div>
+    `;
+  }
+  private _triggerSpotifyCommand(command: string) {
+    window.vscode.postMessage({
+      west: {
+        execCommands: [
+          {
+            command,
+          },
+        ],
+      },
     });
-    //enable butons to show
-    this.shadowRoot!.getElementById("img-wrapper")!.addEventListener(
-      "mouseenter",
-      () => {
-        this.shadowRoot!.getElementById("trackArtwork").style.opacity = "0.35";
-        this.shadowRoot!.getElementById("controller").style.visibility =
-          "visible";
-        this.shadowRoot!.getElementById("controller").style.opacity = "1";
-        this.shadowRoot!.getElementById("name-wrapper").style.visibility =
-          "visible";
-        this.shadowRoot!.getElementById("name-wrapper").style.opacity = "1";
-      }
-    );
-    //reset view
-    this.shadowRoot!.getElementById("img-wrapper")!.addEventListener(
-      "mouseleave",
-      () => {
-        //can just add a class that has these elements but it works for now...
-        this.shadowRoot!.getElementById("trackArtwork").style.opacity = "1";
-        this.shadowRoot!.getElementById("controller").style.display = "hidden";
-        this.shadowRoot!.getElementById("controller").style.opacity = "0";
-        this.shadowRoot!.getElementById("name-wrapper").style.display =
-          "hidden";
-        this.shadowRoot!.getElementById("name-wrapper").style.opacity = "0";
-      }
-    );
   }
 }
-console.log("StatefulMarqueeWidget", StatefulMarqueeWidget);
 window.marqueeExtension.defineWidget(
   {
-    name: StatefulMarqueeWidget.is,
+    name: "spotify-marquee",
     icon: faMusic,
-    label: "Marquee x VSCode-Spotify",
-    tags: ["productivity", "music"],
-    description:
-      "Controller for spotify widget extending vscode-spotify extension",
+    label: "Spotify",
+    tags: ["productivity"],
+    description: "Extension of VSCode Spotify",
   },
-  StatefulMarqueeWidget
+  StatefulMarqueeWidget2
 );
+export default StatefulMarqueeWidget2;

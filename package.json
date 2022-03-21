@@ -13,7 +13,7 @@
     "theme": "light"
   },
   "marquee": {
-    "widget": "/dist/widget2.js"
+    "widget": "/dist/widget.js"
   },
   "repository": {
     "type": "git",
@@ -424,7 +424,8 @@
     "contributors:generate": "all-contributors generate",
     "contributors:check": "all-contributors check",
     "build": "webpack --mode production",
-    "watch:webpack": "NODE_ENV=development webpack --mode development --watch"
+    "watch:webpack": "NODE_ENV=development webpack --mode development --watch",
+    "watch:svelte": "rollup -c -w"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
@@ -452,11 +453,11 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript-2": "^0.8.1",
     "svelte": "^3.46.4",
-    "svelte-check": "^2.4.5",
+    "svelte-check": "^2.4.6",
     "svelte-preprocess": "^4.10.4",
     "ts-loader": "^9.2.7",
     "ts-node": "^10.7.0",
-    "typescript": "^4.0.2",
+    "typescript": "^4.6.2",
     "vscode-test": "^1.4.0",
     "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2",
