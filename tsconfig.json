@@ -23,6 +23,7 @@
     "webpack.config.ts",
     "rollup.config.js",
     "out",
-    "dist"
+    "dist",
+    "./src/svelteWidget/"
   ]
 }

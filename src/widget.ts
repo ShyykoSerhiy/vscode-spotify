@@ -23,7 +23,7 @@ const ch = new Channel<{
   loginState: ILoginState;
 }>("shyykoserhiy.vscode-spotify");
 const client = ch.attach(window.vscode as any);
-
+console.log("window", window);
 // you dont need to define element as the element below on name will define it for you there
 class StatefulMarqueeWidget2 extends LitElement {
   static styles = css`
@@ -119,12 +119,6 @@ class StatefulMarqueeWidget2 extends LitElement {
       color: white;
       font-size: 20px;
     }
-    @media screen and (max-width: 200px) {
-      .icons {
-        width: 10px;
-        height: 10px;
-      }
-    }
   `;
   @property()
   track: ITrack;
@@ -133,9 +127,10 @@ class StatefulMarqueeWidget2 extends LitElement {
   //run our updates
   constructor() {
     super();
-    console.log("prevTrack", this.prevTrack);
+
     client.on("track", (tck) => {
       this.track = tck;
+      //this does not work
       window.vscode.setState({ track: tck });
     });
 
@@ -179,11 +174,6 @@ class StatefulMarqueeWidget2 extends LitElement {
           "brightness(1)";
       });
   }
-  // connectedCallback(): void {
-  //   super.connectedCallback();
-  //   console.log("prev track", window.vscode.getState());
-  //   this.track = window.vscode.getState().track;
-  // }
 
   render() {
     return html`
