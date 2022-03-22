@@ -11,7 +11,6 @@ export interface ITrack {
   album: string;
   artist: string;
   name: string;
-  artwork_url: string;
 }
 
 export interface ILoginState {

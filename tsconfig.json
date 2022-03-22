@@ -19,8 +19,6 @@
   "exclude": [
     "node_modules",
     ".vscode-test",
-    "webview",
-    "webpack.config.ts",
     "rollup.config.js",
     "out",
     "dist",

@@ -19,7 +19,6 @@ import { SpotifyStatusController } from "./spotify-status-controller";
 import { SpoifyClientSingleton } from "./spotify/spotify-client";
 import { getStore } from "./store/store";
 import type { Client } from "tangle";
-import { SpotifyWebview } from "./components/webview-tracks";
 import { ILoginState, IPlayerState, ITrack } from "./state/state";
 import { getState } from "./store/store";
 
@@ -43,12 +42,7 @@ export function activate(context: ExtensionContext) {
     treeDataProvider: treeTrackProvider,
   });
   treeTrackProvider.bindView(trackTreeView);
-  //webview window
-  context.subscriptions.push(
-    vscode.commands.registerCommand("spotify.showWebview", () => {
-      SpotifyWebview.createOrShow(context.extensionUri);
-    })
-  );
+
   // Add to a list of disposables which are disposed when this extension is deactivated.
   context.subscriptions.push(connectPlaylistTreeView(playlistTreeView));
   context.subscriptions.push(connectAlbumTreeView(albumTreeView));
