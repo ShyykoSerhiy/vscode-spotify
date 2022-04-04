@@ -1,14 +1,14 @@
-import App from "../components/widget.svelte";
+import App from "./widget.svelte";
 import { faMusic } from "@fortawesome/free-solid-svg-icons/faMusic";
 
 declare const window: any;
 window.marqueeExtension.defineWidget(
   {
-    name: "example-widget",
+    name: "spotify-widget",
     icon: faMusic,
     label: "Spotify",
     tags: ["productivity"],
-    description: "Extension of VSCode Spotify",
+    description: "Widget Extension for VSCode Spotify",
   },
   App
 );

@@ -3,14 +3,12 @@
     "module": "commonjs",
     "target": "es6",
     "outDir": "out",
-    "lib": ["es6", "DOM"],
+    "lib": ["es6"],
     "sourceMap": true,
     "rootDir": "src",
     "strict": false /* enable all strict type-checking options */,
     "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowJs": true
+    "skipLibCheck": true
     /* Additional Checks */
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
     // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
@@ -20,8 +18,7 @@
     "node_modules",
     ".vscode-test",
     "rollup.config.js",
-    "out",
     "dist",
-    "./src/svelteWidget/"
+    "./src/marquee/**"
   ]
 }
