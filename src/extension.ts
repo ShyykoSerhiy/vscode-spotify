@@ -44,7 +44,7 @@ export function activate(context: ExtensionContext) {
       ) => {
         getStore(context.globalState).subscribe(() => {
           const { track, playerState } = getState();
-          tangle.emit("track", track);
+          tangle.emit('track', track);
           tangle.emit("playerState", playerState);
         });
       },
