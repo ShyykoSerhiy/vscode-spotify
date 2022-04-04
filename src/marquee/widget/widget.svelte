@@ -7,15 +7,19 @@
     import ShuffleIcon from "../../../media/shuffle-arrows.png";
     import type { ILoginState, IPlayerState, ITrack } from "../../state/state";
     import Channel from "tangle/webviews";
- 
+
+    interface Track extends ITrack{
+      artwork_url: string
+    }
+
     const ch = new Channel<{
-        track: ITrack;
+        track: Track;
         playerState: IPlayerState;
         loginState: ILoginState;
     }>("shyykoserhiy.vscode-spotify");
     const client = ch.attach(window.vscode as any);
-   
-    let track: ITrack;
+    
+    let track: Track;
     let pauseOrPlay: 'pause' | 'play' = 'pause';
     let isShuffling: boolean = false;
     let isRepeating: boolean = false;
@@ -53,7 +57,6 @@
     }
 </script>
 
-<!-- src={track.artwork_url} does exist, original types does not have it listed -->
 {#if track === null || track === undefined }
   <div class="defaultWrapper">
     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
@@ -63,7 +66,7 @@
     <img id="trackArtwork" class={isHoveringControls ? 'trackArtwork-darkened' : "trackArtwork"} src={track.artwork_url} alt='Wrapper view for the album.' />
     <div class="name-controller-wrapper" on:mouseenter={() => isHoveringControls = true} on:mouseleave={() => isHoveringControls = false}>
       <div class="name-wrapper">
-        <p>{track.name}</p>
+        <p>{track.name}</p> 
         <p>{track.artist}</p>
       </div>
       
