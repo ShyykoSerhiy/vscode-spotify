@@ -1,6 +1,5 @@
 <script lang="ts" >
     import NextIcon from "../../../media/next.png";
-    import SpotifyIcon from "../../../media/spotify-icon.png";
     import PauseIcon from "../../../media/pause-button.png";
     import PlayIcon from "../../../media/play-buttton.png";
     import PreviousIcon from "../../../media/previous.png";
@@ -57,7 +56,7 @@
 <!-- src={track.artwork_url} does exist, original types does not have it listed -->
 {#if track === null || track === undefined }
   <div class="defaultWrapper">
-    <img src={SpotifyIcon} alt='Logo of spotify' class="spotifyDefault" />
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
   </div>
 {:else}
   <div class="img-wrapper">
@@ -69,8 +68,8 @@
       </div>
       
       <section class="controller">
-        <div class="shuffle-repeat-btn">
-          <button class="shuffle" on:click={() => triggerSpotifyCommand("spotify.toggleShuffling")}>
+        <div class="shuffle-repeat-btn" on:click={() => triggerSpotifyCommand("spotify.toggleShuffling")}>
+          <button class="shuffle" >
             <img src={ShuffleIcon} class="icons" alt='shuffle icon' />
           </button>
           <div class={isShuffling ? 'shuffleActive' : 'hidden'}>.</div>
@@ -130,20 +129,6 @@
       transition: all 0.5s ease-in-out;
       object-fit: cover;
     }
-    .spotifyDefault{
-        width: 75%;
-      /* height: 75%; */
-      animation: rotation 8s infinite linear;
-      object-fit: cover;
-    }
-    @keyframes rotation {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(359deg);
-        }
-    }
     .defaultWrapper{ 
         width:100%;   
         height: 100%;
@@ -158,11 +143,11 @@
     }
     
     .trackArtwork-darkened {
-    width: 100%;
+      width: 100%;
       height: 100%;
       transition: all 0.5s ease-in-out;
       object-fit: cover;
-    filter: brightness(0.3);
+      filter: brightness(0.3);
     }
     .icons {
       width: 16px;
@@ -215,6 +200,62 @@
     }
     .hidden{
         display: none;
-    } 
+    }
+    .lds-ellipsis {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+    .lds-ellipsis div {
+      position: absolute;
+      top: 33px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #fff;
+      animation-timing-function: cubic-bezier(0, 1, 1, 0);
+    }
+    .lds-ellipsis div:nth-child(1) {
+      left: 8px;
+      animation: lds-ellipsis1 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(2) {
+      left: 8px;
+      animation: lds-ellipsis2 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(3) {
+      left: 32px;
+      animation: lds-ellipsis2 0.6s infinite;
+    }
+    .lds-ellipsis div:nth-child(4) {
+      left: 56px;
+      animation: lds-ellipsis3 0.6s infinite;
+    }
+    @keyframes lds-ellipsis1 {
+      0% {
+        transform: scale(0);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+    @keyframes lds-ellipsis3 {
+      0% {
+        transform: scale(1);
+      }
+      100% {
+        transform: scale(0);
+      }
+    }
+    @keyframes lds-ellipsis2 {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(24px, 0);
+      }
+    }
+
 </style>
 
