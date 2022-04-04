@@ -6,7 +6,7 @@
     "lib": ["es6"],
     "sourceMap": true,
     "rootDir": "src",
-    "strict": false /* enable all strict type-checking options */,
+    "strict": true /* enable all strict type-checking options */,
     "experimentalDecorators": true,
     "skipLibCheck": true
     /* Additional Checks */
