@@ -1,60 +1,56 @@
 <script lang="ts" >
-    import NextIcon from "../../../media/next.png";
-    import PauseIcon from "../../../media/pause-button.png";
-    import PlayIcon from "../../../media/play-buttton.png";
-    import PreviousIcon from "../../../media/previous.png";
-    import RepeatIcon from "../../../media/repeat.png";
-    import ShuffleIcon from "../../../media/shuffle-arrows.png";
-    import type { ILoginState, IPlayerState, ITrack } from "../../state/state";
-    import Channel from "tangle/webviews";
+  import NextIcon from "../../../media/next.png";
+  import PauseIcon from "../../../media/pause-button.png";
+  import PlayIcon from "../../../media/play-buttton.png";
+  import PreviousIcon from "../../../media/previous.png";
+  import RepeatIcon from "../../../media/repeat.png";
+  import ShuffleIcon from "../../../media/shuffle-arrows.png";
+  import type { ILoginState, IPlayerState, ITrack } from "../../state/state";
+  import Channel from "tangle/webviews";
 
-    interface Track extends ITrack{
-      artwork_url: string
-    }
+  interface Track extends ITrack{
+    artwork_url: string
+  } 
 
-    const ch = new Channel<{
-        track: Track;
-        playerState: IPlayerState;
-        loginState: ILoginState;
-    }>("shyykoserhiy.vscode-spotify");
-    const client = ch.attach(window.vscode as any);
+  const ch = new Channel<{
+    track: Track;
+    playerState: IPlayerState;
+    loginState: ILoginState;
+  }>("shyykoserhiy.vscode-spotify");
+  const client = ch.attach(window.vscode as any);
     
-    let track: Track;
-    let pauseOrPlay: 'pause' | 'play' = 'pause';
-    let isShuffling: boolean = false;
-    let isRepeating: boolean = false;
-    let isHoveringControls: boolean;
-    client.on("track", (tck) => {
-        track = tck    
-    });
-    client.on("playerState", (state) => {
-      if (state.state === "paused") {
-        pauseOrPlay = 'play';
-      } else if (state.state === "playing") {
-        pauseOrPlay = 'pause';
-      }
-      if (state.isShuffling) {
-       isShuffling = true;
-      } else {
-        isShuffling = false; 
-      }
-      if (state.isRepeating) {
-       isRepeating = true;
-      } else {
-       isRepeating = false;
-      }
-    })
-    function triggerSpotifyCommand(command:string){
-        window.vscode.postMessage({
-            west: {
-                execCommands: [
-                  {
-                      command,
-                  },
-                ],
-            },
-            });
+  let track: Track;
+  let pauseOrPlay: 'pause' | 'play' = 'pause';
+  let isShuffling: boolean = false;
+  let isRepeating: boolean = false;
+  let isHoveringControls: boolean;
+  client.on("track", (tck) => {
+    track = tck    
+  });
+  client.on("playerState", (state) => {
+    if (state.state === "paused") {
+      pauseOrPlay = 'play';
+    } else if (state.state === "playing") {
+      pauseOrPlay = 'pause';
     }
+    if (state.isShuffling) {
+      isShuffling = true;
+    } else {
+      isShuffling = false; 
+    }
+    if (state.isRepeating) {
+      isRepeating = true;
+    } else {
+      isRepeating = false;
+    }
+  })
+  function triggerSpotifyCommand(command:string){
+    window.vscode.postMessage({
+      west: { execCommands: [{
+        command
+      }]},
+    });
+  }
 </script>
 
 {#if track === null || track === undefined }
@@ -144,7 +140,6 @@
         
         overflow: hidden;
     }
-    
     .trackArtwork-darkened {
       width: 100%;
       height: 100%;
