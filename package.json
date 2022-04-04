@@ -420,7 +420,7 @@
     "contributors:generate": "all-contributors generate",
     "contributors:check": "all-contributors check",
     "build": "webpack --mode production",
-    "watch:svelte": "rollup -c -w"
+    "watch:marquee": "rollup -c -w"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.11",
