@@ -410,7 +410,7 @@
   },
   "main": "./out/extension.js",
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run build",
     "build": "run-s compile:*",
     "compile:ts": "tsc -p ./",
     "compile:marquee": "rollup -c",
