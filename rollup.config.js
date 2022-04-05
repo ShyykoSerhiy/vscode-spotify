@@ -21,7 +21,11 @@ export default {
       preprocess: sveltePreprocess(),
       customElement: true,
       tag: null,
+      css: (css) => {
+        css.write("widget.css");
+      },
     }),
+
     resolve({ browser: true, dedupe: ["svelte"] }),
     commonjs(),
     typescript({
