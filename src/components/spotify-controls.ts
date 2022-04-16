@@ -76,20 +76,20 @@ export class SpotifyControls {
         const buttonsInfo = [
             { id: 'next', text: '$(chevron-right)' },
             { id: 'previous', text: '$(chevron-left)' },
-            { id: 'play', text: '$(triangle-right)' },
-            { id: 'pause', text: '$(primitive-square)' },
+            { id: 'play', text: '$(play)' },
+            { id: 'pause', text: '$(debug-pause)' },
             {
                 id: 'playPause',
-                text: '$(triangle-right)',
-                dynamicText: (isPlaying?: boolean) => isPlaying ? '$(primitive-square)' : '$(triangle-right)'
+                text: '$(play)',
+                dynamicText: (isPlaying?: boolean) => isPlaying ? '$(debug-pause)' : '$(play)'
             },
             { id: 'muteVolume', text: '$(mute)' },
             { id: 'unmuteVolume', text: '$(unmute)' },
             { id: 'muteUnmuteVolume', text: '$(mute)', dynamicText: (isMuted?: boolean) => isMuted ? '$(mute)' : '$(unmute)' },
-            { id: 'volumeUp', text: '$(arrow-small-up)' },
-            { id: 'volumeDown', text: '$(arrow-small-down)' },
+            { id: 'volumeUp', text: '$(arrow-up)' },
+            { id: 'volumeDown', text: '$(arrow-down)' },
             { id: 'toggleRepeating', text: '$(sync)', dynamicColor: (isRepeating?: boolean) => isRepeating ? 'white' : 'darkgrey' },
-            { id: 'toggleShuffling', text: '$(git-branch)', dynamicColor: (isShuffling?: boolean) => isShuffling ? 'white' : 'darkgrey' },
+            { id: 'toggleShuffling', text: '$(source-control)', dynamicColor: (isShuffling?: boolean) => isShuffling ? 'white' : 'darkgrey' },
             { id: 'lyrics', text: '$(book)' },
             { id: BUTTON_ID_SIGN_IN, text: '$(sign-in)' },
             { id: BUTTON_ID_SIGN_OUT, text: '$(sign-out)' }
