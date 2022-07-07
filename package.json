@@ -438,7 +438,7 @@
     "child_process": "^1.0.2",
     "express": "^4.16.2",
     "immutable": "^3.8.2",
-    "moment": "^2.22.2",
+    "moment": "^2.29.4",
     "redux": "^3.7.2",
     "redux-persist": "^5.10.0",
     "request-light": "^0.2.1",
