@@ -62,7 +62,7 @@ export function withErrorAsync() {
         descriptor.value = async function (...args: any[]) {
             try {
                 return await originalMethod.apply(this, args);
-            } catch (e) {
+            } catch (e: any) {
                 showWarningMessage('Failed to perform operation ' + e.message || e);
             }
         };
@@ -98,7 +98,7 @@ function asyncActionCreator() {
                 if (!action) {
                     return;
                 }
-            } catch (e) {
+            } catch (e: any) {
                 showWarningMessage('Failed to perform operation ' + e.message || e);
             }
             getStore().dispatch(action);
