@@ -4,7 +4,7 @@ const widgetConfig: Configuration = {
   target: "node",
   entry: path.resolve(__dirname, "src", "marquee/widget.ts"),
   output: {
-    path: path.resolve(__dirname, "dist"),
+    path: path.resolve(__dirname, "out", "marquee"),
     filename: "widget.js",
     libraryTarget: 'commonjs2'
   },

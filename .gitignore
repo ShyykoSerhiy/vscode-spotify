@@ -62,7 +62,6 @@ typings/
 
 # output directory for Typescript
 out
-dist
 
 # built vscode extension
 *.vsix

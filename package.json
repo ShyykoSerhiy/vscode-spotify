@@ -13,7 +13,7 @@
     "theme": "light"
   },
   "marquee": {
-    "widget": "/dist/widget.js"
+    "widget": "/out/marquee/widget.js"
   },
   "repository": {
     "type": "git",
@@ -411,7 +411,9 @@
   "main": "./out/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "compile": "run-p compile:*",
+    "compile:ts": "tsc -p ./",
+    "compile:webpack": "webpack --mode production",
     "lint": "eslint src --ext ts",
     "watch": "run-p watch:*",
     "watch:ts": "tsc -watch -p ./",
