@@ -41,10 +41,12 @@ export function activate(context: ExtensionContext) {
               track: ITrack;
               playerState: IPlayerState;
               loginState: ILoginState | null;
+              isRunning: boolean
             }>
           ) => {
             getStore().subscribe(() => {
-              const { track, playerState, loginState } = getState();
+              const { track, playerState, loginState, isRunning } = getState();
+              tangle.emit("isRunning", isRunning);
               tangle.emit("loginState", loginState);
               tangle.emit("track", track);
               tangle.emit("playerState", playerState);

@@ -12,6 +12,7 @@ const ch = new Channel<{
   track: ITrack;
   playerState: IPlayerState;
   loginState: ILoginState | null;
+  isRunning: boolean;
 }>("shyykoserhiy.vscode-spotify");
 const client = ch.attach(window.vscode);
 
@@ -25,7 +26,10 @@ class StatefulMarqueeWidget extends LitElement {
       justify-content: center;
       align-items: center;
       overflow: hidden;
-
+    }
+    .wrapper-message {
+      width: 75%;
+      text-align: center;
     }
     .img-wrapper {
       position: relative;
@@ -176,6 +180,7 @@ class StatefulMarqueeWidget extends LitElement {
   `;
   @property()
   track: ITrack | undefined;
+  isRunning: boolean | undefined;
   
   @state()
   isHoveringControls = false;
@@ -184,7 +189,10 @@ class StatefulMarqueeWidget extends LitElement {
     super();
     client.on("track", (track: ITrack) => {
       this.track = track;
-      window.vscode.setState({ track: track });
+    });
+
+    client.on("isRunning", (isRunning: boolean) => {
+      this.isRunning = isRunning;
     });
 
     client.on("playerState", (state: IPlayerState) => {
@@ -209,10 +217,17 @@ class StatefulMarqueeWidget extends LitElement {
   }
 
   render() {
-    if (!this.track || this.track === null) {
+    if (!this.track) {
       return html`
         <div class="defaultWrapper">
           <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        </div>
+      `;
+    }
+    if (!this.isRunning ){
+      return html`
+        <div class="defaultWrapper">
+          <div class="wrapper-message">You must have Spotify Win/Mac App installed on and running to display information. This extension requires Spotify Premium to work on Windows.</div>
         </div>
       `;
     }
