@@ -44,14 +44,16 @@ export function activate(context: ExtensionContext) {
               isRunning: boolean
             }>
           ) => {
-            getStore().subscribe(() => {
-              const { track, playerState, loginState, isRunning } = getState();
-              tangle.emit("isRunning", isRunning);
-              tangle.emit("loginState", loginState);
-              tangle.emit("track", track);
-              tangle.emit("playerState", playerState);
+            return tangle.whenReady().then(() => {
+              getStore().subscribe(() => {
+                const { track, playerState, loginState, isRunning } = getState();
+                tangle.emit("isRunning", isRunning);
+                tangle.emit("loginState", loginState);
+                tangle.emit("track", track);
+                tangle.emit("playerState", playerState);
+              });
             });
-          },
+          }
         },
       };
 }
