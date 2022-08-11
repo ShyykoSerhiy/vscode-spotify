@@ -56,13 +56,11 @@ class StatefulMarqueeWidget extends LitElement {
       width: 100%;
       height: 100%;
       transition: all 0.5s ease-in-out;
-      object-fit: cover;
     }
     .trackArtwork-darkened {
       width: 100%;
       height: 100%;
       transition: all 0.5s ease-in-out;
-      object-fit: cover;
       filter: brightness(0.3);
     }
     .icons {

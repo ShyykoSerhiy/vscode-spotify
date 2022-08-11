@@ -7,7 +7,7 @@
 			"es6", "DOM"
 		],
 		"sourceMap": true,
-		"rootDirs": ["src", "./src/marquee/widget"],
+		"rootDir": "src",
 		"strict": true,   /* enable all strict type-checking options */
 		"experimentalDecorators": true,
 		"skipLibCheck": true
