@@ -10,7 +10,7 @@ export function createCancelablePromise<T>(
         cancel = () => {
             reject(CANCELED_REASON);
         };
-        executor(resolve, reject);
+        executor(resolve as any, reject);
     });
     return { promise, cancel };
 }

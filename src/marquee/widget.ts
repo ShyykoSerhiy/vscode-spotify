@@ -222,7 +222,7 @@ class StatefulMarqueeWidget extends LitElement {
         </div>
       `;
     }
-    if (!this.isRunning ){
+    if (!this.isRunning){
       return html`
         <div class="defaultWrapper">
           <div class="wrapper-message">You must have Spotify Win/Mac App installed on and running to display information. This extension requires Spotify Premium to work on Windows.</div>
