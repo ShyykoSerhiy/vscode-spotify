@@ -317,7 +317,7 @@ window.marqueeExtension.defineWidget(
     icon: faMusic,
     label: "Spotify",
     tags: ["productivity"],
-    description: "Extension of VSCode Spotify",
+    description: "Extension of VS Code Spotify",
   },
   StatefulMarqueeWidget
 );
