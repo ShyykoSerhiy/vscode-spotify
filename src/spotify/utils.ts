@@ -2,7 +2,7 @@ export const CANCELED_REASON = 'canceled' as 'canceled';
 export const NOT_RUNNING_REASON = 'not_running' as 'not_running';
 
 export function createCancelablePromise<T>(
-    executor: (resolve: (value?: T | PromiseLike<T>) => void,
+    executor: (resolve: (value: T | PromiseLike<T>) => void | undefined,
     reject: (reason?: any) => void) => void
 ) {
     let cancel: () => void = null as any;

@@ -47,7 +47,7 @@ export class SpotifyStatusController {
                         position: 0, volume: 0, state: 'paused', isRepeating: false,
                         isShuffling: false
                     },
-                    track: { album: '', artist: '', name: '' },
+                    track: { album: '', artist: '', name: '', artwork_url: '' },
                     isRunning: false
                 });
                 this._retryCount = 0;
