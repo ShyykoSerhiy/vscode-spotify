@@ -9,6 +9,9 @@ import { registerGlobalState } from './config/spotify-config';
 import { SpotifyStatusController } from './spotify-status-controller';
 import { SpoifyClientSingleton } from './spotify/spotify-client';
 import { getStore } from './store/store';
+import { Client } from 'tangle';
+import { ILoginState, IPlayerState, ITrack } from './state/state';
+import { getState } from "./store/store";
 
 // This method is called when your extension is activated. Activation is
 // controlled by the activation events defined in package.json.
@@ -31,4 +34,26 @@ export function activate(context: ExtensionContext) {
     context.subscriptions.push(spotifyStatus);
     context.subscriptions.push(playlistTreeView);
     context.subscriptions.push(createCommands(SpoifyClientSingleton.spotifyClient));
+    return {
+        marquee: {
+          setup: (
+            tangle: Client<{
+              track: ITrack;
+              playerState: IPlayerState;
+              loginState: ILoginState | null;
+              isRunning: boolean
+            }>
+          ) => {
+            return tangle.whenReady().then(() => {
+              getStore().subscribe(() => {
+                const { track, playerState, loginState, isRunning } = getState();
+                tangle.emit("isRunning", isRunning);
+                tangle.emit("loginState", loginState);
+                tangle.emit("track", track);
+                tangle.emit("playerState", playerState);
+              });
+            });
+          }
+        },
+      };
 }

@@ -4,7 +4,7 @@ export function createVscodeStorage(memento: Memento) {
     return {
         getItem: (key: string): Promise<string> =>
             new Promise((resolve, _reject) => {
-                resolve(memento.get(key));
+                resolve(memento.get<string>(key) ?? "");
             }),
         setItem: (key: string, item: string): Promise<void> =>
             new Promise((resolve, _reject) => {

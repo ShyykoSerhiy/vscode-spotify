@@ -97,7 +97,7 @@ export class LyricsController {
                 const lyrics = $('.lyrics').text().trim();
                 await this._previewLyrics(`${artist} - ${name}\n\n${lyrics}`);
             }
-            catch (e) {
+            catch (e: any) {
                 if (e.status === 403) {
                     // probably captcha. Open in browser
                     await env.openExternal(Uri.parse(geniusUrl));
@@ -110,7 +110,7 @@ export class LyricsController {
                     await this._previewLyrics(`Error: ${e.responseText}`);
                 }
             }
-        } catch (e) {
+        } catch (e: any) {
             if (e.status === 404) {
                 await this._previewLyrics(`Song lyrics for ${artist} - ${name} not found.\nYou can add it on https://genius.com/ .`);
             }

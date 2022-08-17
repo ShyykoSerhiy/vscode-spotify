@@ -7,6 +7,7 @@ export interface ITrack {
     album: string;
     artist: string;
     name: string;
+    artwork_url?: string;
 }
 
 export interface ILoginState {
@@ -119,7 +120,8 @@ export const DEFAULT_STATE: ISpotifyStatusState = {
     track: {
         album: '',
         artist: '',
-        name: ''
+        name: '',
+        artwork_url: ''
     },
     isRunning: false,
     loginState: null,
